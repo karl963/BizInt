@@ -1,7 +1,7 @@
 <html>
-  <head><title>Hello :: Spring Application</title></head>
+  <head><title>Prooviapplikatsioon</title></head>
   <body>
-    <h1>Hello - Spring Application</h1>
+    <h1>Tere!</h1>
     <p>Greetings. BizInt team!</p>
   </body>
 </html>
