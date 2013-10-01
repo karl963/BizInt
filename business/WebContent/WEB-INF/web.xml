@@ -22,10 +22,10 @@
         <url-pattern>*.htm</url-pattern>
     </servlet-mapping>
     
-    <servlet-mapping>
-  <servlet-name>jsp</servlet-name>
-  <url-pattern>/WEB-INF/jsp/*</url-pattern>
- </servlet-mapping>
+	<servlet-mapping>
+  		<servlet-name>jsp</servlet-name>
+  		<url-pattern>/WEB-INF/jsp/*</url-pattern>
+	</servlet-mapping>
  
  
     <welcome-file-list>

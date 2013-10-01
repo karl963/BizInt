@@ -12,11 +12,11 @@ xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springf
 
 <!-- <mvc:annotation-driven /> -->
 
-    <context:component-scan base-package="bizint.web" />
+    <context:component-scan base-package="bizint.Controller.vaade" />
+    <context:component-scan base-package="bizint.app" />
+    <context:component-scan base-package="bizint.app.alam" />
     
     <bean id="viewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver" p:basename="views" />
-    
     <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer" p:definitions="/WEB-INF/tiles-configuration.xml" />    
-        
 
 </beans>
