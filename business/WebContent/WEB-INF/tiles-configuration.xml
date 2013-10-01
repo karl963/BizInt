@@ -13,14 +13,24 @@
 	<put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp" />
 </definition>
  
-<definition name="esimene" extends="template">
-    <put-attribute name="title" value="Esimene" />  
-	<put-attribute name="body" value="/WEB-INF/jsp/esimene.jsp" />
+<definition name="vaadeProjektid" extends="template">
+    <put-attribute name="title" value="Projektide vaade" />  
+	<put-attribute name="body" value="/WEB-INF/jsp/vaadeProjektid.jsp" />
 </definition>
  
-<definition name="teine" extends="template">
-    <put-attribute name="title" value="Teine" />  
-	<put-attribute name="body" value="/WEB-INF/jsp/teine.jsp" />
+<definition name="vaadePipeline" extends="template">
+    <put-attribute name="title" value="Pipeline vaade" />  
+	<put-attribute name="body" value="/WEB-INF/jsp/vaadePipeline.jsp" />
+</definition>
+
+<definition name="vaadeTootajad" extends="template">
+    <put-attribute name="title" value="Tootajad vaade" />  
+	<put-attribute name="body" value="/WEB-INF/jsp/vaadeTootajad.jsp" />
+</definition>
+
+<definition name="vaadeRahavoog" extends="template">
+    <put-attribute name="title" value="Rahavoog vaade" />  
+	<put-attribute name="body" value="/WEB-INF/jsp/vaadeRahavoog.jsp" />
 </definition>
  
 </tiles-definitions>

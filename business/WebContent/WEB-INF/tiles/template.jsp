@@ -1,6 +1,9 @@
+<%@include file="/WEB-INF/jsp/include.jsp" %>
+
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%> 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
 "http://www.w3.org/TR/html4/loose.dtd">
+
 
 <html>  
 <head>  
@@ -15,10 +18,13 @@
             </td>  
         </tr>  
         <tr>  
-            <td height="250" width="150"><tiles:insertAttribute name="menu" />  
+            <td height="30"><tiles:insertAttribute name="menu" />  
             </td>  
+
+        </tr> 
+        <tr>
             <td width="400"><tiles:insertAttribute name="body" />  
-            </td>  
+            </td> 
         </tr>  
         <tr>  
             <td height="30" colspan="2"><tiles:insertAttribute name="footer" />  

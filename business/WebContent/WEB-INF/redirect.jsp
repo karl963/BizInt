@@ -1,1 +1,1 @@
-<% response.sendRedirect("esimene.htm"); %>
+<% response.sendRedirect("vaadeProjektid.htm"); %>

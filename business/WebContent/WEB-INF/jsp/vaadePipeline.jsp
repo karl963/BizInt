@@ -1,4 +1,4 @@
 <center>  
 <p>${message}</p>
-<p>bbbbbbb</p>  
+<p>Pipeline vaade</p>  
 </center> 

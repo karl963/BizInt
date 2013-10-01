@@ -1,0 +1,10 @@
+@CHARSET "ISO-8859-1";
+.menuu_list{
+  list-style: none;
+}
+
+.menuu_horizontaalselt{
+  display: inline;
+  float:left;
+  display:block;
+}

@@ -11,13 +11,23 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class HelloController {
 	
-	@RequestMapping(value = "/esimene.htm")
-	public ModelAndView esimene() {
-		return new ModelAndView("esimene", "message", "11111"); 
+	@RequestMapping(value = "/vaadeProjektid.htm")
+	public ModelAndView vaadeProjektid() {
+		return new ModelAndView("vaadeProjektid", "message", "11111"); 
 	}
 	
-	@RequestMapping(value = "/teine.htm")
-	public ModelAndView teine() {
-		return new ModelAndView("teine", "message", "2222"); 
+	@RequestMapping(value = "/vaadePipeline.htm")
+	public ModelAndView vaadePipeline() {
+		return new ModelAndView("vaadePipeline", "message", "2222"); 
+	}
+	
+	@RequestMapping(value = "/vaadeTootajad.htm")
+	public ModelAndView vaadeTootajad() {
+		return new ModelAndView("vaadeTootajad", "message", "3333"); 
+	}
+	
+	@RequestMapping(value = "/vaadeRahavoog.htm")
+	public ModelAndView vaadeRahavoog() {
+		return new ModelAndView("vaadeRahavoog", "message", "4444"); 
 	}
 }

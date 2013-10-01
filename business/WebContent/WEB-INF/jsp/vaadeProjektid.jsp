@@ -1,4 +1,4 @@
 <center>  
 <p>${message}</p>
-<p>aaaaaaaa</p>  
+<p>Projektid vaade</p>  
 </center> 
