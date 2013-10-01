@@ -4,26 +4,19 @@ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 xmlns:mvc="http://www.springframework.org/schema/mvc"
 xmlns:tx="http://www.springframework.org/schema/tx"
 xmlns:context="http://www.springframework.org/schema/context"
+xmlns:p="http://www.springframework.org/schema/p"
 xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
                     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd     
                     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
                     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
 
-	<mvc:annotation-driven />
+<!-- <mvc:annotation-driven /> -->
 
-    <context:component-scan
-        base-package="bizint.web.HelloController" />
-
-    <bean id="viewResolver"
-        class="org.springframework.web.servlet.view.UrlBasedViewResolver">
-        <property name="viewClass"
-            value="org.springframework.web.servlet.view.JstlView" />
-        <property name="prefix" value="/WEB-INF/jsp/" />
-        <property name="suffix" value=".jsp" />
-    </bean>
+    <context:component-scan base-package="bizint.web" />
     
-    <!-- static resource mapping for style sheets, etc. -->
-    <mvc:resources mapping="/styles/**"  location="/WEB-INF/skins/" />
-    <mvc:resources mapping="/scripts/**" location="/WEB-INF/scripts/" />
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver" p:basename="views" />
+    
+    <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer" p:definitions="/WEB-INF/tiles-configuration.xml" />    
+        
 
 </beans>

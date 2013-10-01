@@ -1,11 +1,15 @@
-<%@ include file="/WEB-INF/jsp/include.jsp" %>
-
-<html>
-<head>
-<title>BizInt rakendus</title>
-</head>
-<body>
-<h1>CONTENT</h1>
-
-</body>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>  
+<head>  
+<title>Tiles Integration</title>  
+</head>  
+<body>  
+    <center>  
+hai
+ <a href="esimene.html">Click  
+            to see your first Tiles page !</a>  
+    </center>  
+</body>  
 </html>
