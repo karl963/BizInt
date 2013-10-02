@@ -19,13 +19,15 @@ public class ProjektidController {
 	public ModelAndView annaAndmed(){
 		
 		Staatus s = new Staatus();
-		s.setNimetus("lahe staatus");
+		s.setNimi("lahe staatus");
 		//s.setProjektid(Arrays.asList(new Projekt("lahe projekt"),new Projekt("lahedam projekt")));
 
 		Staatus s2 = new Staatus();
-		s2.setNimetus("lahedam staatus");
-		
-		return new ModelAndView("vaadeProjektid", "staatused", Arrays.asList(s,s2));
+		s2.setNimi("lahedam staatus");
+
+		Staatus s3 = new Staatus();
+
+		return new ModelAndView("vaadeProjektid", "staatused", Arrays.asList(s,s2,s3));
 	}
 
 

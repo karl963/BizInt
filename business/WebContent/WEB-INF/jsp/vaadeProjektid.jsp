@@ -2,7 +2,7 @@
 <html>
 <body>
 <c:forEach items="${staatused}" var="staatus">
-	${staatus.nimetus}
+	${staatus.nimi}
 	<br>
 </c:forEach>
 </body>
