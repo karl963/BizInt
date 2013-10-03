@@ -1,7 +1,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
+
+
 <div class=textontop>
+
+<div class=staatusteKonteiner>
+
 <c:forEach items="${staatused}" var="staatus">
+
+<div class=divNextToEachOther>
 
 	<div class=statustext>
 		${staatus.nimi}<br>
@@ -36,10 +43,13 @@
 			</tr>
 		</table>
 	</div>
-
+	
+</div>
 </c:forEach>
 
-	<div class=statustext>
+
+
+	<div class="statustext">
 		<div class=statusdivider>
 			Uus staatus
 			<div>
@@ -48,5 +58,7 @@
 				</a>
 			</div>
 		</div>
+	</div>
+	
 	</div>
 </div>
