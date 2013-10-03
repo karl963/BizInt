@@ -79,6 +79,7 @@ public class ProjektidController {
 		staatused.add(s1);
 		staatused.add(s2);
 
+
 		return new ModelAndView("vaadeProjektid", "staatused", staatused);
 	}
 
