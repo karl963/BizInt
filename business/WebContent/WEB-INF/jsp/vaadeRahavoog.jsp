@@ -1,4 +1,3 @@
 <center>  
-<p>${message}</p>
-<p>Rahavoo vaade</p>  
+<h1>${message}</h1>
 </center> 

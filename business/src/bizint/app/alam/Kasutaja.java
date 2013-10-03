@@ -7,10 +7,13 @@ public class Kasutaja {
 	public static String DEFAULT_NIMI = "nimetu";
 	public static Double DEFAULT_KUUPALK = 0.0;
 	public static Double DEFAULT_TÖÖMAHT = 0.0;
+	public static boolean DEFAULT_VASTUTAJA = false;
+	public static boolean DEFAULT_AKTIIVNE = false;
 	
 	private String nimi;
 	private Date aeg;
 	private Double kuupalk, töömaht;
+	private boolean vastutaja, aktiivne;
 
 	
 	  ///////////\\\\\\\\\\\\
@@ -22,6 +25,8 @@ public class Kasutaja {
 		this.aeg = new Date();
 		this.kuupalk = Kasutaja.DEFAULT_KUUPALK;
 		this.töömaht = Kasutaja.DEFAULT_TÖÖMAHT;
+		this.vastutaja = Kasutaja.DEFAULT_VASTUTAJA;
+		this.aktiivne = Kasutaja.DEFAULT_AKTIIVNE;
 	}
 	
 	public Kasutaja(String nimi){
@@ -29,6 +34,8 @@ public class Kasutaja {
 		this.aeg = new Date();
 		this.kuupalk = Kasutaja.DEFAULT_KUUPALK;
 		this.töömaht = Kasutaja.DEFAULT_TÖÖMAHT;
+		this.vastutaja = Kasutaja.DEFAULT_VASTUTAJA;
+		this.aktiivne = Kasutaja.DEFAULT_AKTIIVNE;
 	}
 	
 	  ///////////\\\\\\\\\\\\
@@ -58,6 +65,22 @@ public class Kasutaja {
 	}
 	public void setTöömaht(Double töömaht) {
 		this.töömaht = töömaht;
+	}
+
+	public boolean isVastutaja() {
+		return vastutaja;
+	}
+
+	public void setVastutaja(boolean vastutaja) {
+		this.vastutaja = vastutaja;
+	}
+
+	public boolean isAktiivne() {
+		return aktiivne;
+	}
+
+	public void setAktiivne(boolean aktiivne) {
+		this.aktiivne = aktiivne;
 	}
 	
 }

@@ -9,7 +9,7 @@ public class PipelineController {
 
 	@RequestMapping("/vaadePipeline.htm")
 	public ModelAndView vaadePipeline() {
-		return new ModelAndView("vaadePipeline", "message", "2222"); 
+		return new ModelAndView("vaadePipeline", "message", "Paluks kannatust, siia tuleb kunagi pipeline vaade !"); 
 	}
 
 	

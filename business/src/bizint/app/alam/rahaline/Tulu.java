@@ -27,6 +27,12 @@ public class Tulu {
 		this.summa = summa;
 	}
 	
+	public Tulu(Double summa){
+		this.nimetus = Tulu.DEFAULT_NIMETUS;
+		this.aeg = new Date();
+		this.summa = summa;
+	}
+	
 	  ///////////\\\\\\\\\\\\
 	 // getters and setters \\
 	/////////////\\\\\\\\\\\\\\

@@ -60,6 +60,31 @@ public class Projekt {
 		kulud.add(kulu);
 	}
 	
+	public Double getKogutulu(){
+		Double summa = 0.0;
+		for(Tulu t : tulud){
+			summa+=t.getSumma();
+		}
+		return summa;
+	}
+	
+	public Double getKogukulu(){
+		Double summa = 0.0;
+		for(Kulu k : kulud){
+			summa+=k.getSumma();
+		}
+		return summa;
+	}
+	
+	public Kasutaja getVastutaja(){
+		for(Kasutaja k : kasutajad){
+			if(k.isVastutaja()){
+				return k;
+			}
+		}
+		return null;
+	}
+	
 	public static boolean muudaKasutajaKuupalkaAndmebaasis(Projekt projekt, Kasutaja kasutaja, Double Kuupalk, Date aeg){
 		
 		/******************************************************************
@@ -243,4 +268,5 @@ public class Projekt {
 	public void setReiting(int reiting) {
 		this.reiting = reiting;
 	}
+	
 }

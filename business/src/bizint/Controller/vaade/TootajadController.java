@@ -9,7 +9,7 @@ public class TootajadController {
 
 	@RequestMapping("/vaadeTootajad.htm")
 	public ModelAndView vaadeTootajad() {
-		return new ModelAndView("vaadeTootajad", "message", "3333"); 
+		return new ModelAndView("vaadeTootajad", "message", "Paluks kannatust, siia tuleb kunagi töötajate vaade !"); 
 	}
 
 

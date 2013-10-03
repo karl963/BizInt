@@ -14,7 +14,7 @@ public class RahavoogController {
 
 	@RequestMapping("/vaadeRahavoog.htm")
 	public ModelAndView vaadeRahavoog() {
-		return new ModelAndView("vaadeRahavoog", "message", "4444"); 
+		return new ModelAndView("vaadeRahavoog", "message", "Paluks kannatust, siia tuleb kunagi rahavoo vaade !"); 
 	}
 
 }

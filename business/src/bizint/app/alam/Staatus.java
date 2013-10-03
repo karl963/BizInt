@@ -25,8 +25,8 @@ public class Staatus {
 		this.setSumma(Staatus.DEFAULT_SUMMA);
 	}
 	
-	public Staatus(String nimetus, int järjekorraNumber){
-		this.nimi = Staatus.DEFAULT_NIMI;
+	public Staatus(String nimi, int järjekorraNumber){
+		this.nimi = nimi;
 		this.projektid = new ArrayList<Projekt>();
 		this.setJärjekorraNumber(järjekorraNumber);
 		this.setSumma(Staatus.DEFAULT_SUMMA);
@@ -39,6 +39,14 @@ public class Staatus {
 	
 	public void addProjekt(Projekt projekt){
 		projektid.add(projekt);
+	}
+	
+	public Double getProjektideKoguTulu(){
+		Double summa = 0.0;
+		for(Projekt p : projektid){
+			summa+=p.getKogutulu();
+		}
+		return summa;
 	}
 	
 	public static boolean kustutaStaatusAndmebaasist(Staatus staatus){
