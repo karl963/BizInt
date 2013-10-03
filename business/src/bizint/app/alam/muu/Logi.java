@@ -1,15 +1,17 @@
 package bizint.app.alam.muu;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import bizint.app.alam.Kasutaja;
 
 public class Logi {
 	
-	public static String DEFAULT_SÕNUM = "sõnum puudub";
+	public static String DEFAULT_SONUM = "tühi sonum";
+	public static SimpleDateFormat AJAFORMAAT = new SimpleDateFormat("dd.mm.yyyy kell: hh:mm:ss");
 	
 	private Kasutaja kasutaja;
-	private String sõnum;
+	private String sonum;
 	private Date aeg;
 
 	
@@ -19,14 +21,23 @@ public class Logi {
 	
 	public Logi(){
 		this.kasutaja = new Kasutaja("nimetu");
-		this.sõnum = Logi.DEFAULT_SÕNUM;
+		this.sonum = Logi.DEFAULT_SONUM;
 		this.aeg = new Date();
 	}
 	
-	public Logi(Kasutaja kasutaja, String sõnum){
+	public Logi(Kasutaja kasutaja, String sonum){
 		this.kasutaja = kasutaja;
-		this.sõnum = sõnum;
+		this.sonum = sonum;
 		this.aeg = new Date();
+	}
+	
+	
+	  ///////////\\\\\\\\\\\\
+	 ///////// methods \\\\\\\
+	/////////////\\\\\\\\\\\\\\
+	
+	public String getFormaaditudAeg(){
+		return AJAFORMAAT.format(aeg);
 	}
 	
 	  ///////////\\\\\\\\\\\\
@@ -39,11 +50,11 @@ public class Logi {
 	public void setKasutaja(Kasutaja kasutaja) {
 		this.kasutaja = kasutaja;
 	}
-	public String getSõnum() {
-		return sõnum;
+	public String getSonum() {
+		return sonum;
 	}
-	public void setSõnum(String sõnum) {
-		this.sõnum = sõnum;
+	public void setSonum(String sonum) {
+		this.sonum = sonum;
 	}
 	public Date getAeg() {
 		return aeg;

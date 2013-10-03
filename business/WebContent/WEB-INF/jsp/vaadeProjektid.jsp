@@ -17,7 +17,7 @@
 
 	<div class=scrollwindow>
 		<c:forEach items="${staatus.projektid}" var="projekt">
-			<a href="vaadeProjektid.htm">
+			<a href="vaadeProjektEsimene.htm">
 			<table class=project>
 				<tr>
 					<th>Nimi: </th>

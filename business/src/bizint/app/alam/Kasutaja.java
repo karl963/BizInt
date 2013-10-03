@@ -6,13 +6,13 @@ public class Kasutaja {
 	
 	public static String DEFAULT_NIMI = "nimetu";
 	public static Double DEFAULT_KUUPALK = 0.0;
-	public static Double DEFAULT_TÖÖMAHT = 0.0;
+	public static Double DEFAULT_OSALUS = 0.0;
 	public static boolean DEFAULT_VASTUTAJA = false;
 	public static boolean DEFAULT_AKTIIVNE = false;
 	
 	private String nimi;
 	private Date aeg;
-	private Double kuupalk, töömaht;
+	private Double kuupalk, osalus;
 	private boolean vastutaja, aktiivne;
 
 	
@@ -24,7 +24,7 @@ public class Kasutaja {
 		this.nimi = Kasutaja.DEFAULT_NIMI;
 		this.aeg = new Date();
 		this.kuupalk = Kasutaja.DEFAULT_KUUPALK;
-		this.töömaht = Kasutaja.DEFAULT_TÖÖMAHT;
+		this.osalus = Kasutaja.DEFAULT_OSALUS;
 		this.vastutaja = Kasutaja.DEFAULT_VASTUTAJA;
 		this.aktiivne = Kasutaja.DEFAULT_AKTIIVNE;
 	}
@@ -33,7 +33,7 @@ public class Kasutaja {
 		this.nimi = nimi;
 		this.aeg = new Date();
 		this.kuupalk = Kasutaja.DEFAULT_KUUPALK;
-		this.töömaht = Kasutaja.DEFAULT_TÖÖMAHT;
+		this.osalus = Kasutaja.DEFAULT_OSALUS;
 		this.vastutaja = Kasutaja.DEFAULT_VASTUTAJA;
 		this.aktiivne = Kasutaja.DEFAULT_AKTIIVNE;
 	}
@@ -60,11 +60,11 @@ public class Kasutaja {
 	public void setKuupalk(Double kuupalk) {
 		this.kuupalk = kuupalk;
 	}
-	public Double getTöömaht() {
-		return töömaht;
+	public Double geOosalus() {
+		return osalus;
 	}
-	public void setTöömaht(Double töömaht) {
-		this.töömaht = töömaht;
+	public void setOsalus(Double töömaht) {
+		this.osalus = töömaht;
 	}
 
 	public boolean isVastutaja() {

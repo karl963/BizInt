@@ -4,33 +4,52 @@
        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
 
 <tiles-definitions>
+
+<!-- terve menu -->
  
-<definition name="template" template="/WEB-INF/tiles/template.jsp">
-    <put-attribute name="title" value="bizint" />
+<definition name="menuTemplate" template="/WEB-INF/tiles/menuTemplate.jsp">
+    <put-attribute name="title" value="BizInt" />
 	<put-attribute name="header" value="/WEB-INF/tiles/header.jsp" />
 	<put-attribute name="menu" value="/WEB-INF/tiles/menu.jsp" />
 	<put-attribute name="body"  value="/WEB-INF/jsp/vaadeProjektid.jsp"/>
 	<put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp" />
 </definition>
  
-<definition name="vaadeProjektid" extends="template">
+<definition name="vaadeProjektid" extends="menuTemplate">
     <put-attribute name="title" value="Projektide vaade" />  
 	<put-attribute name="body" value="/WEB-INF/jsp/vaadeProjektid.jsp" />
 </definition>
  
-<definition name="vaadePipeline" extends="template">
+<definition name="vaadePipeline" extends="menuTemplate">
     <put-attribute name="title" value="Pipeline vaade" />  
 	<put-attribute name="body" value="/WEB-INF/jsp/vaadePipeline.jsp" />
 </definition>
 
-<definition name="vaadeTootajad" extends="template">
+<definition name="vaadeTootajad" extends="menuTemplate">
     <put-attribute name="title" value="Tootajad vaade" />  
 	<put-attribute name="body" value="/WEB-INF/jsp/vaadeTootajad.jsp" />
 </definition>
 
-<definition name="vaadeRahavoog" extends="template">
+<definition name="vaadeRahavoog" extends="menuTemplate">
     <put-attribute name="title" value="Rahavoog vaade" />  
 	<put-attribute name="body" value="/WEB-INF/jsp/vaadeRahavoog.jsp" />
+</definition>
+
+<!-- projektide detailvaade -->
+
+<definition name="projektTemplate" template="/WEB-INF/tiles/projektTemplate.jsp">
+    <put-attribute name="title" value="Projekti detailvaade" />
+	<put-attribute name="body"  value="/WEB-INF/jsp/vaadeProjektEsimene.jsp"/>
+</definition>
+
+<definition name="vaadeProjektEsimene" extends="projektTemplate">
+    <put-attribute name="title" value="Projekti detailvaade" />  
+	<put-attribute name="body" value="/WEB-INF/jsp/vaadeProjektEsimene.jsp" />
+</definition>
+ 
+<definition name="vaadeProjektTeine" extends="projektTemplate">
+    <put-attribute name="title" value="Projekti detailvaade" />  
+	<put-attribute name="body" value="/WEB-INF/jsp/vaadeProjektTeine.jsp" />
 </definition>
  
 </tiles-definitions>

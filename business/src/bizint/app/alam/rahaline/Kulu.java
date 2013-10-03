@@ -1,11 +1,13 @@
 package bizint.app.alam.rahaline;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Kulu {
 	
 	private static String DEFAULT_NIMETUS = "tundmatu kulu";
 	private static Double DEFAULT_SUMMA = 0.0;
+	private static SimpleDateFormat AJAFORMAAT = new SimpleDateFormat("dd.mm.yyyy");
 	
 	private String nimetus;
 	private Double summa;
@@ -25,6 +27,14 @@ public class Kulu {
 		this.nimetus = nimetus;
 		this.aeg = aeg;
 		this.summa = summa;
+	}
+	
+	  ///////////\\\\\\\\\\\\
+	 ///////// methods \\\\\\\
+	/////////////\\\\\\\\\\\\\\
+	
+	public String getFormaaditudAeg(){
+		return Kulu.AJAFORMAAT.format(aeg);
 	}
 	
 	  ///////////\\\\\\\\\\\\
