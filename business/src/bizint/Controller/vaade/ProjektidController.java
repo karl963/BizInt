@@ -1,5 +1,8 @@
 package bizint.Controller.vaade;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -9,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import bizint.andmebaas.Mysql;
 import bizint.app.alam.Kasutaja;
 import bizint.app.alam.Projekt;
 import bizint.app.alam.Staatus;
@@ -21,6 +25,11 @@ public class ProjektidController {
 	
 	@RequestMapping("/vaadeProjektid.htm")
 	public ModelAndView annaAndmed(){
+		
+		/*
+		 * staatus(järjekorranr,nimi,projekt(nimi,vastutaja,kogutulu))
+		 */
+		
 		
 		List<Object> staatused = new ArrayList<Object>();
 
@@ -72,14 +81,94 @@ public class ProjektidController {
 		
 		s2.addProjekt(p11);
 		s2.addProjekt(p21);
-		s2.setSumma(123.32);
-		
-		s1.setSumma(55532.2);
 		
 		staatused.add(s1);
 		staatused.add(s2);
-
-
+		 
+		/*
+		staatused = new ArrayList<Staatus>();
+		
+		Connection con = Mysql.CONNECTION;
+		
+		try{
+			
+			Statement stmt = con.createStatement();
+			
+			String query = "SELECT staatusNimi,järjekorraNR,staatusID FROM staatused";
+			
+			ResultSet rs = stmt.executeQuery(query);
+		
+			while(rs.next()){
+				Staatus staatus = new Staatus();
+				List<Projekt> projektid = new ArrayList<Projekt>();
+				
+				String staatusNimi = rs.getString("staatusNimi");
+				int järjekorraNumber = rs.getInt("järjekorraNR");
+				int staatusID = rs.getInt("staatusID");
+				
+				staatus.setJärjekorraNumber(järjekorraNumber);
+				staatus.setNimi(staatusNimi);
+				
+				String query2 = "SELECT projektNimi, projektID FROM projektid WHERE staatus_ID="+staatusID;
+				Statement stmt2 = con.createStatement();
+				ResultSet rs2 = stmt2.executeQuery(query2);
+				
+				while(rs2.next()){
+					
+					Projekt projekt = new Projekt();
+					List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
+					List<Tulu> tulud = new ArrayList<Tulu>();
+					
+					int projektID = rs2.getInt("projektID");
+					String projektNimi = rs2.getString("projektNimi");
+					
+					String query3 = "SELECT kasutajaNimi, vastutaja FROM projektiKasutajad, kasutajad WHERE kasutajaID=kasutaja_ID AND projekt_ID="+projektID;
+					Statement stmt3 = con.createStatement();
+					ResultSet rs3 = stmt3.executeQuery(query3);
+					
+					while(rs3.next()){
+						Kasutaja kasutaja = new Kasutaja();
+						
+						String kasutajaNimi = rs3.getString("kasutajaNimi");
+						boolean vastutaja = rs3.getBoolean("vastutaja");
+						
+						kasutaja.setNimi(kasutajaNimi);
+						kasutaja.setVastutaja(vastutaja);
+						
+						kasutajad.add(kasutaja);
+					}
+					
+					String query4 = "SELECT tulu FROM tulud WHERE projekt_ID="+projektID;
+					Statement stmt4 = con.createStatement();
+					ResultSet rs4 = stmt4.executeQuery(query4);
+					
+					while(rs4.next()){
+						Tulu tulu = new Tulu();
+						
+						Double summa = rs4.getDouble("tulu");
+						
+						tulu.setSumma(summa);
+						
+						tulud.add(tulu);
+					}
+					
+					projekt.setNimi(projektNimi);
+					projekt.setTulud(tulud);
+					projekt.setKasutajad(kasutajad);
+					
+					projektid.add(projekt);
+					
+				}
+				
+				staatus.setProjektid(projektid);
+				
+				staatused.add(staatus);
+			}
+			
+		}catch(Exception x){
+			x.printStackTrace();
+		}
+		*/
 		return new ModelAndView("vaadeProjektid", "staatused", staatused);
 	}
 

@@ -63,8 +63,8 @@ public class Kasutaja {
 	public Double geOosalus() {
 		return osalus;
 	}
-	public void setOsalus(Double töömaht) {
-		this.osalus = töömaht;
+	public void setOsalus(Double osalus) {
+		this.osalus = osalus;
 	}
 
 	public boolean isVastutaja() {

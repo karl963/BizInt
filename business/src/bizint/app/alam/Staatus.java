@@ -7,12 +7,10 @@ public class Staatus {
 	
 	public static String DEFAULT_NIMI = "lahe staatus";
 	public static int DEFAULT_JÄRJEKORRA_NUMBER = 0;
-	public static Double DEFAULT_SUMMA = 0.0;
 	
 	private List<Projekt> projektid;
 	private String nimi;
 	private int järjekorraNumber;
-	private Double summa;
 	
 	  ///////////\\\\\\\\\\\\
 	 ///// constructors \\\\\\
@@ -22,14 +20,12 @@ public class Staatus {
 		this.nimi = Staatus.DEFAULT_NIMI;
 		this.projektid = new ArrayList<Projekt>();
 		this.setJärjekorraNumber(Staatus.DEFAULT_JÄRJEKORRA_NUMBER);
-		this.setSumma(Staatus.DEFAULT_SUMMA);
 	}
 	
 	public Staatus(String nimi, int järjekorraNumber){
 		this.nimi = nimi;
 		this.projektid = new ArrayList<Projekt>();
 		this.setJärjekorraNumber(järjekorraNumber);
-		this.setSumma(Staatus.DEFAULT_SUMMA);
 	}
 	
 	  ///////////\\\\\\\\\\\\
@@ -41,7 +37,7 @@ public class Staatus {
 		projektid.add(projekt);
 	}
 	
-	public Double getProjektideKoguTulu(){
+	public Double getKogutulu(){
 		Double summa = 0.0;
 		for(Projekt p : projektid){
 			summa+=p.getKogutulu();
@@ -111,14 +107,6 @@ public class Staatus {
 
 	public void setJärjekorraNumber(int järjekorraNumber) {
 		this.järjekorraNumber = järjekorraNumber;
-	}
-
-	public Double getSumma() {
-		return summa;
-	}
-
-	public void setSumma(Double summa) {
-		this.summa = summa;
 	}
 
 }

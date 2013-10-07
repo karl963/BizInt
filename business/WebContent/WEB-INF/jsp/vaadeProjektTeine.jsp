@@ -19,5 +19,5 @@ ${projekt.kogukulu}
 
 <!-- sulud ajal on lihtsalt selleks et nad ongi sulgudes, mina vähemalt paneks nii -->
 <c:forEach items="${projekt.kommentaarid}" var="kommentaar">
-	${kommentaar.kasutaja} ${kommentaar.sonum} (${kommentaar.formaaditudAeg})
+	${kommentaar.kasutaja.nimi} ${kommentaar.sonum} (${kommentaar.formaaditudAeg})
 </c:forEach>

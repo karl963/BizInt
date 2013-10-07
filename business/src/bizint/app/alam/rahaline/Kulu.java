@@ -5,11 +5,11 @@ import java.util.Date;
 
 public class Kulu {
 	
-	private static String DEFAULT_NIMETUS = "tundmatu kulu";
+	private static String DEFAULT_NIMI = "tundmatu kulu";
 	private static Double DEFAULT_SUMMA = 0.0;
 	private static SimpleDateFormat AJAFORMAAT = new SimpleDateFormat("dd.mm.yyyy");
 	
-	private String nimetus;
+	private String nimi;
 	private Double summa;
 	private Date aeg;
 	
@@ -18,13 +18,13 @@ public class Kulu {
 	/////////////\\\\\\\\\\\\\\
 	
 	public Kulu(){
-		this.nimetus = Kulu.DEFAULT_NIMETUS;
+		this.nimi = Kulu.DEFAULT_NIMI;
 		this.summa = Kulu.DEFAULT_SUMMA;
 		this.aeg = new Date();
 	}
 	
-	public Kulu(String nimetus, Date aeg, Double summa){
-		this.nimetus = nimetus;
+	public Kulu(String nimi, Date aeg, Double summa){
+		this.nimi = nimi;
 		this.aeg = aeg;
 		this.summa = summa;
 	}
@@ -41,11 +41,11 @@ public class Kulu {
 	 // getters and setters \\
 	/////////////\\\\\\\\\\\\\\
 	
-	public String getNimetus() {
-		return nimetus;
+	public String getNimi() {
+		return nimi;
 	}
-	public void setNimetus(String nimetus) {
-		this.nimetus = nimetus;
+	public void setNimi(String nimi) {
+		this.nimi = nimi;
 	}
 	public Date getAeg() {
 		return aeg;

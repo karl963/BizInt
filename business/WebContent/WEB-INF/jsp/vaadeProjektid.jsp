@@ -12,7 +12,7 @@
 
 	<div class=statustext>
 		${staatus.nimi}<br>
-		${staatus.summa}
+		${staatus.kogutulu}
 	</div>
 
 	<div class=scrollwindow>
