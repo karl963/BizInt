@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
-<div class=message">
+<div class=message>
 	<c:if test="${not empty message}"><div class="message green">${message}</div></c:if>
 </div>
 
@@ -23,7 +23,7 @@
 
 	<div class=scrollwindow>
 		<c:forEach items="${staatus.projektid}" var="projekt">
-			<a href="vaadeProjektEsimene.htm">
+			<a href="vaadeProjektEsimene.htm?id=${projekt.id}">
 			<table class=project>
 				<tr>
 					<th COLSPAN=2>${projekt.nimi}</th>

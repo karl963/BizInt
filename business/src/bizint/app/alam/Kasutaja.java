@@ -60,7 +60,7 @@ public class Kasutaja {
 	public void setKuupalk(Double kuupalk) {
 		this.kuupalk = kuupalk;
 	}
-	public Double geOosalus() {
+	public Double getOsalus() {
 		return osalus;
 	}
 	public void setOsalus(Double osalus) {

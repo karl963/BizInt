@@ -161,6 +161,7 @@ public class ProjektidController {
 					projekt.setNimi(projektNimi);
 					projekt.setTulud(tulud);
 					projekt.setKasutajad(kasutajad);
+					projekt.setId(projektID);
 					
 					projektid.add(projekt);
 					
@@ -219,4 +220,5 @@ public class ProjektidController {
 	}
 	
 	//@RequestParam("nimi") String nimi, @RequestParam("nimi2") String nimi2
+	
 }

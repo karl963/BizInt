@@ -21,6 +21,7 @@ public class Projekt {
 	public static final int ERROR_JUBA_EKSISTEERIB = 0, VIGA_ANDMEBAASIGA_ÜHENDUMISEL = 1, KÕIK_OKEI = 2;
 	
 	private String nimi,kirjeldus;
+	private int id;
 	private List<Kasutaja> kasutajad;
 	private List<Tulu> tulud;
 	private List<Kulu> kulud;
@@ -306,6 +307,14 @@ public class Projekt {
 
 	public void setStaatusID(int staatusID) {
 		this.staatusID = staatusID;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
 	}
 	
 }
