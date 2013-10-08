@@ -1,15 +1,17 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 
 <div class=textontop>
 
 <div class=staatusteKonteiner>
 
+<c:if test="${not empty message}"><div class="message green">${message}</div></c:if>
+
 <c:forEach items="${staatused}" var="staatus">
 
 <div class=divNextToEachOther>
-
+	
 	<div class=statustext>
 		${staatus.nimi}<br>
 		${staatus.kogutulu}
@@ -37,10 +39,13 @@
 		</c:forEach>
 		
 		<table class=project>
-			<tr>
-				<th>Uus projekt</th>
-				<th><a href="vaadeProjektid.htm"><img src="${pageContext.request.contextPath}/images/addbutton.png"></a></th>
-			</tr>
+			<form:form modelAttribute="uusProjekt">
+				<tr>
+					<form:input path="nimi" />
+					<form:input path="staatusID" value="${staatus.id}" type="hidden"/>
+					<th><input class=addbutton type="submit" value="Lisa" src="${pageContext.request.contextPath}/images/addbutton.png" /></th>
+				</tr>
+			</form:form>
 		</table>
 	</div>
 	
@@ -51,12 +56,11 @@
 
 	<div class="statustext">
 		<div class=statusdivider>
-			Uus staatus
-			<div>
-				<a href="vaadeProjektid.htm">
-					<img class=addbutton src="${pageContext.request.contextPath}/images/addbutton.png">
-				</a>
-			</div>
+			<form:form modelAttribute="uusStaatus">
+				<form:input path="nimi" />
+					<input class=addbutton type="submit" value="Lisa" src="${pageContext.request.contextPath}/images/addbutton.png" />
+					<!-- <img class=addbutton src="${pageContext.request.contextPath}/images/addbutton.png">-->
+			</form:form>
 		</div>
 	</div>
 	

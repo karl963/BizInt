@@ -1,9 +1,13 @@
 package bizint.app.alam;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import bizint.andmebaas.Mysql;
 import bizint.app.alam.muu.Kommentaar;
 import bizint.app.alam.muu.Logi;
 import bizint.app.alam.rahaline.Kulu;
@@ -11,9 +15,10 @@ import bizint.app.alam.rahaline.Tulu;
 
 public class Projekt {
 	
-	private static String DEFAULT_NIMI = "uus projekt";
-	private static String DEFAULT_KIRJELDUS = "lahe projekt";
-	private static int DEFAULT_REITING = 0;
+	private static final String DEFAULT_NIMI = "uus projekt";
+	private static final String DEFAULT_KIRJELDUS = "lahe projekt";
+	private static final int DEFAULT_REITING = 0;
+	public static final int ERROR_JUBA_EKSISTEERIB = 0, VIGA_ANDMEBAASIGA_ÜHENDUMISEL = 1, KÕIK_OKEI = 2;
 	
 	private String nimi,kirjeldus;
 	private List<Kasutaja> kasutajad;
@@ -22,6 +27,7 @@ public class Projekt {
 	private List<Kommentaar> kommentaarid;
 	private List<Logi> logi;
 	private int reiting;
+	private int staatusID;
 	
 	  ///////////\\\\\\\\\\\\
 	 ///// constructors \\\\\\
@@ -83,6 +89,31 @@ public class Projekt {
 			}
 		}
 		return null;
+	}
+	
+	public static int lisaProjektAndmebaasi(Projekt projekt,int staatusID){
+		
+		Connection con = Mysql.connection;
+		if(con==null){
+			return Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e) {
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		String query = "INSERT INTO projektid (projektNimi, staatus_ID) VALUES ('"+projekt.getNimi()+"',"+staatusID+")";
+		
+		try {
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		return Projekt.KÕIK_OKEI;
 	}
 	
 	public static boolean muudaKasutajaKuupalkaAndmebaasis(Projekt projekt, Kasutaja kasutaja, Double Kuupalk, Date aeg){
@@ -267,6 +298,14 @@ public class Projekt {
 	}
 	public void setReiting(int reiting) {
 		this.reiting = reiting;
+	}
+
+	public int getStaatusID() {
+		return staatusID;
+	}
+
+	public void setStaatusID(int staatusID) {
+		this.staatusID = staatusID;
 	}
 	
 }
