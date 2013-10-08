@@ -111,14 +111,12 @@ a
 .statustext
 {
 	
-
 	margin-left:20px;
 	width:175px;
 	font-family:arial;
 	font-size:20;
 	left:10px;
 	top:0px;
-	overflow:auto;
 }
 
 .statusdivider
@@ -148,13 +146,17 @@ a
 
 .divNextToEachOther
 {
-	float:left;
+	display: inline-block;
 	
 }
 
 .staatusteKonteiner
 {
-	height:500;
+	height:473px;
+	overflow-x: auto;
+	overflow-y: hidden;
+	white-space:nowrap;
+	
 	
 }
 

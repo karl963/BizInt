@@ -53,7 +53,7 @@
 
 
 
-	<div class="statustext">
+	<div class="statustext divNextToEachOther">
 		<div class=statusdivider>
 			<form:form modelAttribute="uusStaatus">
 				<form:input path="nimi" />
