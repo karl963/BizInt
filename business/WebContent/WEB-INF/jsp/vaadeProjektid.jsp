@@ -1,11 +1,11 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
+<div class=textontop>
+
 <div class=message>
 	<c:if test="${not empty message}"><div class="message green">${message}</div></c:if>
 </div>
-
-<div class=textontop>
 
 <div class=staatusteKonteiner>
 
@@ -22,6 +22,19 @@
 	
 
 	<div class=scrollwindow>
+	
+		<table class=project>
+			<form:form modelAttribute="uusProjekt">
+				<tr>
+					<td>
+						<form:input class="uusProjekt" path="nimi" />
+						<form:input path="staatusID" value="${staatus.id}" type="hidden"/>
+						<input class=addbutton type="submit" value="+" style="background:url(${pageContext.request.contextPath}/images/addbutton.png) no-repeat;" />
+					</td>
+				</tr>
+			</form:form>
+		</table>
+		<br>
 		<c:forEach items="${staatus.projektid}" var="projekt">
 			<a href="vaadeProjektEsimene.htm?id=${projekt.id}">
 			<table class=project>
@@ -41,17 +54,6 @@
 			<p></p>
 		</c:forEach>
 		
-		<table class=project>
-			<form:form modelAttribute="uusProjekt">
-				<tr>
-					<td>
-						<form:input class="uusProjekt" path="nimi" />
-						<form:input path="staatusID" value="${staatus.id}" type="hidden"/>
-						<input class=addbutton type="submit" value="+" style="background:url(${pageContext.request.contextPath}/images/addbutton.png) no-repeat;" />
-					</td>
-				</tr>
-			</form:form>
-		</table>
 	</div>
 	
 </div>

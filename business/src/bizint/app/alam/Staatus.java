@@ -88,7 +88,6 @@ public class Staatus {
 		try {
 			stmt.executeUpdate(query);
 		} catch (SQLException e) {
-			e.printStackTrace();
 			return Staatus.ERROR_JUBA_EKSISTEERIB;
 		}
 		
