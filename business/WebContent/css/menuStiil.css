@@ -1,4 +1,10 @@
 @CHARSET "ISO-8859-1";
+
+.uusProjekt
+{
+	width:140px;
+}
+
 .menuu_list{
   list-style: none;
 }
@@ -107,16 +113,31 @@ a
 	width:1050px;
 	border:1px solid #F6F4F0;
 }
+.message
+{
+	position:absolute;
+	left:50px;
+	top:165px;
+	font-family:arial;
+	font-size:20;
+	color:green;
+	text-decoration:bold;
+}
 
 .statustext
 {
-	
 	margin-left:20px;
-	width:175px;
+	width:210px;
 	font-family:arial;
 	font-size:20;
 	left:10px;
 	top:0px;
+	text-transform:capitalize;
+}
+.tulutext
+{
+	font-family:arial;
+	font-size:15;
 }
 
 .statusdivider
@@ -138,7 +159,7 @@ a
 	left:10px;
 	top:50px;
 	height:375px;
-	width:180px;
+	width:210px;
 	border:1px solid #F6F4F0;
 	background-color:#F6F4F0;
 	overflow:auto;
@@ -165,10 +186,11 @@ a
 	position:relative;
 	left:10px;
 	top:5px;
-	width:150px;
+	width:180px;
 	background-color:white;
 	font-family:arial;
-	font-size:10;
+	font-size:12;
+	border:1px dotted #686767;
 }
 
 body

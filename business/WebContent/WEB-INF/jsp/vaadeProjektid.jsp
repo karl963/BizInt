@@ -1,12 +1,13 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
+<div class=message">
+	<c:if test="${not empty message}"><div class="message green">${message}</div></c:if>
+</div>
 
 <div class=textontop>
 
 <div class=staatusteKonteiner>
-
-<c:if test="${not empty message}"><div class="message green">${message}</div></c:if>
 
 <c:forEach items="${staatused}" var="staatus">
 
@@ -14,8 +15,11 @@
 	
 	<div class=statustext>
 		${staatus.nimi}<br>
-		${staatus.kogutulu}
+		<div class=tulutext>
+			&euro; ${staatus.kogutulu}
+		</div>
 	</div>
+	
 
 	<div class=scrollwindow>
 		<c:forEach items="${staatus.projektid}" var="projekt">
@@ -25,12 +29,12 @@
 					<th COLSPAN=2>${projekt.nimi}</th>
 				</tr>
 				<tr>
-					<th>Vastutaja:</th>
-					<th>${projekt.vastutaja.nimi}</th>
+					<td>Vastutaja:</td>
+					<td>${projekt.vastutaja.nimi}</td>
 				</tr>
 				<tr>
-					<th>Tulu:</th>
-					<th>${projekt.kogutulu}</th>
+					<td>Tulu:</td>
+					<td>${projekt.kogutulu}</td>
 				</tr>
 			</table>
 			</a>
@@ -40,9 +44,11 @@
 		<table class=project>
 			<form:form modelAttribute="uusProjekt">
 				<tr>
-					<form:input path="nimi" />
-					<form:input path="staatusID" value="${staatus.id}" type="hidden"/>
-					<th><input class=addbutton type="submit" value="Lisa" src="${pageContext.request.contextPath}/images/addbutton.png" /></th>
+					<td>
+						<form:input class="uusProjekt" path="nimi" />
+						<form:input path="staatusID" value="${staatus.id}" type="hidden"/>
+						<input class=addbutton type="submit" value="+" style="background:url(${pageContext.request.contextPath}/images/addbutton.png) no-repeat;" />
+					</td>
 				</tr>
 			</form:form>
 		</table>
@@ -51,13 +57,11 @@
 </div>
 </c:forEach>
 
-
-
 	<div class="statustext divNextToEachOther">
 		<div class=statusdivider>
 			<form:form modelAttribute="uusStaatus">
-				<form:input path="nimi" />
-					<input class=addbutton type="submit" value="Lisa" src="${pageContext.request.contextPath}/images/addbutton.png" />
+				<form:input class="uusProjekt" path="nimi" />
+				<input class=addbutton type="submit" value="+" style="background:url(${pageContext.request.contextPath}/images/addbutton.png) no-repeat;" />
 					<!-- <img class=addbutton src="${pageContext.request.contextPath}/images/addbutton.png">-->
 			</form:form>
 		</div>
