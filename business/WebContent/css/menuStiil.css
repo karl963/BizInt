@@ -102,7 +102,10 @@ a
 {
 	position:absolute;
 	left:50px;
-	top:200px;
+	top:190px;
+	height:430px;
+	width:1050px;
+	border:1px solid #F6F4F0;
 }
 
 .statustext
@@ -162,6 +165,8 @@ a
 	top:5px;
 	width:150px;
 	background-color:white;
+	font-family:arial;
+	font-size:10;
 }
 
 body

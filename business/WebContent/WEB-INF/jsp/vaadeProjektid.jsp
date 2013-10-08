@@ -20,8 +20,7 @@
 			<a href="vaadeProjektEsimene.htm">
 			<table class=project>
 				<tr>
-					<th>Nimi: </th>
-					<th>${projekt.nimi}</th>
+					<th COLSPAN=2>${projekt.nimi}</th>
 				</tr>
 				<tr>
 					<th>Vastutaja:</th>
