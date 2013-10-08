@@ -8,10 +8,6 @@ import java.util.Properties;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,7 +22,7 @@ public class Mysql {
 		}
 	}
 	
-	public static Connection CONNECTION;
+	public static Connection connection;
 	
 	@Resource(name="andmebaasiProperties")
 	private Properties properties;
@@ -42,7 +38,7 @@ public class Mysql {
 		String parool = properties.getProperty("kasutajaParool");
 		
 		try {
-			CONNECTION =  DriverManager.getConnection("jdbc:" + dbms + "://" + nimi + ":" + port + "/" + schema, kasutaja, parool);
+			connection =  DriverManager.getConnection("jdbc:" + dbms + "://" + nimi + ":" + port + "/" + schema, kasutaja, parool);
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

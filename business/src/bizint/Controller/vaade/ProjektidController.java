@@ -4,13 +4,16 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.view.RedirectView;
 
 import bizint.andmebaas.Mysql;
 import bizint.app.alam.Kasutaja;
@@ -21,17 +24,19 @@ import bizint.app.alam.rahaline.Tulu;
 @Controller
 public class ProjektidController {
 	
-	List<Staatus> staatused;
+	private List<Staatus> staatused = new ArrayList<Staatus>();
+	private String sõnum;
 	
-	@RequestMapping("/vaadeProjektid.htm")
-	public ModelAndView annaAndmed(){
+	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.GET)
+	public String vaadeProjektid(Model m){
+		
 		
 		/*
+		 * STAATILINE KOOD, ilma andmebaasita
 		 * staatus(järjekorranr,nimi,projekt(nimi,vastutaja,kogutulu))
 		 */
-		
-		
-		List<Object> staatused = new ArrayList<Object>();
+		/*
+		staatused = new ArrayList<Staatus>();
 
 		Staatus s1 = new Staatus("Suvalised",0);
 		
@@ -84,11 +89,11 @@ public class ProjektidController {
 		
 		staatused.add(s1);
 		staatused.add(s2);
-		 
-		/*
+		 */
+		
 		staatused = new ArrayList<Staatus>();
 		
-		Connection con = Mysql.CONNECTION;
+		Connection con = Mysql.connection;;
 		
 		try{
 			
@@ -108,6 +113,7 @@ public class ProjektidController {
 				
 				staatus.setJärjekorraNumber(järjekorraNumber);
 				staatus.setNimi(staatusNimi);
+				staatus.setId(staatusID);
 				
 				String query2 = "SELECT projektNimi, projektID FROM projektid WHERE staatus_ID="+staatusID;
 				Statement stmt2 = con.createStatement();
@@ -168,9 +174,49 @@ public class ProjektidController {
 		}catch(Exception x){
 			x.printStackTrace();
 		}
-		*/
-		return new ModelAndView("vaadeProjektid", "staatused", staatused);
+		
+		
+		m.addAttribute("staatused", staatused);
+		m.addAttribute("uusStaatus", new Staatus());
+		m.addAttribute("uusProjekt", new Projekt());
+		m.addAttribute("message", sõnum);
+		sõnum = null;
+		
+		return "vaadeProjektid";
 	}
 
+	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"nimi"})
+	public View addStaatus(@ModelAttribute("uusStaatus") Staatus staatus, Model m){
+		
+		int vastus = Staatus.lisaStaatusAndmebaasi(staatus);
+		
+		if(vastus == Staatus.ERROR_JUBA_EKSISTEERIB){
+			sõnum = "Selle nimega staatus juba eksisteerib";
+		}
+		else if(vastus == Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
+			sõnum = "Viga andmebaasiga ühendumisel";
+		}
+		else{
+			sõnum = "Staatuse lisamine õnnestus";
+		}
+		
+		return new RedirectView("vaadeProjektid.htm");
+	}
+	
+	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"nimi","staatusID"})
+	public View addStaatus(@ModelAttribute("uusProjekt") Projekt projekt, int staatusID, Model m){
 
+		int vastus = Projekt.lisaProjektAndmebaasi(projekt,staatusID);
+		
+		if(vastus == Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
+			sõnum = "Viga andmebaasiga ühendumisel";
+		}
+		else{
+			sõnum = "Projekti lisamine õnnestus";
+		}
+		
+		return new RedirectView("vaadeProjektid.htm");
+	}
+	
+	//@RequestParam("nimi") String nimi, @RequestParam("nimi2") String nimi2
 }
