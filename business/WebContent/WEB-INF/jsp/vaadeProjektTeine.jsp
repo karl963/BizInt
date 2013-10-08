@@ -21,3 +21,8 @@ ${projekt.kogukulu}
 <c:forEach items="${projekt.kommentaarid}" var="kommentaar">
 	${kommentaar.kasutaja.nimi} ${kommentaar.sonum} (${kommentaar.formaaditudAeg})
 </c:forEach>
+
+<br>
+<a href="vaadeProjektid.htm">tagasi</a>
+<p></p>
+<a href="vaadeProjektEsimene.htm?id=${projekt.id}">Üldine vaade</a>

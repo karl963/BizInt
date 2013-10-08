@@ -129,8 +129,9 @@ public class ProjektController {
 	}
 
 	@RequestMapping("/vaadeProjektTeine.htm")
-	public ModelAndView vaadeProjektTeine() {
+	public String vaadeProjektTeine(@RequestParam("id") int projektID, Model m) {
 		
+		String teade = null;
 		/*
 		 * nimi,kogutulu,tulu(summa,nimi,formaaditudaeg),kulu(summa,nimi,formaaditudaeg),kommentaar(sonum,kasutaja,formaaditudaeg)
 		 */
@@ -139,19 +140,28 @@ public class ProjektController {
 		List<Tulu> tulud = new ArrayList<Tulu>();
 		List<Kommentaar> kommentaarid = new ArrayList<Kommentaar>();
 		
-		ResultSet rs = null;
-		
 		String nimi = null;
 		
+		Connection con = Mysql.connection;;
+		
 		try{
-			nimi = rs.getString("nimi");
 			
-			while(rs.next()){
+			Statement stmt = con.createStatement();
+			String query = "SELECT projektNimi FROM projektid WHERE projektID="+projektID;
+			ResultSet rs = stmt.executeQuery(query);
+			
+			nimi = rs.getString("projektNimi");
+			
+			Statement stmt2 = con.createStatement();
+			String query2 = "SELECT summa, tuluNimi, aeg FROM tulud WHERE projekt_ID="+projektID;
+			ResultSet rs2 = stmt2.executeQuery(query2);
+
+			while(rs2.next()){
 				Tulu tulu = new Tulu();
 				
 				Double summa = rs.getDouble("summa");
-				String tuluNimi = rs.getString("nimi");
-				Date aeg = rs.getDate("aeg");
+				String tuluNimi = rs.getString("tuluNimi");
+				Date aeg = rs.getTimestamp("aeg");
 				
 				tulu.setSumma(summa);
 				tulu.setNimi(tuluNimi);
@@ -160,12 +170,16 @@ public class ProjektController {
 				tulud.add(tulu);
 			}
 			
-			while(rs.next()){
+			Statement stmt3 = con.createStatement();
+			String query3 = "SELECT summa, kuluNimi, aeg FROM kulud WHERE projekt_ID="+projektID;
+			ResultSet rs3 = stmt3.executeQuery(query3);
+			
+			while(rs3.next()){
 				Kulu kulu = new Kulu();
 				
 				Double summa = rs.getDouble("summa");
-				String kuluNimi = rs.getString("nimi");
-				Date aeg = rs.getDate("aeg");
+				String kuluNimi = rs.getString("kuluNimi");
+				Date aeg = rs.getTimestamp("aeg");
 				
 				kulu.setSumma(summa);
 				kulu.setNimi(kuluNimi);
@@ -173,13 +187,19 @@ public class ProjektController {
 				
 				kulud.add(kulu);
 			}
-			while(rs.next()){
+			
+			Statement stmt4 = con.createStatement();
+			String query4 = "SELECT sonum,aeg,kasutajaNimi FROM kommentaarid, projektid, kasutajad WHERE kommentaarid.projekt_ID="+projektID+" AND kommentaarid.kasutaja_ID=kasutajad.kasutajaID";
+			ResultSet rs4 = stmt4.executeQuery(query4);
+			
+			while(rs4.next()){
 				Kommentaar kommentaar = new Kommentaar();
 				
-				Date aeg = rs.getDate("aeg");
-				String sõnum = rs.getString("sonum");
+				Date aeg = rs4.getTimestamp("aeg");
+				String sõnum = rs4.getString("sonum");
 				
 				Kasutaja kasutaja = new Kasutaja();
+				kasutaja.setNimi(rs4.getString("kasutajaNimi"));
 				
 				kommentaar.setAeg(aeg);
 				kommentaar.setKasutaja(kasutaja);
@@ -188,7 +208,7 @@ public class ProjektController {
 				kommentaarid.add(kommentaar);
 			}
 		}catch(Exception x){
-			
+			x.printStackTrace();
 		}
 		
 		Projekt projekt = new Projekt();
@@ -198,7 +218,10 @@ public class ProjektController {
 		projekt.setTulud(tulud);
 		projekt.setKommentaarid(kommentaarid);
 		
-		return new ModelAndView("vaadeProjektTeine", "projekt", projekt); 
+		m.addAttribute("projekt", projekt);
+		m.addAttribute("message", teade);
+		
+		return "vaadeProjektTeine";
 	}
 	
 }

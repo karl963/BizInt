@@ -56,3 +56,8 @@
 	</tr>
 	</c:forEach>
 </table>
+
+<br>
+<a href="vaadeProjektid.htm">tagasi</a>
+<p></p>
+<a href="vaadeProjektTeine.htm?id=${projekt.id}">Tulud ja kulud vaade</a>
