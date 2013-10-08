@@ -40,7 +40,11 @@ public class Tulu {
 	/////////////\\\\\\\\\\\\\\
 	
 	public String getFormaaditudAeg(){
-		return Tulu.AJAFORMAAT.format(aeg);
+		try{
+			return Tulu.AJAFORMAAT.format(aeg);
+		}catch(Exception x){
+			return "-";
+		}
 	}
 	
 	  ///////////\\\\\\\\\\\\

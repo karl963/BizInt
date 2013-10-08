@@ -2,6 +2,7 @@ package bizint.Controller.vaade;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -117,6 +118,7 @@ public class ProjektController {
 		Projekt projekt = new Projekt();
 		
 		projekt.setNimi(nimi);
+		projekt.setId(projektID);
 		projekt.setKasutajad(kasutajad);
 		projekt.setKirjeldus(kirjeldus);
 		projekt.setLogi(logi);
@@ -150,18 +152,21 @@ public class ProjektController {
 			String query = "SELECT projektNimi FROM projektid WHERE projektID="+projektID;
 			ResultSet rs = stmt.executeQuery(query);
 			
+			rs.next();
+			
 			nimi = rs.getString("projektNimi");
 			
 			Statement stmt2 = con.createStatement();
-			String query2 = "SELECT summa, tuluNimi, aeg FROM tulud WHERE projekt_ID="+projektID;
+			String query2 = "SELECT tulu, tuluNimi, aeg FROM tulud WHERE projekt_ID="+projektID;
 			ResultSet rs2 = stmt2.executeQuery(query2);
-
+			
 			while(rs2.next()){
+
 				Tulu tulu = new Tulu();
 				
-				Double summa = rs.getDouble("summa");
-				String tuluNimi = rs.getString("tuluNimi");
-				Date aeg = rs.getTimestamp("aeg");
+				Double summa = rs2.getDouble("tulu");
+				String tuluNimi = rs2.getString("tuluNimi");
+				Date aeg = rs2.getTimestamp("aeg");
 				
 				tulu.setSumma(summa);
 				tulu.setNimi(tuluNimi);
@@ -171,13 +176,13 @@ public class ProjektController {
 			}
 			
 			Statement stmt3 = con.createStatement();
-			String query3 = "SELECT summa, kuluNimi, aeg FROM kulud WHERE projekt_ID="+projektID;
+			String query3 = "SELECT  kuluNimi, aeg FROM kulud WHERE projekt_ID="+projektID;
 			ResultSet rs3 = stmt3.executeQuery(query3);
 			
 			while(rs3.next()){
 				Kulu kulu = new Kulu();
 				
-				Double summa = rs.getDouble("summa");
+				Double summa = rs.getDouble("kulu");
 				String kuluNimi = rs.getString("kuluNimi");
 				Date aeg = rs.getTimestamp("aeg");
 				
@@ -214,6 +219,7 @@ public class ProjektController {
 		Projekt projekt = new Projekt();
 		
 		projekt.setNimi(nimi);
+		projekt.setId(projektID);
 		projekt.setKulud(kulud);
 		projekt.setTulud(tulud);
 		projekt.setKommentaarid(kommentaarid);
