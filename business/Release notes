@@ -16,6 +16,7 @@ Current verison: 2.0 alpha
 
 -- Teada olevad probleemid
 * Kommentaaride kuupäev ja kellaaeg on vale
+* Kommentaarid peaksid olema vastupidises järjekorras ( viimati komminud peaks olema üleval )
 * projekti detailivaade on liiga algeline
  ' Projekti kirjelduse ja kommenteerimise lahter on liiga väike
  ' Enamus lahterid on liiga suured
