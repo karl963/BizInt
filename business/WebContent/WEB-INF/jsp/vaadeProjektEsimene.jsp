@@ -1,40 +1,76 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <p>${message}</p>
-
+<body class=darkBack>
+<div class=detailViewDiv>
+<div class=detailViewHeader>
 <h1>${projekt.nimi}</h1>
+<div class=muudaKustuta><button type="button">Muuda nime</button><button type="button">Kustuta projekt</button> </div>
+<div class=tuluKulu>
+Tulu:${projekt.kogutulu} Kulu:${projekt.kogukulu}
+</div>
 
-<p>reiting: ${projekt.reiting}</p>
+<div class=reiting>
+reiting: ${projekt.reiting}
+</div>
 
-<table style="border:1px solid black">
+
+<div class=viewTabs>
+<table>
+<tr>
+<th class=activeTab>Üldine</th>
+<th><a href="vaadeProjektTeine.htm?id=${projekt.id}">Tulud ja kulud</a></th>
+</tr>
+</table>
+
+</div>
+</div>
+<div class=leftSideDiv>
+
+Projektiga seotud inimesed:
+<br>
+<select>
+<option value="Kasutaja I">Kasutaja I</option>
+</select>
+<button type="button">Lisa</button>
+<div class=describe>
+
+<table class=table>
 	<tr>
-		<th colspan=4 style="text-align:middle">Kasutajad</th>
+		<th class=smallCell>Vastuaja</th>
+		<th class=smallCell>Aktiivne</th>
+		<th class=nameCell>Nimi</th>
+		<th class=smallCell>Osalus</th>
+		<th></th>
 	</tr>
-	<tr>
-		<td style="border:1px solid black">vastuaja</td>
-		<td style="border:1px solid black">aktiivne</td>
-		<td style="border:1px solid black">nimi</td>
-		<td style="border:1px solid black">osalus</td>
-	</tr>
+
 	<c:forEach items="${projekt.kasutajad}" var="kasutaja">
 		<tr>
-			<td style="border:1px solid black">${kasutaja.vastutaja}</td>
-			<td style="border:1px solid black">${kasutaja.aktiivne}</td>
-			<td style="border:1px solid black">${kasutaja.nimi}</td>
-			<td style="border:1px solid black">${kasutaja.osalus}</td>
+			<td>${kasutaja.vastutaja}</td>
+			<td>${kasutaja.aktiivne}</td>
+			<td>${kasutaja.nimi}</td>
+			<td>${kasutaja.osalus}</td>
+			<td><button type="button">Kustuta</button>
 		</tr>
 	</c:forEach>
 </table>
-
-<table style="border:1px solid black">
-	<tr>
-		<th>Projekti kirjeldus</th>
-	</tr>
+</div>
+<div class=buttonAlign>
+<button type="button">Salvesta</button>
+</div>
+<br>
+Kirjeldus:
+<div class=describe>
+<table>
 	<tr>
 		<td>${projekt.kirjeldus}</td>
 	</tr>
 </table>
+</div>
+<div class=buttonAlign>
+<button type="button">Muuda</button>
+</div>
 
-<table style="border:1px solid black">
+<table>
 	<tr>
 		<th>Logi</th>
 	</tr>
@@ -44,6 +80,9 @@
 	</tr>
 	</c:forEach>
 </table>
+
+</div>
+<div class=rightSideDiv>
 
 <!-- sulud ajal on lihtsalt selleks et nad ongi sulgudes, mina vähemalt paneks nii -->
 <table style="border:1px solid black">
@@ -57,7 +96,9 @@
 	</c:forEach>
 </table>
 
-<br>
-<a href="vaadeProjektid.htm">tagasi</a>
-<p></p>
-<a href="vaadeProjektTeine.htm?id=${projekt.id}">Tulud ja kulud vaade</a>
+</div>
+</div>
+<a href="vaadeProjektid.htm">
+<div class=closeView >X</div>
+</a>
+</body>

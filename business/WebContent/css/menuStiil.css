@@ -107,10 +107,10 @@ a
 .textontop
 {
 	position:absolute;
-	left:50px;
+	left:40px;
 	top:170px;
-	height:430px;
-	width:1050px;
+	height:470px;
+	width:1080px;
 	border:1px solid #F6F4F0;
 }
 .message
@@ -144,6 +144,11 @@ a
 	width:155px;
 }
 
+.newStatusDiv
+{
+
+}
+
 .addbutton
 {
 	
@@ -156,7 +161,7 @@ a
 	
 	left:10px;
 	top:50px;
-	height:415px;
+	height:400px;
 	width:210px;
 	border:1px solid #F6F4F0;
 	background-color:#F6F4F0;
@@ -166,12 +171,13 @@ a
 .divNextToEachOther
 {
 	display: inline-block;
+
 	
 }
 
 .staatusteKonteiner
 {
-	height:493px;
+	height:470px;
 	overflow-x: auto;
 	overflow-y: hidden;
 	white-space:nowrap;
@@ -189,7 +195,160 @@ a
 	border:1px dotted #686767;
 }
 
+.newStatus
+{
+	position:relative;
+	top:-400px;
+}
+
 body
 {
 	background-color:#F6F4F0;
+}
+
+h1
+{
+	font-family:arial;
+}
+
+.detailViewDiv
+{
+	position:absolute;
+	left:100px;
+	top:50px;
+	height:700px;
+	width:1400px;
+	background-color:white;
+}
+
+.darkBack
+{
+	background-color:#7A7A7A;
+	font-family:arial;
+}
+
+.detailViewHeader
+{
+	position:absolute;
+	left:10px;
+	height:50px;
+	width:1400px;
+}
+
+.leftSideDiv
+{
+	position:absolute;
+	left:10px;
+	top:150px;
+	overflow-y:auto;
+	overflow-x:hidden;
+	border:1px solid #F6F4F0;
+	height:545px;
+	width:650px;
+}
+
+.rightSideDiv
+{
+	position:absolute;
+	left:660px;
+	top:100px;
+	overflow:auto;
+	border:1px solid #F6F4F0;
+	height:595px;
+	width:650px;
+}
+
+.tuluKulu
+{
+	position:absolute;
+	left:0px;
+	top:70px;
+	width:300px;
+}
+
+.reiting
+{
+	position:absolute;
+	left:300px;
+	top:70px;
+	width:300px;
+}
+
+.muudaKustuta
+{
+	position:absolute;
+	left:350px;
+	top:40px;
+}
+
+.viewTabs
+{
+	position:absolute;
+	left:150px;
+	top:100px;
+	font-family:arial;
+	font-size:20;
+	text-decoration:bold;
+	background-color:#F6F4F0;
+}
+
+.activeTab
+{
+	background-color:#3FBBFF;
+}
+
+.describe
+{
+	width:500px;
+	height:300px;
+	overflow:auto;
+	border:1px solid #F6F4F0;
+}
+
+.smallCell
+{
+	width:50px;
+	border:1px dotted #686767;
+}
+
+.nameCell
+{
+	width:300px;
+	border:1px dotted #686767;
+}
+
+.table
+{
+	border:1px dotted #686767;
+}
+
+.buttonAlign
+{
+	position:relative;
+	left:450px;
+}
+
+.closeView
+{
+	position:absolute;
+	left:1465px;
+	top:30px;
+	height:50px;
+	width:50px;
+	align:center;
+	background-color:#C22828;
+	border:2px solid black;
+	font-family:arial;
+	text-decoration:bold;
+	font-size:50;
+}
+
+.smallInput
+{
+	width:100px;
+}
+
+.bigInput
+{
+	width:200px;
 }

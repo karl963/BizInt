@@ -59,14 +59,14 @@
 </div>
 </c:forEach>
 
-	<div class="statustext divNextToEachOther">
-		<div class=statusdivider>
+	<div class="statustext divNextToEachOther newStatus">
+		
 			<form:form modelAttribute="uusStaatus">
 				<form:input class="uusProjekt" path="nimi" />
 				<input class=addbutton type="submit" value="+" style="background:url(${pageContext.request.contextPath}/images/addbutton.png) no-repeat;" />
 					<!-- <img class=addbutton src="${pageContext.request.contextPath}/images/addbutton.png">-->
 			</form:form>
-		</div>
+		
 	</div>
 	
 	</div>
