@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
 
 <p>${message}</p>
@@ -28,29 +29,52 @@ reiting: ${projekt.reiting}
 </div>
 <div class=leftSideDiv>
 
-<form>
-Tulu: <input type="text" class=smallInput> Kuupäev: <input type="text" class=smallInput> <br> Kirjeldus: <input type="text" class=bigInput> <button type="button">Lisa</button> <br>
+
+
+Tulu: <input class="smallInput" /> Kuupäev: <input class="smallInput" /> <br> Kirjeldus: <input class="bigInput" /> <input type="submit" value="lisa"> <br>
+
 <br>
-Kulu: <input type="text" class=smallInput> Kuupäev: <input type="text" class=smallInput> <br> Kirjeldus: <input type="text" class=bigInput> <button type="button">Lisa</button> <br>
-</form>
+
+Kulu: <input class="smallInput" /> Kuupäev: <input class="smallInput" /> <br> Kirjeldus: <input class="bigInput" /> <input type="submit" value="lisa"> <br>
+
 
 Tulud ja kulud:
 
 <div class=describe>
 <c:forEach items="${projekt.tulud}" var="tulu">
-	+ ${tulu.summa}
-	${tulu.nimi}
-	${tulu.formaaditudAeg}
-	<button type="button">Kustuta</button>
-	<br>
+	<form:form modelAttribute="kustutaTulu">
+	<form:input path="tuluNimi" type="hidden" value="${tulu.tuluNimi}" />
+	<form:input path="summa" type="hidden" value="${tulu.summa}" />
+	<form:input path="aeg" type="hidden" value="${tulu.aeg}" />
+	<form:input path="projektID" type="hidden" value="${projekt.id}" />
+	
+		+ ${tulu.summa}
+		<small>
+			${tulu.tuluNimi}
+			<i>${tulu.formaaditudAeg}</i>
+		</small>
+		<input type="button" value="kustuta" />
+		<br>
+		
+	</form:form>
 </c:forEach>
 
 <c:forEach items="${projekt.kulud}" var="kulu">
-	- ${kulu.summa}
-	${kulu.nimi}
-	${kulu.formaaditudAeg}
-	<button type="button">Kustuta</button>
-	<br>
+	<form:form modelAttribute="kustutaKulu">
+	<form:input path="kuluNimi" type="hidden" value="${kulu.kuluNimi}" />
+	<form:input path="summa" type="hidden" value="${kulu.summa}" />
+	<form:input path="aeg" type="hidden" value="${kulu.aeg}" />
+	<form:input path="projektID" type="hidden" value="${projekt.id}" />
+	
+		- ${kulu.summa}
+		<small>
+			${kulu.kuluNimi}
+			<i>${kulu.formaaditudAeg}</i>
+		</small>
+		<input type="button" value="kustuta" />
+		<br>
+		
+	</form:form>
 </c:forEach>
 
 
@@ -59,14 +83,23 @@ Tulud ja kulud:
 </div>
 <div class=rightSideDiv>
 
-<!-- sulud ajal on lihtsalt selleks et nad ongi sulgudes, mina vähemalt paneks nii -->
+<form:form modelAttribute="uusKommentaar">
+	<tr>
+		<td>
+			<form:input path="sonum" />
+			<form:input path="projektID" value="${projekt.id}" type="hidden"/>
+			<input type="submit" value="lisa" />
+		</td>
+	</tr>
+</form:form>
+
 <table style="border:1px solid black">
 	<tr>
 		<th>Kommentaarid</th>
 	</tr>
 	<c:forEach items="${projekt.kommentaarid}" var="kommentaar">
 	<tr>
-		<td>${kommentaar.kasutaja.nimi} : ${kommentaar.sonum} ("${kommentaar.formaaditudAeg}")</td>
+		<td>${kommentaar.sonum} <small><i>(${kommentaar.kasutaja.kasutajaNimi} - ${kommentaar.formaaditudAeg})</i></small></td>
 	</tr>
 	</c:forEach>
 </table>

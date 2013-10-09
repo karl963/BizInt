@@ -10,7 +10,7 @@ public class Kasutaja {
 	public static boolean DEFAULT_VASTUTAJA = false;
 	public static boolean DEFAULT_AKTIIVNE = false;
 	
-	private String nimi;
+	private String kasutajaNimi;
 	private Date aeg;
 	private Double kuupalk, osalus;
 	private boolean vastutaja, aktiivne;
@@ -21,7 +21,7 @@ public class Kasutaja {
 	/////////////\\\\\\\\\\\\\\
 	
 	public Kasutaja(){
-		this.nimi = Kasutaja.DEFAULT_NIMI;
+		this.kasutajaNimi = Kasutaja.DEFAULT_NIMI;
 		this.aeg = new Date();
 		this.kuupalk = Kasutaja.DEFAULT_KUUPALK;
 		this.osalus = Kasutaja.DEFAULT_OSALUS;
@@ -30,7 +30,7 @@ public class Kasutaja {
 	}
 	
 	public Kasutaja(String nimi){
-		this.nimi = nimi;
+		this.kasutajaNimi = nimi;
 		this.aeg = new Date();
 		this.kuupalk = Kasutaja.DEFAULT_KUUPALK;
 		this.osalus = Kasutaja.DEFAULT_OSALUS;
@@ -42,11 +42,11 @@ public class Kasutaja {
 	 // getters and setters \\
 	/////////////\\\\\\\\\\\\\\
 
-	public String getNimi() {
-		return nimi;
+	public String getKasutajaNimi() {
+		return kasutajaNimi;
 	}
-	public void setNimi(String nimi) {
-		this.nimi = nimi;
+	public void setKasutajaNimi(String nimi) {
+		this.kasutajaNimi = nimi;
 	}
 	public Date getAeg() {
 		return aeg;

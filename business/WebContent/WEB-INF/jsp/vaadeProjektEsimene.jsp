@@ -1,4 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+
 <p>${message}</p>
 <body class=darkBack>
 <div class=detailViewDiv>
@@ -28,10 +30,15 @@ reiting: ${projekt.reiting}
 
 Projektiga seotud inimesed:
 <br>
+
 <select>
-<option value="Kasutaja I">Kasutaja I</option>
+<c:forEach items="${kasutajad}" var="kasutaja">
+	<option value="${kasutaja.kasutajaNimi}">${kasutaja.kasutajaNimi}</option>
+</c:forEach>
 </select>
-<button type="button">Lisa</button>
+<input type="submit" value="lisa" />
+
+
 <div class=describe>
 
 <table class=table>
@@ -47,7 +54,7 @@ Projektiga seotud inimesed:
 		<tr>
 			<td>${kasutaja.vastutaja}</td>
 			<td>${kasutaja.aktiivne}</td>
-			<td>${kasutaja.nimi}</td>
+			<td>${kasutaja.kasutajaNimi}</td>
 			<td>${kasutaja.osalus}</td>
 			<td><button type="button">Kustuta</button>
 		</tr>
@@ -59,16 +66,20 @@ Projektiga seotud inimesed:
 </div>
 <br>
 Kirjeldus:
+
+<form:form modelAttribute="uusKirjeldus">
 <div class=describe>
 <table>
 	<tr>
-		<td>${projekt.kirjeldus}</td>
+		<td><form:input path="kirjeldus" value="${projekt.kirjeldus}" /></td>
 	</tr>
+	<form:input path="projektID" value="${projekt.id}" type="hidden" />
 </table>
 </div>
 <div class=buttonAlign>
-<button type="button">Muuda</button>
+	<input class=addbutton type="submit" value="muuda"/>
 </div>
+</form:form>
 
 <table>
 	<tr>
@@ -84,14 +95,23 @@ Kirjeldus:
 </div>
 <div class=rightSideDiv>
 
-<!-- sulud ajal on lihtsalt selleks et nad ongi sulgudes, mina vähemalt paneks nii -->
+<form:form modelAttribute="uusKommentaar">
+	<tr>
+		<td>
+			<form:input path="sonum" />
+			<form:input path="projektID" value="${projekt.id}" type="hidden"/>
+			<input type="submit" value="lisa" />
+		</td>
+	</tr>
+</form:form>
+
 <table style="border:1px solid black">
 	<tr>
 		<th>Kommentaarid</th>
 	</tr>
 	<c:forEach items="${projekt.kommentaarid}" var="kommentaar">
 	<tr>
-		<td>${kommentaar.kasutaja.nimi} : ${kommentaar.sonum} ("${kommentaar.formaaditudAeg}")</td>
+		<td>${kommentaar.sonum} <small><i>(${kommentaar.kasutaja.kasutajaNimi} - ${kommentaar.formaaditudAeg})</i></small></td>
 	</tr>
 	</c:forEach>
 </table>

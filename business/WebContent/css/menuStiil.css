@@ -151,17 +151,15 @@ a
 
 .addbutton
 {
-	
 	top:-10px;
 	right:0px;
 }
 
 .scrollwindow
 {
-	
 	left:10px;
 	top:50px;
-	height:400px;
+	height:360px;
 	width:210px;
 	border:1px solid #F6F4F0;
 	background-color:#F6F4F0;
@@ -172,7 +170,6 @@ a
 {
 	display: inline-block;
 
-	
 }
 
 .staatusteKonteiner
@@ -198,7 +195,7 @@ a
 .newStatus
 {
 	position:relative;
-	top:-400px;
+
 }
 
 body

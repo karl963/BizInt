@@ -8,7 +8,7 @@ import bizint.app.alam.Kasutaja;
 public class Kommentaar {
 	
 	public static String DEFAULT_SONUM = "tühi kommentaar";
-	public static SimpleDateFormat AJAFORMAAT = new SimpleDateFormat("dd.mm.yyyy kell: hh:mm:ss");
+	public static SimpleDateFormat AJAFORMAAT = new SimpleDateFormat("dd.mm.yyyy 'kell' hh:mm:ss");
 	
 	private Kasutaja kasutaja;
 	private String sonum;

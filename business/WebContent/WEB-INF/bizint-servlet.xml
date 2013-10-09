@@ -18,6 +18,7 @@ xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springf
     <context:component-scan base-package="bizint.app.alam.rahaline" />
     <context:component-scan base-package="bizint.app.alam.muu" />
     <context:component-scan base-package="bizint.andmebaas" />
+     <context:component-scan base-package="bizint.post" />
        
     <bean id="viewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver" p:basename="views" />
     <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer" p:definitions="/WEB-INF/tiles-configuration.xml" />    

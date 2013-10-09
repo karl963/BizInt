@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -20,6 +21,7 @@ import bizint.app.alam.Kasutaja;
 import bizint.app.alam.Projekt;
 import bizint.app.alam.Staatus;
 import bizint.app.alam.rahaline.Tulu;
+import bizint.post.UusKirjeldus;
 
 @Controller
 public class ProjektidController {
@@ -128,7 +130,7 @@ public class ProjektidController {
 					int projektID = rs2.getInt("projektID");
 					String projektNimi = rs2.getString("projektNimi");
 					
-					String query3 = "SELECT kasutajaNimi, vastutaja FROM projektiKasutajad, kasutajad WHERE kasutajaID=kasutaja_ID AND projekt_ID="+projektID;
+					String query3 = "SELECT kasutajaNimi, vastutaja FROM projektikasutajad, kasutajad WHERE kasutajaID=kasutaja_ID AND projekt_ID="+projektID;
 					Statement stmt3 = con.createStatement();
 					ResultSet rs3 = stmt3.executeQuery(query3);
 					
@@ -138,7 +140,7 @@ public class ProjektidController {
 						String kasutajaNimi = rs3.getString("kasutajaNimi");
 						boolean vastutaja = rs3.getBoolean("vastutaja");
 						
-						kasutaja.setNimi(kasutajaNimi);
+						kasutaja.setKasutajaNimi(kasutajaNimi);
 						kasutaja.setVastutaja(vastutaja);
 						
 						kasutajad.add(kasutaja);

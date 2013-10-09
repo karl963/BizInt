@@ -12,7 +12,10 @@ import bizint.app.alam.muu.Kommentaar;
 import bizint.app.alam.muu.Logi;
 import bizint.app.alam.rahaline.Kulu;
 import bizint.app.alam.rahaline.Tulu;
-
+import bizint.post.UusKasutaja;
+import bizint.post.UusKirjeldus;
+import bizint.post.UusKommentaar;
+import bizint.post.UusProjektiNimi;
 public class Projekt {
 	
 	private static final String DEFAULT_NIMI = "uus projekt";
@@ -96,7 +99,7 @@ public class Projekt {
 		
 		Connection con = Mysql.connection;
 		if(con==null){
-			return Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		Statement stmt;
 		try {
@@ -106,6 +109,56 @@ public class Projekt {
 		}
 		
 		String query = "INSERT INTO projektid (projektNimi, staatus_ID) VALUES ('"+projekt.getNimi()+"',"+staatusID+")";
+		
+		try {
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		return Projekt.KÕIK_OKEI;
+	}
+	
+	public static int muudaProjektiKirjeldusAndmebaasis(UusKirjeldus uusKirjeldus){
+		
+		Connection con = Mysql.connection;
+		if(con==null){
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e) {
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		String query = "UPDATE projektid SET kirjeldus = '"+uusKirjeldus.getKirjeldus()+"' WHERE projektID="+uusKirjeldus.getProjektID();
+		
+		try {
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		return Projekt.KÕIK_OKEI;
+	}
+	
+	public static int lisaUusKasutajaAndmebaasi(UusKasutaja uusKasutaja){
+		
+		Connection con = Mysql.connection;
+		if(con==null){
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e) {
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		String query = "INSERT INTO projektikasutajad (kasutaja_ID, projekt_ID) VALUES ((SELECT kasutajaID FROM kasutajad WHERE kasutajaNimi='"+uusKasutaja.getKasutajaNimi()+"'),"+uusKasutaja.getProjektID()+")";
 		
 		try {
 			stmt.executeUpdate(query);
@@ -153,16 +206,29 @@ public class Projekt {
 		return false;
 	}
 	
-	public static boolean muudaProjektiNimeAndmebaasis(Projekt projekt, String uusProjektiNimi){
+	public static int muudaProjektiNimeAndmebaasis(UusProjektiNimi nimi){
 		
-		/******************************************************************
-		 ******************************************************************
-		 ***************************** ANDMEBAAS **************************
-		 ******************************************************************
-		 ******************************************************************
-		 */
+		Connection con = Mysql.connection;
+		if(con==null){
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e) {
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
 		
-		return false;
+		String query = "UPDATE projektid SET projektNimi = '"+nimi.getNimi()+"' WHERE projektID="+nimi.getProjektID();
+		
+		try {
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		return Projekt.KÕIK_OKEI;
 	}
 	
 	public static boolean muudaReitingutAndmebaasis(Projekt projekt, int reiting){
@@ -189,63 +255,159 @@ public class Projekt {
 		return false;
 	}
 	
-	public static boolean lisaKommentaarAndmebaasi(Projekt projekt, Kommentaar kommentaar){
+	public static int lisaKommentaarAndmebaasi(UusKommentaar uusKommentaar){
 		
-		/******************************************************************
-		 ******************************************************************
-		 ***************************** ANDMEBAAS **************************
-		 ******************************************************************
-		 ******************************************************************
-		 */
+		Connection con = Mysql.connection;
+		if(con==null){
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e) {
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
 		
-		return false;
+		String query = "INSERT INTO kommentaarid (sonum, projekt_ID, kasutaja_ID) VALUES ('"+uusKommentaar.getSonum()+"',"+uusKommentaar.getProjektID()+",0)";
+		
+		try {
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		return Projekt.KÕIK_OKEI;
 	}
 
-	public static boolean lisaKuluAndmebaasi(Projekt projekt, Kulu kulu){
+	public static int lisaKuluAndmebaasi(Kulu kulu){
 		
-		/******************************************************************
-		 ******************************************************************
-		 ***************************** ANDMEBAAS **************************
-		 ******************************************************************
-		 ******************************************************************
-		 */
+		Connection con = Mysql.connection;
+		if(con==null){
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e) {
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
 		
-		return false;
+		String query = "INSERT INTO kulud (summa, aeg, kuluNimi, projekt_ID) "
+				+ "VALUES ("+kulu.getSumma()+","+kulu.getAeg().getTime()+",'"+kulu.getKuluNimi()+"',"+kulu.getProjektID()+")";
+		
+		try {
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		return Projekt.KÕIK_OKEI;
+		
 	}
-	public static boolean lisaTuluAndmebaasi(Projekt projekt,Tulu tulu){
+	public static int lisaTuluAndmebaasi(Tulu tulu){
 		
-		/******************************************************************
-		 ******************************************************************
-		 ***************************** ANDMEBAAS **************************
-		 ******************************************************************
-		 ******************************************************************
-		 */
+		Connection con = Mysql.connection;
+		if(con==null){
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e) {
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
 		
-		return false;
+		String query = "INSERT INTO tulud (summa, aeg, tuluNimi, projekt_ID) "
+				+ "VALUES ("+tulu.getSumma()+","+tulu.getAeg().getTime()+",'"+tulu.getTuluNimi()+"',"+tulu.getProjektID()+")";
+		
+		try {
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		return Projekt.KÕIK_OKEI;
 	}
 	
-	public static boolean eemaldaTuluAndmebaasist(Projekt projekt,Tulu tulu){
+	public static int kustutaTuluAndmebaasist(Tulu tulu){
 		
-		/******************************************************************
-		 ******************************************************************
-		 ***************************** ANDMEBAAS **************************
-		 ******************************************************************
-		 ******************************************************************
-		 */
+		Connection con = Mysql.connection;
+		if(con==null){
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e) {
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
 		
-		return false;
+		String query = "DELETE FROM tulud WHERE summa="+tulu.getSumma()
+				+ " AND aeg="+tulu.getAeg().getTime()
+				+ " AND tuluNimi='"+tulu.getTuluNimi()
+				+ "' AND projekt_ID="+tulu.getProjektID();
+		try {
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		return Projekt.KÕIK_OKEI;
 	}
 	
-	public static boolean eemaldaKuluAndmebaasist(Projekt projekt,Kulu kulu){
+	public static int kustutaKuluAndmebaasist(Kulu kulu){
 		
-		/******************************************************************
-		 ******************************************************************
-		 ***************************** ANDMEBAAS **************************
-		 ******************************************************************
-		 ******************************************************************
-		 */
+		Connection con = Mysql.connection;
+		if(con==null){
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e) {
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
 		
-		return false;
+		String query = "DELETE FROM kulud WHERE summa="+kulu.getSumma()
+				+ " AND aeg="+kulu.getAeg().getTime()
+				+ " AND tuluNimi='"+kulu.getKuluNimi()
+				+ "' AND projekt_ID="+kulu.getProjektID();
+		try {
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		return Projekt.KÕIK_OKEI;
+	}
+	
+	public static int kustutaProjektAndmebaasist(int id){
+		
+		Connection con = Mysql.connection;
+		if(con==null){
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e) {
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		String query = "DELETE FROM projektid, projektikasutajad, tulud, kulud, kommentaarid, logid WHERE "
+				+ "logid.projekt_ID="+id
+				+ " AND kommentaarid.projekt_ID="+id
+				+ " AND projektikasutajad.projekt_ID="+id
+				+ " AND kulud.projekt_ID="+id
+				+ " AND tulud.projekt_ID="+id
+				+ " AND projekt.projektID="+id;
+		try {
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		return Projekt.KÕIK_OKEI;
 	}
 	
 	  ///////////\\\\\\\\\\\\
