@@ -1,0 +1,30 @@
+BizInt release notes
+
+Current verison: 2.0 alpha
+
+---------- version 2.0 alpha patch notes ----------
+
+-- Uued omadused
+* Saab liikunda menus ringi
+* Saab lisada uusi staatuseid
+* Saab lisada uusi projekte iga staatuse alla
+* Saab näha projekti detailvaadet
+* Saab kommenteerida projekti
+* Saab muuta projekti
+
+-- Bug fixes
+
+-- Teada olevad probleemid
+* Kommentaaride kuupäev ja kellaaeg on vale
+* projekti detailivaade on liiga algeline
+ ' Projekti kirjelduse ja kommenteerimise lahter on liiga väike
+ ' Enamus lahterid on liiga suured
+ ' Puuduvad eraldajad ( värvid, piirid )
+
+---------- version 1.0 alpha patch notes ----------
+-- Uued omadused
+
+-- Bug fixes
+
+-- Teada olevad probleemid
+* Mitte midagi ei tööta
