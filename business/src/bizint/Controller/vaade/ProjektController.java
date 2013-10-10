@@ -86,7 +86,7 @@ public class ProjektController {
 			}
 			
 			Statement stmt3 = con.createStatement();
-			String query3 = "SELECT sonum,aeg FROM logid, projektid WHERE logid.projekt_ID="+projektID;
+			String query3 = "SELECT sonum,aeg FROM logid WHERE projekt_ID="+projektID;
 			ResultSet rs3 = stmt3.executeQuery(query3);
 			
 			while(rs3.next()){

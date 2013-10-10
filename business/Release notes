@@ -11,6 +11,7 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Saab projektide kulusid kustutada
 * Saab muuta projekti nime
 * Saab kustutada projekti
+* Logifunktsioon, mis j‰‰dvustab kıik kasutaja tegevused ning hiljemalt kuvab need logisse
 
 -- Bug fixes
 * Kommentaaride kuup‰ev parandatud

@@ -115,9 +115,16 @@ public class Projekt {
 		try {
 			stmt.executeUpdate(query);
 		} catch (SQLException e) {
-			e.printStackTrace();
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
+		
+		try {
+			Statement stmt2 = con.createStatement();
+			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+projekt.getId()+","+"'Projekt loodi kasutaja "+"Kasutaja"+" poolt')";
+			stmt2.executeUpdate(query2);
+		} catch (SQLException e) {
+		}
+		
 		
 		return Projekt.KÕIK_OKEI;
 	}
@@ -144,6 +151,13 @@ public class Projekt {
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
+		try {
+			Statement stmt2 = con.createStatement();
+			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+uusKirjeldus.getProjektID()+","+"'"+"Kasutaja"+" muutis projekti kirjeldust')";
+			stmt2.executeUpdate(query2);
+		} catch (SQLException e) {
+		}
+		
 		return Projekt.KÕIK_OKEI;
 	}
 	
@@ -167,6 +181,13 @@ public class Projekt {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		try {
+			Statement stmt2 = con.createStatement();
+			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+uusKasutaja.getProjektID()+","+"'"+"Kasutaja"+" määras "+uusKasutaja.getKasutajaNimi()+" projekti töötajaks')";
+			stmt2.executeUpdate(query2);
+		} catch (SQLException e) {
 		}
 		
 		return Projekt.KÕIK_OKEI;
@@ -228,6 +249,13 @@ public class Projekt {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		try {
+			Statement stmt2 = con.createStatement();
+			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+nimi.getProjektID()+","+"'"+"Kasutaja"+" määras projektile uue nime : "+nimi.getUusNimi()+"')";
+			stmt2.executeUpdate(query2);
+		} catch (SQLException e) {
 		}
 		
 		return Projekt.KÕIK_OKEI;
@@ -305,6 +333,21 @@ public class Projekt {
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
+		try {
+			Statement stmt2 = con.createStatement();
+			String query2;
+			if(kulu.getKuluNimi().equals(" ") || kulu.getKuluNimi().equals("")){
+				query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+kulu.getProjektID()+","+"'"+"Kasutaja"+" lisas projektile uue kulu : "+kulu.getSumma()+"')";
+
+			}
+			else{
+				query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+kulu.getProjektID()+","+"'"+"Kasutaja"+" lisas projektile uue kulu : "+kulu.getKuluNimi()+" ("+kulu.getSumma()+")')";
+
+			}
+			stmt2.executeUpdate(query2);
+		} catch (SQLException e) {
+		}
+		
 		return Projekt.KÕIK_OKEI;
 		
 	}
@@ -331,6 +374,21 @@ public class Projekt {
 		} catch (SQLException e) {
 			e.printStackTrace();
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		try {
+			Statement stmt2 = con.createStatement();
+			String query2;
+			if(tulu.getTuluNimi().equals(" ") || tulu.getTuluNimi().equals("")){
+				query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+tulu.getProjektID()+","+"'"+"Kasutaja"+" lisas projektile uue tulu : "+tulu.getSumma()+"')";
+
+			}
+			else{
+				query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+tulu.getProjektID()+","+"'"+"Kasutaja"+" lisas projektile uue tulu : "+tulu.getTuluNimi()+" ("+tulu.getSumma()+")')";
+
+			}
+			stmt2.executeUpdate(query2);
+		} catch (SQLException e) {
 		}
 		
 		return Projekt.KÕIK_OKEI;
@@ -375,6 +433,21 @@ public class Projekt {
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
+		try {
+			Statement stmt2 = con.createStatement();
+			String query2;
+			if(tulu.getTuluNimi().equals(" ") || tulu.getTuluNimi().equals("")){
+				query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+tulu.getProjektID()+","+"'"+"Kasutaja"+" eemaldas projektist tulu : "+tulu.getSumma()+"')";
+
+			}
+			else{
+				query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+tulu.getProjektID()+","+"'"+"Kasutaja"+" eemaldas projektist tulu : "+tulu.getTuluNimi()+" ("+tulu.getSumma()+")')";
+
+			}
+			stmt2.executeUpdate(query2);
+		} catch (SQLException e) {
+		}
+		
 		return Projekt.KÕIK_OKEI;
 	}
 	
@@ -415,6 +488,21 @@ public class Projekt {
 			stmt.executeUpdate(query);
 		} catch (SQLException e) {
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		try {
+			Statement stmt2 = con.createStatement();
+			String query2;
+			if(kulu.getKuluNimi().equals(" ") || kulu.getKuluNimi().equals("")){
+				query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+kulu.getProjektID()+","+"'"+"Kasutaja"+" eemaldas projektist kulu : "+kulu.getSumma()+"')";
+
+			}
+			else{
+				query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+kulu.getProjektID()+","+"'"+"Kasutaja"+" eemaldas projektist kulu : "+kulu.getKuluNimi()+" ("+kulu.getSumma()+")')";
+
+			}
+			stmt2.executeUpdate(query2);
+		} catch (SQLException e) {
 		}
 		
 		return Projekt.KÕIK_OKEI;
@@ -529,7 +617,24 @@ public class Projekt {
 		return logi;
 	}
 	public void setLogi(List<Logi> logi) {
-		this.logi = logi;
+		List<Logi> pööratudLogi = new ArrayList<Logi>();
+		
+		while(logi.size()>0){
+			int index = 0, mitmes = 0;
+			Logi uusimLogi = logi.get(index);
+			
+			for(Logi k : logi){
+				if(k.getAeg().after(uusimLogi.getAeg())){
+					uusimLogi = k;
+					index = mitmes;
+				}
+				mitmes++;
+			}
+			pööratudLogi.add(uusimLogi);
+			logi.remove(index);
+		}
+		
+		this.logi = pööratudLogi;
 	}
 	public int getReiting() {
 		return reiting;

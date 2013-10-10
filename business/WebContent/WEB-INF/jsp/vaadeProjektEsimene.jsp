@@ -107,7 +107,7 @@ Kirjeldus:
 	</tr>
 	<c:forEach items="${projekt.logi}" var="logi">
 	<tr>
-		<td>${logi.formaaditudAeg} - ${logi.sonum}</td>
+		<td>${logi.sonum} <i><small>( ${logi.formaaditudAeg} )</small></i></td>
 	</tr>
 	</c:forEach>
 </table>
