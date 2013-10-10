@@ -39,7 +39,7 @@ public class ProjektController {
 	
 	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.GET, params={"id"})
 	public String vaadeProjektEsimene(@RequestParam("id") int projektID, Model m) {
-		
+
 		/*
 		 * nimi,reiting,kasutaja(vastutaja,aktiivne,nimi,osalus),kirjeldus,logi(sonum,formaaditudaeg),kommentaar(kasutaja,sonum,formaaditudaeg)
 		 */
@@ -388,8 +388,8 @@ public class ProjektController {
 		return new RedirectView("vaadeProjektTeine.htm?id="+tulu.getProjektID());
 	}
 	
-	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"id","kustuta"})
-	public View kustutaProjekt(@RequestParam("id") int id,@RequestParam("kustuta") String käsk, Model m){
+	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"kustuta","projektID"})
+	public View kustutaProjekt(@RequestParam("projektID") int id,@RequestParam("kustuta") String käsk, Model m){
 
 		if(käsk.equals("jah")){
 			
@@ -410,9 +410,9 @@ public class ProjektController {
 		}
 	}
 	
-	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"uusProjektiNimi"})
+	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"uusNimi","projektID"})
 	public View muudaProjektiNime1(@ModelAttribute("uusProjektiNimi") UusProjektiNimi nimi, Model m){
-
+		
 		int vastus = Projekt.muudaProjektiNimeAndmebaasis(nimi);
 		
 		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
@@ -425,7 +425,7 @@ public class ProjektController {
 		return new RedirectView("vaadeProjektEsimene.htm?id="+nimi.getProjektID());
 	}
 	
-	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"uusProjektiNimi"})
+	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"uusNimi","projektID"})
 	public View muudaProjektiNime2(@ModelAttribute("uusProjektiNimi") UusProjektiNimi nimi, Model m){
 
 		int vastus = Projekt.muudaProjektiNimeAndmebaasis(nimi);

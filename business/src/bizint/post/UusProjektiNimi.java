@@ -2,20 +2,25 @@ package bizint.post;
 
 public class UusProjektiNimi {
 	
-	private String nimi;
+	private String uusNimi;
 	private int projektID;
 	
 	public UusProjektiNimi(String nimi,int id){
-		this.nimi = nimi;
+		this.uusNimi = nimi;
 		this.projektID = id;
 	}
-
-	public String getNimi() {
-		return nimi;
+	
+	public UusProjektiNimi(){
+		this.uusNimi = "";
+		this.projektID = 1;
 	}
 
-	public void setNimi(String nimi) {
-		this.nimi = nimi;
+	public String getUusNimi() {
+		return uusNimi;
+	}
+
+	public void setUusNimi(String nimi) {
+		this.uusNimi = nimi;
 	}
 
 	public int getProjektID() {

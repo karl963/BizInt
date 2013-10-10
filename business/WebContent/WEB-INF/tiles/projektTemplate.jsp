@@ -6,8 +6,11 @@
 
 <html>
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">  
-	<title><tiles:insertAttribute name="title" ignore="true" /> </title>  
+
+	<script src="${pageContext.request.contextPath}/scripts/menu.js" type="text/javascript" ></script>
+	<script src="${pageContext.request.contextPath}/scripts/jquery-1.10.2.js" type="text/javascript" ></script>
+	<script src="${pageContext.request.contextPath}/scripts/projekt.js" type="text/javascript" ></script>
+
 </head>
 <body>
 	<tiles:insertAttribute name="body" />

@@ -8,7 +8,7 @@ import bizint.app.alam.Kasutaja;
 public class Logi {
 	
 	public static String DEFAULT_SONUM = "tühi sonum";
-	public static SimpleDateFormat AJAFORMAAT = new SimpleDateFormat("dd.mm.yyyy kell: hh:mm:ss");
+	public static SimpleDateFormat AJAFORMAAT = new SimpleDateFormat("dd.MM.yyyy '-' HH:mm:ss");
 	
 	private Kasutaja kasutaja;
 	private String sonum;

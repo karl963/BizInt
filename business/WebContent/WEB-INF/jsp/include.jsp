@@ -1,6 +1,10 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ page session="false"%>
 <%@ taglib uri="http://tiles.apache.org/tags-tiles" prefix="tiles"%> 
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">  
+
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/menuStiil.css" type="text/css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/projektStiil.css" type="text/css" />
-<link rel="stylesheet" href="${pageContext.request.contextPath}/scripts/menu.js" type="text/css" />
-<link rel="stylesheet" href="${pageContext.request.contextPath}/scripts/jquery-1.10.2.js" type="text/css" />
+
+<title><tiles:insertAttribute name="title" ignore="true" /> </title>  

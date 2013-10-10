@@ -219,7 +219,7 @@ public class Projekt {
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
-		String query = "UPDATE projektid SET projektNimi = '"+nimi.getNimi()+"' WHERE projektID="+nimi.getProjektID();
+		String query = "UPDATE projektid SET projektNimi = '"+nimi.getUusNimi()+"' WHERE projektID="+nimi.getProjektID();
 		
 		try {
 			stmt.executeUpdate(query);
@@ -387,24 +387,42 @@ public class Projekt {
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
-		Statement stmt;
+		
 		try {
-			stmt = con.createStatement();
+			
+			Statement stmt = con.createStatement();
+			String query = "DELETE FROM projektid WHERE projektID="+id;
+			stmt.executeUpdate(query);
+			
 		} catch (SQLException e) {
+			e.printStackTrace();
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
-		String query = "DELETE FROM projektid, projektikasutajad, tulud, kulud, kommentaarid, logid WHERE "
-				+ "logid.projekt_ID="+id
-				+ " AND kommentaarid.projekt_ID="+id
-				+ " AND projektikasutajad.projekt_ID="+id
-				+ " AND kulud.projekt_ID="+id
-				+ " AND tulud.projekt_ID="+id
-				+ " AND projekt.projektID="+id;
 		try {
+			
+			Statement stmt = con.createStatement();
+			String query = "DELETE FROM projektikasutajad WHERE projekt_ID="+id;
 			stmt.executeUpdate(query);
+			
+			Statement stmt2 = con.createStatement();
+			String query2 = "DELETE FROM tulud WHERE projekt_ID="+id;
+			stmt2.executeUpdate(query2);
+			
+			Statement stmt3 = con.createStatement();
+			String query3 = "DELETE FROM logid WHERE projekt_ID="+id;
+			stmt3.executeUpdate(query3);
+			
+			Statement stmt4 = con.createStatement();
+			String query4 = "DELETE FROM kulud WHERE projekt_ID="+id;
+			stmt4.executeUpdate(query4);
+			
+			Statement stmt5 = con.createStatement();
+			String query5 = "DELETE FROM kommentaarid WHERE projekt_ID="+id;
+			stmt5.executeUpdate(query5);
+			
 		} catch (SQLException e) {
-			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+			e.printStackTrace();
 		}
 		
 		return Projekt.KÕIK_OKEI;

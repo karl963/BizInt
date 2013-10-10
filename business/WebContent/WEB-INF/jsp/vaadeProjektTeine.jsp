@@ -1,13 +1,26 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
-
 <p>${message}</p>
 <body class=darkBack>
 <div class=detailViewDiv>
 <div class=detailViewHeader>
-<h1>${projekt.nimi}</h1>
-<div class=muudaKustuta><button type="button">Muuda nime</button><button type="button">Kustuta projekt</button> </div>
+
+		<div style="display:none" id="projektiNimeMuutmine" >
+			<form:form modelAttribute="uusProjektiNimi">
+				<form:input path="uusNimi"/>
+				<form:input path="projektID" type="hidden" />
+				<input type="submit" value="muuda nime" />
+			</form:form>
+		</div>
+		
+		<h1 id="projektiNimi" >${projekt.nimi}</h1>
+		
+		<div class=muudaKustuta>
+			<button type="button" id="projektiNimeMuutmiseNupp">Muuda nime</button>
+			<button type="button">Kustuta projekt</button>
+		</div>
+		
 <div class=tuluKulu>
 Tulu:${projekt.kogutulu} Kulu:${projekt.kogukulu}
 </div>

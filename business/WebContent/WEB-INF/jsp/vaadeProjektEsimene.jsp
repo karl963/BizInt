@@ -5,8 +5,28 @@
 <body class=darkBack>
 <div class=detailViewDiv>
 <div class=detailViewHeader>
-<h1>${projekt.nimi}</h1>
-<div class=muudaKustuta><button type="button">Muuda nime</button><button type="button">Kustuta projekt</button> </div>
+
+		<div style="display:none" id="projektiNimeMuutmine" >
+			<form:form modelAttribute="uusProjektiNimi">
+				<form:input path="uusNimi" />
+				<form:input path="projektID" type="hidden" />
+				<input type="submit" value="muuda nime" />
+			</form:form>
+		</div>
+		
+		<h1 id="projektiNimi" >${projekt.nimi}</h1>
+		
+		<div class=muudaKustuta>
+		
+			<button type="button" id="projektiNimeMuutmiseNupp" >Muuda nime</button>
+			<button type="button" onclick="javascript:document.kustutaProjekt.submit()" >Kustuta projekt</button>
+		</div>
+
+<form name="kustutaProjekt" method="POST" action="vaadeProjektEsimene.htm">
+	<input type="hidden" name="projektID" value="${projekt.id}">
+	<input type="hidden" name="kustuta" value="jah">
+</form>
+
 <div class=tuluKulu>
 Tulu:${projekt.kogutulu} Kulu:${projekt.kogukulu}
 </div>
