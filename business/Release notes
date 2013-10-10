@@ -1,6 +1,29 @@
 BizInt release notes
 
-Current verison: 2.0 alpha
+Current RELEASED (taged) verison: 2.0 alpha
+
+---------- under development patch notes ----------
+
+-- Uued omadused
+* Saab projektidele lisada tulusid
+* Saab projektidele lisada kulusid
+* Saab projektide tulusid kustutada
+* Saab projektide kulusid kustutada
+* Saab muuta projekti nime
+* Saab kustutada projekti
+
+-- Bug fixes
+* Kommentaaride kuup‰ev parandatud
+* Kommentaaride j‰rjekord parandatud ( vanemad asuvad all pool )
+
+-- Teada olevad probleemid
+* Kommentaaride kellaaeg on vale ( ainult EC2-s sest seal on instance kell vale? )
+* projekti detailivaade on liiga algeline
+ ' Projekti kirjelduse ja kommenteerimise lahter on liiga v√§ike
+ ' Enamus lahterid on liiga suured
+ ' Puuduvad eraldajad ( v√§rvid, piirid )
+* Projekti kustutamisel peaks k¸sima confirmationit
+* Liiga suurte tulude/kulude korral kuvab *10 astmetega (E)
 
 ---------- version 2.0 alpha patch notes ----------
 
@@ -10,7 +33,6 @@ Current verison: 2.0 alpha
 * Saab lisada uusi projekte iga staatuse alla
 * Saab n√§ha projekti detailvaadet
 * Saab kommenteerida projekti
-* Saab muuta projekti
 
 -- Bug fixes
 

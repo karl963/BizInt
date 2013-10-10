@@ -7,12 +7,13 @@ public class Kulu {
 	
 	private static String DEFAULT_NIMI = "";
 	private static Double DEFAULT_SUMMA = 0.0;
-	private static SimpleDateFormat AJAFORMAAT = new SimpleDateFormat("dd.mm.yyyy");
+	public static SimpleDateFormat AJAFORMAAT = new SimpleDateFormat("dd.MM.yyyy");
 	
 	private String kuluNimi;
 	private Double summa;
 	private Date aeg;
 	private int projektID;
+	private String stringAeg;
 	
 	  ///////////\\\\\\\\\\\\
 	 ///// constructors \\\\\\
@@ -23,6 +24,7 @@ public class Kulu {
 		this.summa = Kulu.DEFAULT_SUMMA;
 		this.aeg = new Date();
 		this.projektID = 0;
+		stringAeg = Kulu.AJAFORMAAT.format(new Date());
 	}
 	
 	public Kulu(String kuluNimi, Date aeg, Double summa){
@@ -30,6 +32,7 @@ public class Kulu {
 		this.aeg = aeg;
 		this.summa = summa;
 		this.projektID = 0;
+		stringAeg = Kulu.AJAFORMAAT.format(new Date());
 	}
 	
 	  ///////////\\\\\\\\\\\\
@@ -38,6 +41,19 @@ public class Kulu {
 	
 	public String getFormaaditudAeg(){
 		return Kulu.AJAFORMAAT.format(aeg);
+	}
+	
+	public static Date muudaStringAjaks(String aeg){
+		
+		try{
+			
+			aeg=aeg.replaceAll("[,;-_/]", ".");
+			
+			return Kulu.AJAFORMAAT.parse(aeg);
+		}
+		catch(Exception x){
+			return null;
+		}
 	}
 	
 	  ///////////\\\\\\\\\\\\
@@ -70,6 +86,14 @@ public class Kulu {
 
 	public void setProjektID(int projektID) {
 		this.projektID = projektID;
+	}
+
+	public String getStringAeg() {
+		return stringAeg;
+	}
+
+	public void setStringAeg(String stringAeg) {
+		this.stringAeg = stringAeg;
 	}
 
 }

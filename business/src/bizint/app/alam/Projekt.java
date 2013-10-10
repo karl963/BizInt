@@ -3,6 +3,8 @@ package bizint.app.alam;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -292,8 +294,10 @@ public class Projekt {
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
-		String query = "INSERT INTO kulud (summa, aeg, kuluNimi, projekt_ID) "
-				+ "VALUES ("+kulu.getSumma()+","+kulu.getAeg().getTime()+",'"+kulu.getKuluNimi()+"',"+kulu.getProjektID()+")";
+		Timestamp aeg = new Timestamp(kulu.getAeg().getTime());
+		
+		String query = "INSERT INTO kulud (kulu, aeg, kuluNimi, projekt_ID) "
+				+ "VALUES ("+kulu.getSumma()+",'"+aeg+"','"+kulu.getKuluNimi()+"',"+kulu.getProjektID()+")";
 		
 		try {
 			stmt.executeUpdate(query);
@@ -317,12 +321,15 @@ public class Projekt {
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
-		String query = "INSERT INTO tulud (summa, aeg, tuluNimi, projekt_ID) "
-				+ "VALUES ("+tulu.getSumma()+","+tulu.getAeg().getTime()+",'"+tulu.getTuluNimi()+"',"+tulu.getProjektID()+")";
+		Timestamp aeg = new Timestamp(tulu.getAeg().getTime());
+		
+		String query = "INSERT INTO tulud (tulu, aeg, tuluNimi, projekt_ID) "
+				+ "VALUES ("+tulu.getSumma()+",'"+aeg+"','"+tulu.getTuluNimi()+"',"+tulu.getProjektID()+")";
 		
 		try {
 			stmt.executeUpdate(query);
 		} catch (SQLException e) {
+			e.printStackTrace();
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
@@ -342,10 +349,26 @@ public class Projekt {
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
-		String query = "DELETE FROM tulud WHERE summa="+tulu.getSumma()
-				+ " AND aeg="+tulu.getAeg().getTime()
-				+ " AND tuluNimi='"+tulu.getTuluNimi()
-				+ "' AND projekt_ID="+tulu.getProjektID();
+		Timestamp aeg = null;
+		String query = null;
+		
+		try {
+			
+			aeg = new Timestamp(Tulu.AJAFORMAAT.parse(tulu.getStringAeg()).getTime());
+			query = "DELETE FROM tulud WHERE tulu="+tulu.getSumma()
+					+ " AND aeg='"+aeg
+					+ "' AND tuluNimi='"+tulu.getTuluNimi()
+					+ "' AND projekt_ID="+tulu.getProjektID()
+					+" LIMIT 1";
+
+		} catch (ParseException e1) {
+			
+			query = "DELETE FROM kulud WHERE tulu="+tulu.getSumma()
+					+ " AND tuluNimi='"+tulu.getTuluNimi()
+					+ "' AND projekt_ID="+tulu.getProjektID()
+					+" LIMIT 1";
+		}
+		
 		try {
 			stmt.executeUpdate(query);
 		} catch (SQLException e) {
@@ -368,10 +391,26 @@ public class Projekt {
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
-		String query = "DELETE FROM kulud WHERE summa="+kulu.getSumma()
-				+ " AND aeg="+kulu.getAeg().getTime()
-				+ " AND tuluNimi='"+kulu.getKuluNimi()
-				+ "' AND projekt_ID="+kulu.getProjektID();
+		Timestamp aeg = null;
+		String query = null;
+		
+		try {
+			
+			aeg = new Timestamp(Kulu.AJAFORMAAT.parse(kulu.getStringAeg()).getTime());
+			query = "DELETE FROM kulud WHERE kulu="+kulu.getSumma()
+					+ " AND aeg='"+aeg
+					+ "' AND kuluNimi='"+kulu.getKuluNimi()
+					+ "' AND projekt_ID="+kulu.getProjektID()
+					+" LIMIT 1";
+			
+		} catch (ParseException e1) {
+
+			query = "DELETE FROM kulud WHERE kulu="+kulu.getSumma()
+					+ " AND kuluNimi='"+kulu.getKuluNimi()
+					+ "' AND projekt_ID="+kulu.getProjektID()
+					+" LIMIT 1";
+		}
+		
 		try {
 			stmt.executeUpdate(query);
 		} catch (SQLException e) {
@@ -466,7 +505,25 @@ public class Projekt {
 		return kommentaarid;
 	}
 	public void setKommentaarid(List<Kommentaar> kommentaarid) {
-		this.kommentaarid = kommentaarid;
+		
+		List<Kommentaar> pööratudKommentaarid = new ArrayList<Kommentaar>();
+		
+		while(kommentaarid.size()>0){
+			int index = 0, mitmes = 0;
+			Kommentaar uusimKommentaar = kommentaarid.get(index);
+			
+			for(Kommentaar k : kommentaarid){
+				if(k.getAeg().after(uusimKommentaar.getAeg())){
+					uusimKommentaar = k;
+					index = mitmes;
+				}
+				mitmes++;
+			}
+			pööratudKommentaarid.add(uusimKommentaar);
+			kommentaarid.remove(index);
+		}
+		
+		this.kommentaarid = pööratudKommentaarid;
 	}
 	public List<Logi> getLogi() {
 		return logi;

@@ -206,15 +206,15 @@ public class ProjektController {
 			}
 			
 			Statement stmt3 = con.createStatement();
-			String query3 = "SELECT  kuluNimi, aeg FROM kulud WHERE projekt_ID="+projektID;
+			String query3 = "SELECT kulu, kuluNimi, aeg FROM kulud WHERE projekt_ID="+projektID;
 			ResultSet rs3 = stmt3.executeQuery(query3);
 			
 			while(rs3.next()){
 				Kulu kulu = new Kulu();
 				
-				Double summa = rs.getDouble("kulu");
-				String kuluNimi = rs.getString("kuluNimi");
-				Date aeg = rs.getTimestamp("aeg");
+				Double summa = rs3.getDouble("kulu");
+				String kuluNimi = rs3.getString("kuluNimi");
+				Date aeg = rs3.getTimestamp("aeg");
 				
 				kulu.setSumma(summa);
 				kulu.setKuluNimi(kuluNimi);
@@ -258,10 +258,10 @@ public class ProjektController {
 		m.addAttribute("projekt", projekt);
 		m.addAttribute("message", teade);
 		m.addAttribute("uusKommentaar", new UusKommentaar());
-		m.addAttribute("uusTulu", new Tulu());
-		m.addAttribute("uusKulu", new Kulu());
 		m.addAttribute("kustutaKulu", new Kulu());
 		m.addAttribute("kustutaTulu", new Tulu());
+		m.addAttribute("uusTulu", new Tulu());
+		m.addAttribute("uusKulu", new Kulu());
 		m.addAttribute("uusProjektiNimi", new UusProjektiNimi(projekt.getNimi(),projekt.getId()));
 		
 		teade = null;
@@ -328,37 +328,56 @@ public class ProjektController {
 		return new RedirectView("vaadeProjektEsimene.htm?id="+uusKasutaja.getProjektID());
 	}
 	
-	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"tuluNimi","summa","aeg","projektID"})
+	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"aeg.time","tuluNimi","summa","stringAeg","projektID"})
 	public View addTulu(@ModelAttribute("uusTulu") Tulu tulu, Model m){
 
-		int vastus = Projekt.lisaTuluAndmebaasi(tulu);
+		Date uusAeg = Tulu.muudaStringAjaks(tulu.getStringAeg());
 		
-		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
-			teade = "Viga andmebaasiga ühendumisel";
+		if(uusAeg==null){
+			teade="Tulu kuupäev peab olema kujul 'päev.kuu.aasta' ning eraldajaks võivad olla .,;-_/";
 		}
 		else{
-			teade = "Tulu lisamine õnnestus";
+			
+			tulu.setAeg(uusAeg);
+			
+			int vastus = Projekt.lisaTuluAndmebaasi(tulu);
+			
+			if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
+				teade = "Viga andmebaasiga ühendumisel";
+			}
+			else{
+				teade = "Tulu lisamine õnnestus";
+			}
 		}
 
 		return new RedirectView("vaadeProjektTeine.htm?id="+tulu.getProjektID());
 	}
 	
-	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"kuluNimi","summa","aeg","projektID"})
+	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"aeg.time","kuluNimi","summa","stringAeg","projektID"})
 	public View addKulu(@ModelAttribute("uusKulu") Kulu kulu, Model m){
 
-		int vastus = Projekt.lisaKuluAndmebaasi(kulu);
+		Date uusAeg = Kulu.muudaStringAjaks(kulu.getStringAeg());
 		
-		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
-			teade = "Viga andmebaasiga ühendumisel";
+		if(uusAeg==null){
+			teade="Kulu kuupäev peab olema kujul 'päev.kuu.aasta' ning eraldajaks võivad olla .,;-_/";
 		}
 		else{
-			teade = "Kulu lisamine õnnestus";
+			
+			kulu.setAeg(uusAeg);
+			
+			int vastus = Projekt.lisaKuluAndmebaasi(kulu);
+			
+			if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
+				teade = "Viga andmebaasiga ühendumisel";
+			}
+			else{
+				teade = "Kulu lisamine õnnestus";
+			}
 		}
-
 		return new RedirectView("vaadeProjektTeine.htm?id="+kulu.getProjektID());
 	}
 	
-	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"kustutaKulu"})
+	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"kuluNimi","summa","stringAeg","projektID"})
 	public View kustutaKulu(@ModelAttribute("kustutaKulu") Kulu kulu, Model m){
 		
 		int vastus = Projekt.kustutaKuluAndmebaasist(kulu);
@@ -373,7 +392,7 @@ public class ProjektController {
 		return new RedirectView("vaadeProjektTeine.htm?id="+kulu.getProjektID());
 	}
 	
-	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"kustutaTulu"})
+	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"tuluNimi","summa","stringAeg","projektID"})
 	public View kustutaTulu(@ModelAttribute("kustutaTulu") Tulu tulu, Model m){
 
 		int vastus = Projekt.kustutaTuluAndmebaasist(tulu);

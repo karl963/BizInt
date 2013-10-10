@@ -43,13 +43,27 @@ reiting: ${projekt.reiting}
 <div class=leftSideDiv>
 
 
-
-Tulu: <input class="smallInput" /> Kuupäev: <input class="smallInput" /> <br> Kirjeldus: <input class="bigInput" /> <input type="submit" value="lisa"> <br>
+<form:form modelAttribute="uusTulu">
+	Tulu:      <form:input class="smallInput" path="summa" value="0.0" />
+	Kuupäev:   <form:input class="smallInput" path="stringAeg" />
+<br>
+	Kirjeldus: <form:input class="bigInput" path="tuluNimi" value="" />
+			   <form:input path="projektID" type="hidden" value="${projekt.id}" />
+	           <form:input path="aeg.time" type="hidden"/>
+	           <input type="submit" value="lisa">
+</form:form>
 
 <br>
 
-Kulu: <input class="smallInput" /> Kuupäev: <input class="smallInput" /> <br> Kirjeldus: <input class="bigInput" /> <input type="submit" value="lisa"> <br>
-
+<form:form modelAttribute="uusKulu">
+	Kulu:      <form:input class="smallInput" path="summa" value="0.0" />
+	Kuupäev:   <form:input class="smallInput" path="stringAeg" />
+<br>
+	Kirjeldus: <form:input class="bigInput" path="kuluNimi" value="" />
+			   <form:input path="projektID" type="hidden" value="${projekt.id}" />
+	           <form:input path="aeg.time" type="hidden" />
+	           <input type="submit" value="lisa">
+</form:form>
 
 Tulud ja kulud:
 
@@ -58,33 +72,34 @@ Tulud ja kulud:
 	<form:form modelAttribute="kustutaTulu">
 	<form:input path="tuluNimi" type="hidden" value="${tulu.tuluNimi}" />
 	<form:input path="summa" type="hidden" value="${tulu.summa}" />
-	<form:input path="aeg" type="hidden" value="${tulu.aeg}" />
+	<form:input path="stringAeg" type="hidden" value="${tulu.formaaditudAeg}" />
 	<form:input path="projektID" type="hidden" value="${projekt.id}" />
+
+	<b class="tuluSumma">+ ${tulu.summa}</b>
+	<small>
+		${tulu.tuluNimi}
+		<i><b>${tulu.formaaditudAeg}</b></i>
+	</small>
+	<input type="submit" value="kustuta" />
+	<br>
 	
-		+ ${tulu.summa}
-		<small>
-			${tulu.tuluNimi}
-			<i>${tulu.formaaditudAeg}</i>
-		</small>
-		<input type="button" value="kustuta" />
-		<br>
-		
 	</form:form>
 </c:forEach>
 
 <c:forEach items="${projekt.kulud}" var="kulu">
 	<form:form modelAttribute="kustutaKulu">
-	<form:input path="kuluNimi" type="hidden" value="${kulu.kuluNimi}" />
-	<form:input path="summa" type="hidden" value="${kulu.summa}" />
-	<form:input path="aeg" type="hidden" value="${kulu.aeg}" />
-	<form:input path="projektID" type="hidden" value="${projekt.id}" />
-	
-		- ${kulu.summa}
+		<form:input path="kuluNimi" type="hidden" value="${kulu.kuluNimi}" />
+		<form:input path="summa" type="hidden" value="${kulu.summa}" />
+		<form:input path="stringAeg" type="hidden" value="${tulu.formaaditudAeg}" />
+		<form:input path="projektID" type="hidden" value="${projekt.id}" />
+
+
+		<b class="kuluSumma">- ${kulu.summa}</b>
 		<small>
 			${kulu.kuluNimi}
-			<i>${kulu.formaaditudAeg}</i>
+			<i><b>${kulu.formaaditudAeg}</b></i>
 		</small>
-		<input type="button" value="kustuta" />
+		<input type="submit" value="kustuta" />
 		<br>
 		
 	</form:form>

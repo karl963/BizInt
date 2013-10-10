@@ -175,7 +175,7 @@ public class ProjektidController {
 			}
 			
 		}catch(Exception x){
-
+			x.printStackTrace();
 		}
 		
 		

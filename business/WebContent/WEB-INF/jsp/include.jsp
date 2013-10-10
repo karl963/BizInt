@@ -4,7 +4,7 @@
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">  
 
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/projektiStiil.css" type="text/css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/menuStiil.css" type="text/css" />
-<link rel="stylesheet" href="${pageContext.request.contextPath}/css/projektStiil.css" type="text/css" />
 
 <title><tiles:insertAttribute name="title" ignore="true" /> </title>  
