@@ -91,7 +91,7 @@ Kirjeldus:
 <div class=describe>
 <table>
 	<tr>
-		<td><form:input path="kirjeldus" value="${projekt.kirjeldus}" /></td>
+		<td><textarea name="kirjeldus" id="kirjelduseVali" >${projekt.kirjeldus}</textarea></td>
 	</tr>
 	<form:input path="projektID" value="${projekt.id}" type="hidden" />
 </table>

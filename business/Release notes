@@ -15,6 +15,7 @@ Current RELEASED (taged) verison: 2.0 alpha
 -- Bug fixes
 * Kommentaaride kuupäev parandatud
 * Kommentaaride järjekord parandatud ( vanemad asuvad all pool )
+* kirjelduse lahter on textarea, enne oli textfield
 
 -- Teada olevad probleemid
 * Kommentaaride kellaaeg on vale ( ainult EC2-s sest seal on instance kell vale? )
