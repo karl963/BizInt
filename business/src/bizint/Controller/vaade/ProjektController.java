@@ -39,15 +39,13 @@ public class ProjektController {
 	
 	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.GET, params={"id"})
 	public String vaadeProjektEsimene(@RequestParam("id") int projektID, Model m) {
-
-		/*
-		 * nimi,reiting,kasutaja(vastutaja,aktiivne,nimi,osalus),kirjeldus,logi(sonum,formaaditudaeg),kommentaar(kasutaja,sonum,formaaditudaeg)
-		 */
 		
 		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
 		List<Logi> logi = new ArrayList<Logi>();
 		List<Kommentaar> kommentaarid = new ArrayList<Kommentaar>();
 		List<Kasutaja> kõikKasutajad = new ArrayList<Kasutaja>();
+		List<Kulu> kulud = new ArrayList<Kulu>();
+		List<Tulu> tulud = new ArrayList<Tulu>();
 		
 		String nimi = null;
 		String kirjeldus = null;
@@ -134,6 +132,33 @@ public class ProjektController {
 
 				kõikKasutajad.add(kasutaja);
 			}
+			
+			Statement stmt7 = con.createStatement();
+			String query7 = "SELECT tulu FROM tulud WHERE projekt_ID="+projektID;
+			ResultSet rs7 = stmt7.executeQuery(query7);
+			
+			while(rs7.next()){
+
+				Tulu tulu = new Tulu();
+				
+				Double summa = rs7.getDouble("tulu");
+				tulu.setSumma(summa);
+				
+				tulud.add(tulu);
+			}
+			
+			Statement stmt6 = con.createStatement();
+			String query6 = "SELECT kulu FROM kulud WHERE projekt_ID="+projektID;
+			ResultSet rs6 = stmt6.executeQuery(query6);
+			
+			while(rs6.next()){
+				Kulu kulu = new Kulu();
+				
+				Double summa = rs6.getDouble("kulu");
+				kulu.setSumma(summa);
+				
+				kulud.add(kulu);
+			}
 		}catch(Exception x){
 			x.printStackTrace();
 			teade = "Viga andmebaasiga";
@@ -146,6 +171,8 @@ public class ProjektController {
 		projekt.setKasutajad(kasutajad);
 		projekt.setKirjeldus(kirjeldus);
 		projekt.setLogi(logi);
+		projekt.setKulud(kulud);
+		projekt.setTulud(tulud);
 		projekt.setKommentaarid(kommentaarid);
 		
 		m.addAttribute("kasutajad",kõikKasutajad);
@@ -163,10 +190,6 @@ public class ProjektController {
 
 	@RequestMapping("/vaadeProjektTeine.htm")
 	public String vaadeProjektTeine(@RequestParam("id") int projektID, Model m) {
-		
-		/*
-		 * nimi,kogutulu,tulu(summa,nimi,formaaditudaeg),kulu(summa,nimi,formaaditudaeg),kommentaar(sonum,kasutaja,formaaditudaeg)
-		 */
 		
 		List<Kulu> kulud = new ArrayList<Kulu>();
 		List<Tulu> tulud = new ArrayList<Tulu>();
