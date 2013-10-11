@@ -28,7 +28,7 @@
 </form>
 
 <div class=tuluKulu>
-Tulu:${projekt.kogutulu} Kulu:${projekt.kogukulu}
+Tulu: <b class="tuluSumma">${projekt.kogutulu}</b> Kulu: <b class="kuluSumma">${projekt.kogukulu}</b>
 </div>
 
 <div class=reiting>
@@ -72,11 +72,16 @@ Projektiga seotud inimesed:
 
 	<c:forEach items="${projekt.kasutajad}" var="kasutaja">
 		<tr>
-			<td>${kasutaja.vastutaja}</td>
-			<td>${kasutaja.aktiivne}</td>
-			<td>${kasutaja.kasutajaNimi}</td>
-			<td>${kasutaja.osalus}</td>
-			<td><button type="button">Kustuta</button>
+				<td><input type="checkbox" value="${kasutaja.vastutaja}" /></td>
+				<td><input type="checkbox" value="${kasutaja.aktiivne}" /></td>
+				<td>${kasutaja.kasutajaNimi}</td>
+				<td><input value="${kasutaja.osalus}" /></td>
+				
+			<form:form modelAttribute="eemaldaKasutaja">
+				<form:input type="hidden" path="kasutajaID" value="${kasutaja.kasutajaID}" />
+				<form:input type="hidden" path="projektID" value="${projekt.id}" />
+				<td><button type="submit">Kustuta</button></td>
+			</form:form>
 		</tr>
 	</c:forEach>
 </table>

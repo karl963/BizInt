@@ -14,6 +14,7 @@ public class Kasutaja {
 	private Date aeg;
 	private Double kuupalk, osalus;
 	private boolean vastutaja, aktiivne;
+	private int projektID,kasutajaID;
 
 	
 	  ///////////\\\\\\\\\\\\
@@ -27,6 +28,8 @@ public class Kasutaja {
 		this.osalus = Kasutaja.DEFAULT_OSALUS;
 		this.vastutaja = Kasutaja.DEFAULT_VASTUTAJA;
 		this.aktiivne = Kasutaja.DEFAULT_AKTIIVNE;
+		this.setProjektID(0);
+		this.setKasutajaID(0);
 	}
 	
 	public Kasutaja(String nimi){
@@ -36,6 +39,8 @@ public class Kasutaja {
 		this.osalus = Kasutaja.DEFAULT_OSALUS;
 		this.vastutaja = Kasutaja.DEFAULT_VASTUTAJA;
 		this.aktiivne = Kasutaja.DEFAULT_AKTIIVNE;
+		this.setProjektID(0);
+		this.setKasutajaID(0);
 	}
 	
 	  ///////////\\\\\\\\\\\\
@@ -81,6 +86,22 @@ public class Kasutaja {
 
 	public void setAktiivne(boolean aktiivne) {
 		this.aktiivne = aktiivne;
+	}
+
+	public int getKasutajaID() {
+		return kasutajaID;
+	}
+
+	public void setKasutajaID(int kasutajaID) {
+		this.kasutajaID = kasutajaID;
+	}
+
+	public int getProjektID() {
+		return projektID;
+	}
+
+	public void setProjektID(int projektID) {
+		this.projektID = projektID;
 	}
 	
 }

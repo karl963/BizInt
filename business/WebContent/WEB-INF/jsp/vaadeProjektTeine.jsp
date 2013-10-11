@@ -22,7 +22,7 @@
 		</div>
 		
 <div class=tuluKulu>
-Tulu:${projekt.kogutulu} Kulu:${projekt.kogukulu}
+Tulu: <b class="tuluSumma">${projekt.kogutulu}</b> Kulu: <b class="kuluSumma">${projekt.kogukulu}</b>
 </div>
 
 <div class=reiting>

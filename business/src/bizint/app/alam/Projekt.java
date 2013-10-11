@@ -555,6 +555,25 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 	}
 	
+public static int eemaldaKasutajaProjektistAndmebaasis(int kasutajaID, int projektID){
+		
+		Connection con = Mysql.connection;
+		if(con==null){
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		try {
+			Statement stmt = con.createStatement();
+			String query = "DELETE FROM projektikasutajad WHERE projekt_ID="+projektID+" AND kasutaja_ID="+kasutajaID+" LIMIT 1";
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		return Projekt.KÕIK_OKEI;
+	}
+	
 	  ///////////\\\\\\\\\\\\
 	 // getters and setters \\
 	/////////////\\\\\\\\\\\\\\

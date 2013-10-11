@@ -64,7 +64,7 @@ public class ProjektController {
 			kirjeldus = rs.getString("kirjeldus");
 			
 			Statement stmt2 = con.createStatement();
-			String query2 = "SELECT kasutajaNimi,aktiivne,vastutaja,osalus FROM projektikasutajad, kasutajad WHERE projektikasutajad.projekt_ID="+projektID+" AND kasutajad.kasutajaID=projektikasutajad.kasutaja_ID";
+			String query2 = "SELECT kasutajaNimi,aktiivne,vastutaja,osalus,kasutajaID FROM projektikasutajad, kasutajad WHERE projektikasutajad.projekt_ID="+projektID+" AND kasutajad.kasutajaID=projektikasutajad.kasutaja_ID";
 			ResultSet rs2 = stmt2.executeQuery(query2);
 			
 			while(rs2.next()){
@@ -74,7 +74,9 @@ public class ProjektController {
 				boolean aktiivne = rs2.getBoolean("aktiivne");
 				boolean vastutaja = rs2.getBoolean("vastutaja");
 				Double osalus = rs2.getDouble("osalus");
+				int kasutajaID = rs2.getInt("kasutajaID");
 				
+				kasutaja.setKasutajaID(kasutajaID);
 				kasutaja.setKasutajaNimi(kasutajaNimi);
 				kasutaja.setAktiivne(aktiivne);
 				kasutaja.setVastutaja(vastutaja);
@@ -181,7 +183,7 @@ public class ProjektController {
 		m.addAttribute("uusKommentaar", new UusKommentaar());
 		m.addAttribute("uusKirjeldus", new UusKirjeldus());
 		m.addAttribute("uusProjektiNimi", new UusProjektiNimi(projekt.getNimi(),projekt.getId()));
-		
+		m.addAttribute("eemaldaKasutaja",new Kasutaja());
 		
 		teade = null;
 		
@@ -480,6 +482,22 @@ public class ProjektController {
 		}
 
 		return new RedirectView("vaadeProjektTeine.htm?id="+nimi.getProjektID());
+	}
+	
+	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"projektID","kasutajaID"})
+	public View eemaldaKasutaja(@RequestParam("kasutajaID") int kasutajaID,@RequestParam("projektID") int projektID, Model m){
+		
+		
+		int vastus = Projekt.eemaldaKasutajaProjektistAndmebaasis(kasutajaID,projektID);
+		
+		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
+			teade = "Viga andmebaasiga ühendumisel";
+		}
+		else{
+			teade = "Töötaja eemaldamine õnnestus";
+		}
+
+		return new RedirectView("vaadeProjektEsimene.htm?id="+projektID);
 	}
 	
 }

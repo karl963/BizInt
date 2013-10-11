@@ -12,6 +12,7 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Saab muuta projekti nime
 * Saab kustutada projekti
 * Logifunktsioon, mis jäädvustab kõik kasutaja tegevused ning hiljemalt kuvab need logisse
+* Saab eemaldada projektist projektiga seotud töötajaid
 
 -- Bug fixes
 * Kommentaaride kuupäev parandatud
