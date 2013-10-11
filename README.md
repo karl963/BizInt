@@ -7,4 +7,5 @@ Business intelligence for SME's
 
 Build failis(build.xml) peab tomcati pathi ära muutma!!!!
   <property name="tcserver.home" 	value="C:\Users\Siimu\Desktop\apache-tomcat-6.0.37" />
+  
   value väärtuseks peab panema oma arvutis oleva tomcati pathi.
