@@ -531,12 +531,10 @@ public class ProjektController {
 
 	}
 	
-	
-	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"projektID","kasutajaID","vastutaja","osalus","aktiivne"})
-	public View muudaKasutajaAndmeid(@ModelAttribute("kasutajateMuutmineProjektis") List<Kasutaja> kasutajad,@RequestParam("projektID") int projektID, Model m){
+	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"projektID","kasutajad"})
+	public void muudaKasutajateAndmeid(HttpServletRequest request, HttpServletResponse response,@RequestParam("kasutajad") String kasutajad, @RequestParam("projektID") int projektID, Model m){
 		
-		
-		int vastus = Projekt.muudaKasutajaAndmeidProjektigaAndmebaasis(kasutajad, projektID);
+		int vastus = Projekt.muudaKasutajateAndmeidProjektigaAndmebaasis(kasutajad, projektID);
 		
 		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
@@ -544,8 +542,14 @@ public class ProjektController {
 		else{
 			teade = "Töötajate andmete muutmine õnnestus";
 		}
-		
-		return new RedirectView("vaadeProjektEsimene.htm?id="+projektID);
+	
+	}
+	
+	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"teade"})
+	public void muudaTeade(HttpServletRequest request, HttpServletResponse response,@RequestParam("teade") String teade, Model m){
+
+		this.teade = teade;
+	
 	}
 	
 }

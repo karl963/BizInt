@@ -206,14 +206,57 @@ public class Projekt {
 		return false;
 	}
 	
-	public static int muudaKasutajaAndmeidProjektigaAndmebaasis(List<Kasutaja> kasutajad, int projektID){
+	public static int muudaKasutajateAndmeidProjektigaAndmebaasis(String kasutajad, int projektID){
 		
 		Connection con = Mysql.connection;
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
-		for(Kasutaja kasutaja : kasutajad){
+		boolean oliJubaVastutaja = false;
+		
+		for(String kasutaja : kasutajad.split(";")){
+			
+			if(kasutaja == null || kasutaja.equals(" ") || kasutaja.equals("")){
+				break;
+			}
+			
+			boolean aktiivne;
+			boolean vastutaja;
+			Double osalus;
+			int kasutajaID;
+			
+			try{
+				vastutaja = Boolean.parseBoolean(kasutaja.split("''")[0]);
+				
+				if(vastutaja && oliJubaVastutaja){
+					vastutaja = false;
+				}
+				else if(vastutaja){
+					oliJubaVastutaja = true;
+				}
+			}catch(Exception x){
+				vastutaja = false;
+			}
+			
+			try{
+				aktiivne = Boolean.parseBoolean(kasutaja.split("''")[1]);
+			}catch(Exception x){
+				aktiivne = false;
+			}
+			
+			try{
+				kasutajaID = Integer.parseInt(kasutaja.split("''")[2]);
+			}catch(Exception x){
+				kasutajaID = 0;
+			}
+			
+			try{
+				osalus = Double.parseDouble(kasutaja.split("''")[3].replaceAll(" ", ""));
+			}catch(Exception x){
+				osalus = 0.0;
+			}
+			
 			Statement stmt;
 			try {
 				stmt = con.createStatement();
@@ -221,7 +264,7 @@ public class Projekt {
 				return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 			}
 			
-			String query = "UPDATE projektikasutajad SET aktiivne="+kasutaja.isAktiivne()+", osalus="+kasutaja.getOsalus()+",vastutaja="+kasutaja.isVastutaja()+" WHERE projekt_ID="+kasutaja.getProjektID()+" AND kasutaja_ID="+kasutaja.getKasutajaID();
+			String query = "UPDATE projektikasutajad SET aktiivne="+aktiivne+", osalus="+osalus+",vastutaja="+vastutaja+" WHERE projekt_ID="+projektID+" AND kasutaja_ID="+kasutajaID;
 			
 			try {
 				stmt.executeUpdate(query);
@@ -229,7 +272,9 @@ public class Projekt {
 				e.printStackTrace();
 				return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 			}
+			
 		}
+		
 		try {
 			Statement stmt2 = con.createStatement();
 			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+projektID+","+"'"+"Kasutaja"+" muutis töötajate andmeid projektis";

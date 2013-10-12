@@ -15,10 +15,13 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Saab eemaldada projektist projektiga seotud töötajaid
 * Saab lisada töötajaid projekti
 * Saab eemaldada töötajaid projektist
+* Saab muuda töötajatega seotud andmeid projektis (osalus, aktiivsus, vastutaja)
 
 -- Lisamärkused
 * Süntaksiliselt valesti lisatud tulu/kulu asendatakse automaatselt 0 -ga
 * Kasutajaid ei saa projekti mitmekordselt lisada (loogiline)
+* Projektil saab olla ainult üks vastutaja, mitme valitu korral valitakse esimene
+* Süntaksiliselt valesti olev töötaja osalus projektis muudetakse (võetakse ära vigased karakterid, mitme punkti korral arvestatakse vasakult esimest)
 
 -- Bug fixes
 * Kommentaaride kuupäev parandatud

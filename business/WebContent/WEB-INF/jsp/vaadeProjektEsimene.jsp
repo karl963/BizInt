@@ -61,7 +61,7 @@ Projektiga seotud inimesed:
 
 <div class=describe>
 
-<table class=table>
+<table class=table id="kasutajateTabel" >
 	<tr>
 		<th class=smallCell>Vastuaja</th>
 		<th class=smallCell>Aktiivne</th>
@@ -72,10 +72,25 @@ Projektiga seotud inimesed:
 
 	<c:forEach items="${projekt.kasutajad}" var="kasutaja">
 		<tr>
-				<td><input type="checkbox" value="${kasutaja.vastutaja}" /></td>
-				<td><input type="checkbox" value="${kasutaja.aktiivne}" /></td>
-				<td>${kasutaja.kasutajaNimi}</td>
-				<td><input value="${kasutaja.osalus}" /></td>
+
+				<td>
+					<c:choose>
+						<c:when test="${kasutaja.vastutaja=='true'}"><input type="checkbox" checked /></c:when>
+						<c:otherwise><input type="checkbox"/></c:otherwise>
+					</c:choose>
+				</td>
+				<td>
+					<c:choose>
+						<c:when test="${kasutaja.aktiivne=='true'}"><input type="checkbox" checked /></c:when>
+						<c:otherwise><input type="checkbox"/></c:otherwise>
+					</c:choose>
+				<td>
+					${kasutaja.kasutajaNimi}
+				</td>
+				<td>
+					<input value="${kasutaja.osalus}" />
+				</td>
+				<td style="display:none;"><input value="${kasutaja.kasutajaID}" /></td>
 				
 			<form:form modelAttribute="eemaldaKasutaja">
 				<form:input type="hidden" path="kasutajaID" value="${kasutaja.kasutajaID}" />
@@ -87,7 +102,7 @@ Projektiga seotud inimesed:
 </table>
 </div>
 <div class=buttonAlign>
-<button type="button">Salvesta</button>
+<button type="button" onclick="listiProjektiKasutajadJaSalvesta('${pageContext.request.contextPath}',${projekt.id});" >Salvesta töötajad</button>
 </div>
 <br>
 Kirjeldus:
