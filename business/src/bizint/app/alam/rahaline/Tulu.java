@@ -10,7 +10,7 @@ public class Tulu {
 	public static SimpleDateFormat AJAFORMAAT = new SimpleDateFormat("dd.MM.yyyy");
 	
 	private String tuluNimi;
-	private Double summa;
+	private Object summa;
 	private Date aeg;
 	private int projektID;
 	private String stringAeg;
@@ -85,13 +85,19 @@ public class Tulu {
 		this.aeg = aeg;
 	}
 	
-	public Double getSumma() {
+	public Object getSumma() {
 		return summa;
 	}
-
-	public void setSumma(Double summa) {
-		this.summa = summa;
+	
+	public void setSumma(Object summa){
+		
+		try{
+			this.summa = Double.valueOf(String.valueOf(summa).replace(",", "."));
+		}catch(Exception x){
+			this.summa = 0.0;
+		}
 	}
+	
 	public int getProjektID() {
 		return projektID;
 	}

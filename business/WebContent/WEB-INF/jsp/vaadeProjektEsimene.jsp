@@ -51,12 +51,12 @@ reiting: ${projekt.reiting}
 Projektiga seotud inimesed:
 <br>
 
-<select>
+<select id="uueKasutajaList">
 <c:forEach items="${kasutajad}" var="kasutaja">
 	<option value="${kasutaja.kasutajaNimi}">${kasutaja.kasutajaNimi}</option>
 </c:forEach>
 </select>
-<input type="submit" value="lisa" />
+<input type="button" onclick="lisaProjektiKasutaja('${pageContext.request.contextPath}',${projekt.id});" value="lisa" />
 
 
 <div class=describe>

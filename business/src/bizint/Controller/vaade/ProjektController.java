@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -497,6 +500,37 @@ public class ProjektController {
 			teade = "Töötaja eemaldamine õnnestus";
 		}
 
+		return new RedirectView("vaadeProjektEsimene.htm?id="+projektID);
+	}
+	
+	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"projektID","kasutajaNimi"})
+	public void lisaKasutajaProjekti(HttpServletRequest request, HttpServletResponse response,@RequestParam("projektID") int projektID,@RequestParam("kasutajaNimi") String nimi, Model m){
+		
+		int vastus = Projekt.lisaKasutajaProjektiAndmebaasis(nimi, projektID);
+		
+		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
+			teade = "Viga andmebaasiga ühendumisel";
+		}
+		else{
+			teade = "Töötaja lisamine õnnestus";
+		}
+
+	}
+	
+	
+	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"projektID","kasutajaID","vastutaja","osalus","aktiivne"})
+	public View muudaKasutajaAndmeid(@ModelAttribute("kasutajateMuutmineProjektis") List<Kasutaja> kasutajad,@RequestParam("projektID") int projektID, Model m){
+		
+		
+		int vastus = Projekt.muudaKasutajaAndmeidProjektigaAndmebaasis(kasutajad, projektID);
+		
+		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
+			teade = "Viga andmebaasiga ühendumisel";
+		}
+		else{
+			teade = "Töötajate andmete muutmine õnnestus";
+		}
+		
 		return new RedirectView("vaadeProjektEsimene.htm?id="+projektID);
 	}
 	
