@@ -90,3 +90,16 @@ function valideeriOsalus(osalus){
 String.prototype.replaceAt=function(index, character) {
     return this.substr(0, index) + character + this.substr(index+character.length);
 };
+
+$(document).ready(function() {
+    $('.looUusInputLahter').focus(function() {
+        if($(this).val() == $(this).data('default_val') || !$(this).data('default_val')) {
+            $(this).data('default_val', $(this).val());
+            $(this).val('');
+        }
+    });
+    
+    $('.looUusInputLahter').blur(function() {
+        if ($(this).val() == '') $(this).val($(this).data('default_val'));
+    });
+});
