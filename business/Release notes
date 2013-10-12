@@ -13,6 +13,12 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Saab kustutada projekti
 * Logifunktsioon, mis jäädvustab kõik kasutaja tegevused ning hiljemalt kuvab need logisse
 * Saab eemaldada projektist projektiga seotud töötajaid
+* Saab lisada töötajaid projekti
+* Saab eemaldada töötajaid projektist
+
+-- Lisamärkused
+* Süntaksiliselt valesti lisatud tulu/kulu asendatakse automaatselt 0 -ga
+* Kasutajaid ei saa projekti mitmekordselt lisada (loogiline)
 
 -- Bug fixes
 * Kommentaaride kuupäev parandatud
@@ -27,7 +33,6 @@ Current RELEASED (taged) verison: 2.0 alpha
  ' Puuduvad eraldajad ( vÃ¤rvid, piirid )
 * Projekti kustutamisel peaks küsima confirmationit
 * Liiga suurte tulude/kulude korral kuvab *10 astmetega (E)
-* tulude ja kulude süntaksiliselt valesti sisestamine on handlimata
 
 ---------- version 2.0 alpha patch notes ----------
 

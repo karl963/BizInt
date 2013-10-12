@@ -126,14 +126,17 @@ public class ProjektController {
 			}
 			
 			Statement stmt5 = con.createStatement();
-			String query5 = "SELECT kasutajaNimi FROM kasutajad";
+			String query5 = "SELECT kasutajaNimi, kasutajaID FROM kasutajad";
 			ResultSet rs5 = stmt5.executeQuery(query5);
 			
 			while(rs5.next()){
 				Kasutaja kasutaja = new Kasutaja();
 				
 				String kasutajaNimi = rs5.getString("kasutajaNimi");
+				int kasutajaID = rs5.getInt("kasutajaID");
+				
 				kasutaja.setKasutajaNimi(kasutajaNimi);
+				kasutaja.setKasutajaID(kasutajaID);
 
 				kõikKasutajad.add(kasutaja);
 			}
@@ -167,6 +170,17 @@ public class ProjektController {
 		}catch(Exception x){
 			x.printStackTrace();
 			teade = "Viga andmebaasiga";
+		}
+		
+		
+		// võtame välja kasutajad (kõikKasutajad listist) kes juba osalevad projektis
+		for(Kasutaja projektiKasutaja : kasutajad){
+			for(Kasutaja ülejäänudKasutaja : kõikKasutajad){
+				if(ülejäänudKasutaja.getKasutajaID() == projektiKasutaja.getKasutajaID()){
+					kõikKasutajad.remove(ülejäänudKasutaja);
+					break;
+				}
+			}
 		}
 		
 		Projekt projekt = new Projekt();
