@@ -52,19 +52,21 @@ public class ProjektController {
 		
 		String nimi = null;
 		String kirjeldus = null;
+		int reiting = 1;
 		
 		Connection con = Mysql.connection;;
 		
 		try{
 			
 			Statement stmt = con.createStatement();
-			String query = "SELECT kirjeldus, projektNimi FROM projektid WHERE projektID="+projektID;
+			String query = "SELECT kirjeldus, projektNimi, reiting FROM projektid WHERE projektID="+projektID;
 			ResultSet rs = stmt.executeQuery(query);
 			
 			rs.next();
 			
 			nimi = rs.getString("projektNimi");
 			kirjeldus = rs.getString("kirjeldus");
+			reiting = rs.getInt("reiting");
 			
 			Statement stmt2 = con.createStatement();
 			String query2 = "SELECT kasutajaNimi,aktiivne,vastutaja,osalus,kasutajaID FROM projektikasutajad, kasutajad WHERE projektikasutajad.projekt_ID="+projektID+" AND kasutajad.kasutajaID=projektikasutajad.kasutaja_ID";
@@ -183,8 +185,20 @@ public class ProjektController {
 			}
 		}
 		
+		// teeme reitinguHTML-i
+		String html = "";
+		for(int i = 1; i <= 5 ;i++){
+			if(i <= reiting){
+				html+="<a class='reitingNuppOn' href='vaadeProjektEsimene.htm?projektID="+projektID+"&reiting="+i+"' >"+i+"</a> ";
+			}
+			else{
+				html+="<a class='reitingNuppPole' href='vaadeProjektEsimene.htm?projektID="+projektID+"&reiting="+i+"' >"+i+"</a> ";
+			}
+		}
+		
 		Projekt projekt = new Projekt();
 		
+		projekt.setReitinguHTML(html);
 		projekt.setNimi(nimi);
 		projekt.setId(projektID);
 		projekt.setKasutajad(kasutajad);
@@ -545,11 +559,27 @@ public class ProjektController {
 	
 	}
 	
+	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.GET, params={"reiting","projektID"})
+	public View muudaReitingut(@RequestParam("reiting") int reiting,@RequestParam("projektID") int projektID, Model m){
+		
+		
+		int vastus = Projekt.muudaProjektiReitingutAndmebaasis(projektID, reiting);
+		
+		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
+			teade = "Viga andmebaasiga ühendumisel";
+		}
+		else{
+			teade = "Reitingu muutmine õnnestus";
+		}
+
+		return new RedirectView("vaadeProjektEsimene.htm?id="+projektID);
+	}
+	
 	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"teade"})
 	public void muudaTeade(HttpServletRequest request, HttpServletResponse response,@RequestParam("teade") String teade, Model m){
 
 		this.teade = teade;
 	
 	}
-	
+
 }

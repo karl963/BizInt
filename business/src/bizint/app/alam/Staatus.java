@@ -1,6 +1,7 @@
 package bizint.app.alam;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -58,16 +59,89 @@ public class Staatus {
 		return summa;
 	}
 	
-	public static boolean kustutaStaatusAndmebaasist(Staatus staatus){
+	public static int kustutaStaatusAndmebaasist(int staatusID){
 		
-		/******************************************************************
-		 ******************************************************************
-		 ***************************** ANDMEBAAS **************************
-		 ******************************************************************
-		 ******************************************************************
-		 */
+		int[] projektid = null;
+				
+		Connection con = Mysql.connection;
+		if(con==null){
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
 		
-		return false;
+		try {
+			
+			Statement stmt = con.createStatement();
+			String query = "SELECT COUNT(*) AS mituProjekti FROM staatused WHERE staatusID="+staatusID;
+			ResultSet rs = stmt.executeQuery(query);
+			
+			rs.next();
+			
+			projektid = new int[rs.getInt("mituProjekti")];
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		try {
+			
+			Statement stmt = con.createStatement();
+			String query = "SELECT projekt_ID FROM staatused WHERE staatusID="+staatusID;
+			ResultSet rs = stmt.executeQuery(query);
+			
+			int i = 0;
+			while(rs.next()){
+				projektid[i] = rs.getInt("projekt_ID");
+				i++;
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		try {
+			
+			Statement stmt = con.createStatement();
+			String query = "DELETE FROM staatused WHERE staatusID="+staatusID;
+			stmt.executeUpdate(query);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		try {
+			for(int projektID : projektid){
+				Statement stmt0 = con.createStatement();
+				String query0 = "DELETE FROM projektid WHERE projektID="+projektID;
+				stmt0.executeUpdate(query0);
+
+				Statement stmt = con.createStatement();
+				String query = "DELETE FROM projektikasutajad WHERE projekt_ID="+projektID;
+				stmt.executeUpdate(query);
+				
+				Statement stmt2 = con.createStatement();
+				String query2 = "DELETE FROM tulud WHERE projekt_ID="+projektID;
+				stmt2.executeUpdate(query2);
+				
+				Statement stmt3 = con.createStatement();
+				String query3 = "DELETE FROM logid WHERE projekt_ID="+projektID;
+				stmt3.executeUpdate(query3);
+				
+				Statement stmt4 = con.createStatement();
+				String query4 = "DELETE FROM kulud WHERE projekt_ID="+projektID;
+				stmt4.executeUpdate(query4);
+				
+				Statement stmt5 = con.createStatement();
+				String query5 = "DELETE FROM kommentaarid WHERE projekt_ID="+projektID;
+				stmt5.executeUpdate(query5);
+			}
+		} catch (SQLException e) {
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		return Projekt.KÕIK_OKEI;
 	}
 	
 	public static int lisaStaatusAndmebaasi(Staatus staatus){

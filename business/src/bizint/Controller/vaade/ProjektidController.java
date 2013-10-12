@@ -8,11 +8,13 @@ import java.util.List;
 
 
 
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -221,6 +223,19 @@ public class ProjektidController {
 		return new RedirectView("vaadeProjektid.htm");
 	}
 	
-	//@RequestParam("nimi") String nimi, @RequestParam("nimi2") String nimi2
+	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"staatusID"})
+	public View kustutaStaatus(@RequestParam("kasutajad") int staatusID, Model m){
+		
+		int vastus = Staatus.kustutaStaatusAndmebaasist(staatusID);
+		
+		if(vastus == Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
+			sõnum = "Viga andmebaasiga ühendumisel";
+		}
+		else{
+			sõnum = "Staatuse kustutamine õnnestus";
+		}
+		
+		return new RedirectView("vaadeProjektid.htm");
+	}
 	
 }

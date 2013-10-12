@@ -1,5 +1,38 @@
 @CHARSET "ISO-8859-1";
 
+.reitingNuppOn {
+  width: 15px;
+  height: 15px;
+  color: #EFF7FF;
+  font-size: 25;
+  text-align:center;
+  background-color: #5CADFF;
+  moz-border-radius: 999px;
+  -webkit-border-radius: 999px;
+  border: 3px solid #5CADFF;
+  padding: 5px;
+  border-radius: 999px;
+  behavior: url(PIE.htc);
+}
+
+.reitingNuppPole {
+  width: 15px;
+  height: 15px;
+  color: #5CADFF;
+  font-size: 25;
+  text-align:center;
+  background-color: #EFF7FF;
+  moz-border-radius: 999px;
+  -webkit-border-radius: 999px;
+  border: 3px solid #5CADFF;
+  padding: 5px;
+  border-radius: 999px;
+  behavior: url(PIE.htc);
+}
+
+.reitingNuppPole:hover {opacity: 0.6;}
+.reitingNuppOn:hover {opacity: 0.6;}
+
 .uusProjekt
 {
 	width:140px;
@@ -266,9 +299,10 @@ h1
 .reiting
 {
 	position:absolute;
-	left:300px;
+	left:200px;
 	top:70px;
 	width:300px;
+	height=17px;
 }
 
 .muudaKustuta
@@ -281,8 +315,8 @@ h1
 .viewTabs
 {
 	position:absolute;
-	left:150px;
-	top:100px;
+	left:120px;
+	top:110px;
 	font-family:arial;
 	font-size:20;
 	text-decoration:bold;

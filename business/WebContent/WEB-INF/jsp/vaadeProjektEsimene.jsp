@@ -32,7 +32,19 @@ Tulu: <b class="tuluSumma">${projekt.kogutulu}</b> Kulu: <b class="kuluSumma">${
 </div>
 
 <div class=reiting>
-reiting: ${projekt.reiting}
+
+<!--
+<c:choose>
+	<c:when test="${projekt.reiting==1}">  </c:when>
+	<c:when test="${projekt.reiting==2}">  </c:when>
+	<c:when test="${projekt.reiting==3}">  </c:when>
+	<c:when test="${projekt.reiting==4}">  </c:when>
+	<c:otherwise>  </c:otherwise>
+</c:choose>
+-->
+
+reiting: ${projekt.reitinguHTML}
+
 </div>
 
 

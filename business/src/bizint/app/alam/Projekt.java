@@ -35,6 +35,7 @@ public class Projekt {
 	private List<Logi> logi;
 	private int reiting;
 	private int staatusID;
+	private String reitinguHTML;
 	
 	  ///////////\\\\\\\\\\\\
 	 ///// constructors \\\\\\
@@ -329,16 +330,36 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 	}
 	
-	public static boolean muudaReitingutAndmebaasis(Projekt projekt, int reiting){
+	public static int muudaProjektiReitingutAndmebaasis(int projektID, int reiting){
 		
-		/******************************************************************
-		 ******************************************************************
-		 ***************************** ANDMEBAAS **************************
-		 ******************************************************************
-		 ******************************************************************
-		 */
+		Connection con = Mysql.connection;
+		if(con==null){
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e) {
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
 		
-		return false;
+		String query = "UPDATE projektid SET reiting = "+reiting+" WHERE projektID="+projektID;
+		
+		try {
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		try {
+			Statement stmt2 = con.createStatement();
+			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+projektID+","+"'"+"Kasutaja"+" muutis projekti reitingut : "+reiting+"')";
+			stmt2.executeUpdate(query2);
+		} catch (SQLException e) {
+		}
+		
+		return Projekt.KÕIK_OKEI;
 	}
 	
 	public static boolean lisaLogiAndmebaasi(Projekt projekt, Logi logi){
@@ -785,6 +806,14 @@ public class Projekt {
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	public String getReitinguHTML() {
+		return reitinguHTML;
+	}
+
+	public void setReitinguHTML(String reitinguHTML) {
+		this.reitinguHTML = reitinguHTML;
 	}
 	
 }
