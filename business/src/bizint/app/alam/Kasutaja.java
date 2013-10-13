@@ -1,6 +1,13 @@
 package bizint.app.alam;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Date;
+
+import bizint.andmebaas.Mysql;
+import bizint.post.UusKasutaja;
 
 public class Kasutaja {
 	
@@ -9,6 +16,7 @@ public class Kasutaja {
 	public static Double DEFAULT_OSALUS = 0.0;
 	public static boolean DEFAULT_VASTUTAJA = false;
 	public static boolean DEFAULT_AKTIIVNE = false;
+	public static int VIGA_ANDMEBAASIGA_ÜHENDUMISEL = 0, VIGA_JUBA_EKSISTEERIB = 1, KÕIK_OKEI = 2;
 	
 	private String kasutajaNimi;
 	private Date aeg;
@@ -41,6 +49,97 @@ public class Kasutaja {
 		this.aktiivne = Kasutaja.DEFAULT_AKTIIVNE;
 		this.setProjektID(0);
 		this.setKasutajaID(0);
+	}
+	
+	  ///////////\\\\\\\\\\\\
+	 ///////// methods \\\\\\\
+	/////////////\\\\\\\\\\\\\\
+	
+	public static int lisaKasutajaAndmebaasi(Kasutaja kasutaja){
+		
+		Connection con = Mysql.connection;
+		if(con==null){
+			return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e) {
+			return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		String query = "INSERT INTO kasutajad (kasutajaNimi) VALUES ('"+kasutaja.getKasutajaNimi()+"')";
+		
+		try {
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			return Kasutaja.VIGA_JUBA_EKSISTEERIB;
+		}
+		
+		return Kasutaja.KÕIK_OKEI;
+	}
+	
+	public static int kustutaKasutajaAndmebaasist(Kasutaja kasutaja){
+		
+		Connection con = Mysql.connection;
+		if(con==null){
+			return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		String kasutajaNimi = "";
+		ResultSet logile;
+		
+		try {
+			Statement stmt = con.createStatement();
+			String query = "SELECT kasutajaNimi FROM kasutajad WHERE kasutajaID="+kasutaja.getKasutajaID();
+			ResultSet rs = stmt.executeQuery(query);
+			
+			rs.next();
+			
+			kasutajaNimi = rs.getString("kasutajaNimi");
+			
+			Statement stmt2 = con.createStatement();
+			String query2 = "SELECT projekt_ID FROM projektikasutajad WHERE kasutaja_ID = "+kasutaja.getKasutajaID();
+			logile = stmt2.executeQuery(query2);
+			
+		}catch(Exception c){
+			return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		try {
+			Statement stmt = con.createStatement();
+			String query = "DELETE FROM kasutajad WHERE kasutajaID = "+kasutaja.getKasutajaID();
+			stmt.executeUpdate(query);
+			
+			Statement stmt2 = con.createStatement();
+			String query2 = "DELETE FROM projektikasutajad WHERE kasutaja_ID = "+kasutaja.getKasutajaID();
+			stmt2.executeUpdate(query2);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		try{
+			while(logile.next()){
+				int projektID = logile.getInt("projekt_ID");
+
+				try {
+					Statement stmt3 = con.createStatement();
+					String query3 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+projektID+","+"'"+"Kasutaja"+" eemaldas kustutaks töötaja, "+kasutajaNimi+", ning ta eemaldati automaatselt projektist')";
+					stmt3.executeUpdate(query3);
+				} catch (SQLException e) {
+					e.printStackTrace();
+					return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+				}
+			}
+
+		}catch(Exception x){
+			x.printStackTrace();
+			return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		return Kasutaja.KÕIK_OKEI;
 	}
 	
 	  ///////////\\\\\\\\\\\\

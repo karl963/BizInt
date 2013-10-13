@@ -15,7 +15,9 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Saab eemaldada projektist projektiga seotud töötajaid
 * Saab lisada töötajaid projekti
 * Saab eemaldada töötajaid projektist
-* Saab muuda töötajatega seotud andmeid projektis (osalus, aktiivsus, vastutaja)
+* Saab muuta töötajatega seotud andmeid projektis (osalus, aktiivsus, vastutaja)
+* Saab lisada töötajaid
+* Saab kustutada töötajaid
 
 -- Lisamärkused
 * Süntaksiliselt valesti lisatud tulu/kulu asendatakse automaatselt 0 -ga
@@ -37,6 +39,8 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Projekti kustutamisel peaks küsima confirmationit
 * Liiga suurte tulude/kulude korral kuvab *10 astmetega (E)
 * Liiga suurte tulude korral muudetakse projektide vaates projekti lahter suuremaks
+* kasutaja kustutamisel ei küsita confirmationit
+* menus liikudes ei muudeta aktiivse lingi välimust
 
 ---------- version 2.0 alpha patch notes ----------
 
