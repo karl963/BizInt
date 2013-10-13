@@ -30,13 +30,13 @@ Current RELEASED (taged) verison: 2.0 alpha
 * kirjelduse lahter on textarea, enne oli textfield
 
 -- Teada olevad probleemid
-* Kommentaaride kellaaeg on vale ( ainult EC2-s sest seal on instance kell vale? )
 * projekti detailivaade on liiga algeline
- ' Projekti kirjelduse ja kommenteerimise lahter on liiga vÃ¤ike
+ ' Projekti kirjelduse ja kommenteerimise lahter on liiga väike
  ' Enamus lahterid on liiga suured
  ' Puuduvad eraldajad ( vÃ¤rvid, piirid )
 * Projekti kustutamisel peaks küsima confirmationit
 * Liiga suurte tulude/kulude korral kuvab *10 astmetega (E)
+* Liiga suurte tulude korral muudetakse projektide vaates projekti lahter suuremaks
 
 ---------- version 2.0 alpha patch notes ----------
 

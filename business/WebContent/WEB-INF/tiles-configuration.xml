@@ -25,9 +25,14 @@
 	<put-attribute name="body" value="/WEB-INF/jsp/vaadePipeline.jsp" />
 </definition>
 
-<definition name="vaadeTootajad" extends="menuTemplate">
-    <put-attribute name="title" value="Tootajad vaade" />  
-	<put-attribute name="body" value="/WEB-INF/jsp/vaadeTootajad.jsp" />
+<definition name="vaadeTootajadTabel" extends="menuTemplate">
+    <put-attribute name="title" value="Tootajad tabel vaade" />  
+	<put-attribute name="body" value="/WEB-INF/jsp/vaadeTootajadTabel.jsp" />
+</definition>
+
+<definition name="vaadeTootajadGraaf" extends="menuTemplate">
+    <put-attribute name="title" value="Tootajad graaf vaade" />  
+	<put-attribute name="body" value="/WEB-INF/jsp/vaadeTootajadGraaf.jsp" />
 </definition>
 
 <definition name="vaadeRahavoog" extends="menuTemplate">

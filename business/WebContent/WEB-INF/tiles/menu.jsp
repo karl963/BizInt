@@ -8,7 +8,7 @@
 	<div class=pipeline_text>
 		<a href="vaadePipeline.htm">Pipeline</a>
 	<div class=tootajad_text>
-		<a href="vaadeTootajad.htm">T&ouml;&ouml;tajad</a>
+		<a href="vaadeTootajadTabel.htm">T&ouml;&ouml;tajad</a>
 	<div class=rahavoog_text>
 		<a href="vaadeRahavoog.htm">Rahavoog</a>
 	</div>
