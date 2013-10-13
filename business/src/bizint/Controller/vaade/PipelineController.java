@@ -1,6 +1,8 @@
 package bizint.Controller.vaade;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,78 +14,93 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 
+import bizint.andmebaas.Mysql;
+import bizint.app.alam.Kasutaja;
 import bizint.app.alam.Projekt;
 import bizint.app.alam.Staatus;
+import bizint.app.alam.rahaline.Tulu;
 
 @Controller
 public class PipelineController {
+	
+	private List<Staatus> staatused = new ArrayList<Staatus>();
+	private String teade;
 
-	
-	@RequestMapping("/vaadePipeline.htm")
-	public ModelAndView vaadePipeline() {
+	@RequestMapping(value = "/vaadePipeline.htm", method = RequestMethod.GET)
+	public String vaadePipeline(Model m) {
 		
-		//List<Staatus>staatused = getStaatusedAndmebaasist();
-		List<Staatus> staatused = new ArrayList<Staatus>();
-		return new ModelAndView("vaadePipeline", "staatused", staatused); 
-	}
-	
-	
-	/*
-	@RequestMapping(value = "/vaadePipeline", method = RequestMethod.GET)
-	public String uusStaatus(Model m){
-		m.addAttribute("uusStaatus", new UusStaatus());
+		staatused = new ArrayList<Staatus>();
 		
-		List<Staatus> staatused = new ArrayList<Staatus>();
-		m.addAttribute("staatused", staatused);
+		Connection con = Mysql.connection;;
 		
-		return "vaadePipeline";
-	}
-	
-	@RequestMapping(value = "/vaadePipeline", method = RequestMethod.POST)
-	public String addStaatus(@ModelAttribute UusStaatus staatus, Model m){
-		
-		m.addAttribute("message", "ONNESTUS!!!");
-		m.addAttribute("nimi", staatus.getNimi());
-		System.out.println(staatus.getNimi());
-		
-		
-		return "vaadePipeline";
-	}
-	*/
-	
-/*
-	private List<Staatus> getStaatusedAndmebaasist(){
-		
-		List<Staatus> staatused = new ArrayList<Staatus>();
-		
-		Statement statement = conn.createStatement();
-		ResultSet rs = statement.executeQuery(query);
-		
-		while(rs.next()){
-			List<Projekt> projektid = new ArrayList<Projekt>();
-			Staatus staatus = new Staatus();
+		try{
 			
-			String nimi = rs.getString("nimi");
-			int järjekorraNR = rs.getInt("järjekorraNR");
+			Statement stmt = con.createStatement();
 			
-			while(rs2.next()){
-				Projekt p = new Projekt();
+			String query = "SELECT staatusNimi,järjekorraNR,staatusID FROM staatused";
+			
+			ResultSet rs = stmt.executeQuery(query);
+		
+			while(rs.next()){
+				Staatus staatus = new Staatus();
+				List<Projekt> projektid = new ArrayList<Projekt>();
 				
-				while(){
+				String staatusNimi = rs.getString("staatusNimi");
+				int järjekorraNumber = rs.getInt("järjekorraNR");
+				int staatusID = rs.getInt("staatusID");
+				
+				staatus.setJärjekorraNumber(järjekorraNumber);
+				staatus.setNimi(staatusNimi);
+				staatus.setId(staatusID);
+				
+				String query2 = "SELECT projektID FROM projektid WHERE staatus_ID="+staatusID;
+				Statement stmt2 = con.createStatement();
+				ResultSet rs2 = stmt2.executeQuery(query2);
+				
+				while(rs2.next()){
+					
+					Projekt projekt = new Projekt();
+
+					List<Tulu> tulud = new ArrayList<Tulu>();
+					
+					int projektID = rs2.getInt("projektID");
+					
+					String query4 = "SELECT tulu FROM tulud WHERE projekt_ID="+projektID;
+					Statement stmt4 = con.createStatement();
+					ResultSet rs4 = stmt4.executeQuery(query4);
+					
+					while(rs4.next()){
+						Tulu tulu = new Tulu();
+						
+						Double summa = rs4.getDouble("tulu");
+						
+						tulu.setSumma(summa);
+						
+						tulud.add(tulu);
+					}
+					
+					projekt.setTulud(tulud);
+					projekt.setId(projektID);
+					
+					projektid.add(projekt);
 					
 				}
 				
-				p.setTulud(tulud);
+				staatus.setProjektid(projektid);
 				
-				projektid.add(projekt);
+				staatused.add(staatus);
 			}
 			
-			staatus.setProjektid(projektid);
-			staatus.setNimi(nimi);
-			staatus.setJärjekorraNumber(järjekorraNR)
-			staatused.add(staatus);
+		}catch(Exception x){
+			x.printStackTrace();
 		}
 		
+		staatused = Staatus.paneJärjekorda(staatused);
+		
+		m.addAttribute("staatused", staatused);
+		m.addAttribute("teade", teade);
+		
+		return "vaadePipeline";
 	}
-	*/
+	
 }

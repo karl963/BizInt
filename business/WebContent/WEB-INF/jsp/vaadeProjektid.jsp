@@ -4,7 +4,7 @@
 <div class=textontop>
 
 <div class=message>
-	<c:if test="${not empty message}"><div class="message green">${message}</div></c:if>
+	<c:if test="${not empty teade}"><div class="message green">${teade}</div></c:if>
 </div>
 
 <div class=staatusteKonteiner>

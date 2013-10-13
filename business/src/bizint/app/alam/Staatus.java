@@ -46,6 +46,35 @@ public class Staatus {
 	 ///////// methods \\\\\\\
 	/////////////\\\\\\\\\\\\\\
 	
+	public Double getBilanss(){
+		return getKogutulu()-getKogukulu();
+	}
+	
+	public static List<Staatus> paneJärjekorda(List<Staatus> staatused){
+		
+		List<Staatus> sorteeritudStaatused = new ArrayList<Staatus>();
+		
+		while(staatused.size() > 0 ){
+			int väikseimNumber = staatused.get(0).getJärjekorraNumber();
+			int index = 0;
+			int i = 0;
+			
+			for(Staatus s : staatused){
+				if(s.getJärjekorraNumber() < väikseimNumber){
+					väikseimNumber = s.getJärjekorraNumber();
+					index = i;
+				}
+				i++;
+			}
+			
+			sorteeritudStaatused.add(staatused.get(index));
+			staatused.remove(index);
+		}
+		
+		return sorteeritudStaatused;
+		
+	}
+	
 	
 	public void addProjekt(Projekt projekt){
 		projektid.add(projekt);
@@ -55,6 +84,14 @@ public class Staatus {
 		Double summa = 0.0;
 		for(Projekt p : projektid){
 			summa+=p.getKogutulu();
+		}
+		return summa;
+	}
+	
+	public Double getKogukulu(){
+		Double summa = 0.0;
+		for(Projekt p : projektid){
+			summa+=p.getKogukulu();
 		}
 		return summa;
 	}

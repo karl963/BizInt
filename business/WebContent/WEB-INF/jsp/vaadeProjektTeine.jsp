@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
-<p>${message}</p>
+<p>${teade}</p>
 <body class=darkBack>
 <div class=detailViewDiv>
 <div class=detailViewHeader>
@@ -26,7 +26,7 @@ Tulu: <b class="tuluSumma">${projekt.kogutulu}</b> Kulu: <b class="kuluSumma">${
 </div>
 
 <div class=reiting>
-reiting: ${projekt.reiting}
+reiting: ${projekt.reitinguHTML}
 </div>
 
 

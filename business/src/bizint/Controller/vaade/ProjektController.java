@@ -210,7 +210,7 @@ public class ProjektController {
 		
 		m.addAttribute("kasutajad",kõikKasutajad);
 		m.addAttribute("projekt", projekt);
-		m.addAttribute("message", teade);
+		m.addAttribute("teade", teade);
 		m.addAttribute("uusKommentaar", new UusKommentaar());
 		m.addAttribute("uusKirjeldus", new UusKirjeldus());
 		m.addAttribute("uusProjektiNimi", new UusProjektiNimi(projekt.getNimi(),projekt.getId()));
@@ -229,18 +229,20 @@ public class ProjektController {
 		List<Kommentaar> kommentaarid = new ArrayList<Kommentaar>();
 		
 		String nimi = null;
+		int reiting = 1;
 		
 		Connection con = Mysql.connection;;
 		
 		try{
 			
 			Statement stmt = con.createStatement();
-			String query = "SELECT projektNimi FROM projektid WHERE projektID="+projektID;
+			String query = "SELECT projektNimi, reiting FROM projektid WHERE projektID="+projektID;
 			ResultSet rs = stmt.executeQuery(query);
 			
 			rs.next();
 			
 			nimi = rs.getString("projektNimi");
+			reiting = rs.getInt("reiting");
 			
 			Statement stmt2 = con.createStatement();
 			String query2 = "SELECT tulu, tuluNimi, aeg FROM tulud WHERE projekt_ID="+projektID;
@@ -303,8 +305,20 @@ public class ProjektController {
 			x.printStackTrace();
 		}
 		
+		// teeme reitinguHTML-i
+		String html = "";
+		for(int i = 1; i <= 5 ;i++){
+			if(i <= reiting){
+				html+="<a class='reitingNuppOn' href='vaadeProjektTeine.htm?projektID="+projektID+"&reiting="+i+"' >"+i+"</a> ";
+			}
+			else{
+				html+="<a class='reitingNuppPole' href='vaadeProjektTeine.htm?projektID="+projektID+"&reiting="+i+"' >"+i+"</a> ";
+			}
+		}
+		
 		Projekt projekt = new Projekt();
 		
+		projekt.setReitinguHTML(html);
 		projekt.setNimi(nimi);
 		projekt.setId(projektID);
 		projekt.setKulud(kulud);
@@ -312,7 +326,7 @@ public class ProjektController {
 		projekt.setKommentaarid(kommentaarid);
 		
 		m.addAttribute("projekt", projekt);
-		m.addAttribute("message", teade);
+		m.addAttribute("teade", teade);
 		m.addAttribute("uusKommentaar", new UusKommentaar());
 		m.addAttribute("kustutaKulu", new Kulu());
 		m.addAttribute("kustutaTulu", new Tulu());

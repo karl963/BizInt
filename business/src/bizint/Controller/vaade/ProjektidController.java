@@ -29,7 +29,7 @@ import bizint.post.UusKirjeldus;
 public class ProjektidController {
 	
 	private List<Staatus> staatused = new ArrayList<Staatus>();
-	private String sõnum;
+	private String teade;
 	
 	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.GET)
 	public String vaadeProjektid(Model m){
@@ -184,8 +184,8 @@ public class ProjektidController {
 		m.addAttribute("staatused", staatused);
 		m.addAttribute("uusStaatus", new Staatus());
 		m.addAttribute("uusProjekt", new Projekt());
-		m.addAttribute("message", sõnum);
-		sõnum = null;
+		m.addAttribute("teade", teade);
+		teade = null;
 		
 		return "vaadeProjektid";
 	}
@@ -196,13 +196,13 @@ public class ProjektidController {
 		int vastus = Staatus.lisaStaatusAndmebaasi(staatus);
 		
 		if(vastus == Staatus.ERROR_JUBA_EKSISTEERIB){
-			sõnum = "Selle nimega staatus juba eksisteerib";
+			teade = "Selle nimega staatus juba eksisteerib";
 		}
 		else if(vastus == Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
-			sõnum = "Viga andmebaasiga ühendumisel";
+			teade = "Viga andmebaasiga ühendumisel";
 		}
 		else{
-			sõnum = "Staatuse lisamine õnnestus";
+			teade = "Staatuse lisamine õnnestus";
 		}
 		
 		return new RedirectView("vaadeProjektid.htm");
@@ -214,10 +214,10 @@ public class ProjektidController {
 		int vastus = Projekt.lisaProjektAndmebaasi(projekt,staatusID);
 		
 		if(vastus == Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
-			sõnum = "Viga andmebaasiga ühendumisel";
+			teade = "Viga andmebaasiga ühendumisel";
 		}
 		else{
-			sõnum = "Projekti lisamine õnnestus";
+			teade = "Projekti lisamine õnnestus";
 		}
 		
 		return new RedirectView("vaadeProjektid.htm");
@@ -229,10 +229,10 @@ public class ProjektidController {
 		int vastus = Staatus.kustutaStaatusAndmebaasist(staatusID);
 		
 		if(vastus == Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
-			sõnum = "Viga andmebaasiga ühendumisel";
+			teade = "Viga andmebaasiga ühendumisel";
 		}
 		else{
-			sõnum = "Staatuse kustutamine õnnestus";
+			teade = "Staatuse kustutamine õnnestus";
 		}
 		
 		return new RedirectView("vaadeProjektid.htm");
