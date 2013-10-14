@@ -114,7 +114,7 @@ Projektiga seotud inimesed:
 </table>
 </div>
 <div class=buttonAlign>
-<button type="button" onclick="listiProjektiKasutajadJaSalvesta('${pageContext.request.contextPath}',${projekt.id});" >Salvesta töötajad</button>
+<button type="button" onclick="listiProjektiKasutajadJaSalvesta(${projekt.id});" >Salvesta töötajad</button>
 </div>
 <br>
 Kirjeldus:

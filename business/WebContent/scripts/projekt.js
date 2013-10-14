@@ -8,7 +8,7 @@ $(document).ready(function(){
 
 });
 
-function lisaProjektiKasutaja(rakenduseNimi,pid){
+function lisaProjektiKasutaja(pid){
 
 	var e = document.getElementById("uueKasutajaList");
 	var nimi = e.options[e.selectedIndex].value;
@@ -27,7 +27,7 @@ function lisaProjektiKasutaja(rakenduseNimi,pid){
 	
 }
 
-function listiProjektiKasutajadJaSalvesta(rakenduseNimi,pid){
+function listiProjektiKasutajadJaSalvesta(pid){
 
 	var kasutajad = "";
 	
@@ -117,38 +117,69 @@ $(document).ready(function() {
 
     });
     
+    $('.tootajaPalk').click(function() {
+    	// kõik ülejäänud muudame tagasi
+    	$(".tootajaPalkText").show();
+    	$(".tootajaPalgaMuutmine").hide();
+    	
+    	// muudame valitud lahtrit vastavalt
+        $(this).closest(".tootajaPalk").children(".tootajaPalkText").hide();
+        $(this).closest(".tootajaPalk").children(".tootajaPalgaMuutmine").show();
+        
+        // fokuseerib lahtri peale
+        $(this).find("input.tootajaPalgaMuutmiseLahter").focus();
+
+    });
     
+    $('.tootajaPalgaMuutmiseLahter').blur(function() {
+    	$(this).closest(".tootajaPalk").children(".tootajaPalkText").html($(this).val());
+    });
+    
+});
+
+$(document).ready(function() {
+	
+    $('#salvestaTootajatePalgad').click(function() {
+       
+    	
+    	
+    	
+    });
+    
+    $('#aastateValikud').change(function() {
+    	document.location.href = "vaadeTootajadTabel.htm?aasta="+$(this).val();
+    });
+
 });
 
 google.load("visualization", "1", {packages:["corechart"]});
 google.setOnLoadCallback(tekitaTabel);
+
 function tekitaTabel(sisendString){
+	
     var andmed = sisendString.split("/");
     var tabel = new Array();
     tabel[0]= ["Staatus", "Tulu", "Kulu" , "Bilanss"] ;
+    
     for(var i = 1;i < andmed.length ; i++){
     	var vaheTabel = andmed[i-1].split(";");
     		tabel[i] = [vaheTabel[0], parseFloat(vaheTabel[1]),parseFloat(vaheTabel[2]),parseFloat(vaheTabel[3])];	
     }
-        var data = google.visualization.arrayToDataTable(tabel);
+    var data = google.visualization.arrayToDataTable(tabel);
 
-        var options = {
-          legend: {position: 'top'},
-          colors: ['green','red', 'blue'],
-          width: 150 * (tabel.length-1),
-          vAxis: {title: '€', titleTextStyle: {color: 'red'}},
-          hAxis: {title: 'Staatus', titleTextStyle: {color: 'red'} }
-        	
-        };
+    var options = {
+      legend: {position: 'top'},
+      colors: ['green','red', 'blue'],
+      width: 150 * (tabel.length-1),
+      vAxis: {title: '€', titleTextStyle: {color: 'red'}},
+      hAxis: {title: 'Staatus', titleTextStyle: {color: 'red'} }
+    	
+    };
 
-        var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-        chart.draw(data, options);
+    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+    chart.draw(data, options);
 }
 
 $(document).ready(function(){
 	$("#pipelineAndmed").trigger("click");
-
 });
-
-
-

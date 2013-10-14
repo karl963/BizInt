@@ -16,9 +16,34 @@ ${teade}
 
 <br>
 
-<table>
+<select id="aastateValikud">
+	<c:forEach items="${aastad}" var="aasta">
+		<c:choose>
+			<c:when test="${aasta == hetkeAasta}">
+    			<option value="${aasta}" selected>${aasta}</option>
+    		</c:when>
+    		<c:otherwise>
+    			<option value="${aasta}">${aasta}</option>
+    		</c:otherwise>
+    	</c:choose>
+    </c:forEach>
+</select>
+ 
+<table border=1>
 	<tr>
 		<th>Töötajad</th>
+		<th> </th>
+		<c:forEach items="${kuupaevad}" var="kuupaev">
+			<th COLSPAN=2>${kuupaev}</th>
+		</c:forEach>
+	</tr>
+	<tr>
+		<th></th>
+		<th></th>
+		<c:forEach items="${kuupaevad}" var="kuupaev">
+			<th>Palk</th>
+			<th>Tulu</th>
+		</c:forEach>
 	</tr>
 	<c:forEach items="${kasutajad}" var="tootaja" >
 	
@@ -27,6 +52,15 @@ ${teade}
 		<tr>
 			<td>${tootaja.kasutajaNimi}</td>
 			<td><input type="submit" value="X" /></td>
+			<c:forEach items="${tootaja.tabeliAndmed}" var="yhik">
+				<td class="tootajaPalk" style="width:40px">
+					<div class="tootajaPalgaMuutmine" style="display:none;">
+						<input style="width:40px" class="tootajaPalgaMuutmiseLahter" value="${yhik.palk}" />
+					</div>
+					<div class="tootajaPalkText">${yhik.palk}</div>
+				</td>
+				<td>${yhik.tulu}</td>
+			</c:forEach>
 		</tr>
 		
 		</form:form>
@@ -41,3 +75,6 @@ ${teade}
 	</tr>
 </table>
 
+<br>
+
+<button type="button" id="salvestaTootajatePalgad" >Salvesta</button>

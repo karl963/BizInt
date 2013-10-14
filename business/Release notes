@@ -19,7 +19,8 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Saab lisada töötajaid
 * Saab kustutada töötajaid
 * Saab muuta staatuse nime
-* Saab nÃ¤ha pipeline vaadet
+* Saab vaadata pipeline vaadet
+* Saab vaadata töötajate vaates kuupalkasid ja projektide pealt tulevaid tulusid ( osakaal x kõik tulud ) aasta vältel, iga kuu eraldi. Saab valida aastat.
 
 -- Lisamärkused
 * Süntaksiliselt valesti lisatud tulu/kulu asendatakse automaatselt 0 -ga

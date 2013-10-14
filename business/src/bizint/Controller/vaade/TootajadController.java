@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,8 @@ import org.springframework.web.servlet.view.RedirectView;
 import bizint.andmebaas.Mysql;
 import bizint.app.alam.Kasutaja;
 import bizint.app.alam.Projekt;
+import bizint.app.alam.kuuAndmed.Kuud;
+import bizint.app.alam.kuuAndmed.TabeliData;
 import bizint.app.alam.muu.Kommentaar;
 import bizint.app.alam.muu.Logi;
 import bizint.app.alam.rahaline.Kulu;
@@ -38,8 +42,12 @@ public class TootajadController {
 	public String vaadeTootajadTabel(Model m) {
 		
 		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
+	
+		Connection con = Mysql.connection;
 		
-		Connection con = Mysql.connection;;
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		int hetkeAasta = cal.get(Calendar.YEAR);
 		
 		try{
 
@@ -48,6 +56,7 @@ public class TootajadController {
 			ResultSet rs = stmt.executeQuery(query);
 			
 			while(rs.next()){
+				List<TabeliData> tabeliAndmed = new ArrayList<TabeliData>();
 				Kasutaja kasutaja = new Kasutaja();
 				
 				String kasutajaNimi = rs.getString("kasutajaNimi");
@@ -56,14 +65,56 @@ public class TootajadController {
 				kasutaja.setKasutajaID(kasutajaID);
 				kasutaja.setKasutajaNimi(kasutajaNimi);
 				
+				for(int i = 1; i<=12 ;i++){
+					Statement stmt2 = con.createStatement();
+					String query2 = "SELECT palk FROM palgad WHERE kasutaja_ID="+kasutajaID+" AND kuu="+i+" AND aasta="+hetkeAasta;
+					ResultSet rs2 = stmt2.executeQuery(query2);
+					
+					int kuuNumber = i;
+					Double palk = 0.0;
+					
+					if(rs2.next()){
+						palk = rs2.getDouble("palk");
+					}
+					
+					TabeliData data = new TabeliData();
+					data.setPalk(palk);
+					data.setKuuNumber(kuuNumber);
+					
+					tabeliAndmed.add(data);
+					
+				}
+
+				Statement stmt3 = con.createStatement();
+				String query3 = "SELECT tulu, osalus, aeg FROM tulud, projektikasutajad WHERE projektikasutajad.kasutaja_ID="+kasutajaID+" AND tulud.projekt_ID=projektikasutajad.projekt_ID";
+				ResultSet rs3 = stmt3.executeQuery(query3);
+				
+				while(rs3.next()){
+					
+					cal.setTime(new Date(rs3.getTimestamp("aeg").getTime()));
+					int kuu = cal.get(Calendar.MONTH)+1; // +1 sest date-s algavad kuud 0-st
+					
+					Double tulu = rs3.getDouble("tulu")*rs3.getDouble("osalus");
+					
+					tabeliAndmed = lisaTuluTabeliAndmetesse(kuu, tulu,tabeliAndmed);
+					
+				}
+				
+				kasutaja.setTabeliAndmed(paneTabelJärjekorda(tabeliAndmed));
+				
 				kasutajad.add(kasutaja);
 			}
 
 		}catch(Exception x){
+			x.printStackTrace();
 			teade = "Viga andmebaasiga";
 		}
 		
-
+		int[] aastad = {hetkeAasta-3,hetkeAasta-2,hetkeAasta-1,hetkeAasta,hetkeAasta+1,hetkeAasta+2,hetkeAasta+3};
+		
+		m.addAttribute("hetkeAasta", Calendar.getInstance().get(Calendar.YEAR));
+		m.addAttribute("aastad", aastad);
+		m.addAttribute("kuupaevad",Kuud.KUUD_LYHEND);
 		m.addAttribute("kasutajad",kasutajad);
 		m.addAttribute("teade", teade);
 		m.addAttribute("uusTootaja",new Kasutaja());
@@ -74,6 +125,127 @@ public class TootajadController {
 		return "vaadeTootajadTabel"; 
 	}
 	
+	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.GET, params = {"aasta"})
+	public String vaadeTootajadTabelValitudAasta(@RequestParam("aasta") int aasta, Model m) {
+
+		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
+		
+		Connection con = Mysql.connection;
+		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		int hetkeAasta = cal.get(Calendar.YEAR);
+		
+		try{
+
+			Statement stmt = con.createStatement();
+			String query = "SELECT kasutajaNimi, kasutajaID FROM kasutajad WHERE töötab=1";
+			ResultSet rs = stmt.executeQuery(query);
+			
+			while(rs.next()){
+				List<TabeliData> tabeliAndmed = new ArrayList<TabeliData>();
+				Kasutaja kasutaja = new Kasutaja();
+				
+				String kasutajaNimi = rs.getString("kasutajaNimi");
+				int kasutajaID = rs.getInt("kasutajaID");
+				
+				kasutaja.setKasutajaID(kasutajaID);
+				kasutaja.setKasutajaNimi(kasutajaNimi);
+				
+				for(int i = 1; i<=12 ;i++){
+					Statement stmt2 = con.createStatement();
+					String query2 = "SELECT palk FROM palgad WHERE kasutaja_ID="+kasutajaID+" AND palgad.kuu="+i+" AND aasta="+aasta;
+					ResultSet rs2 = stmt2.executeQuery(query2);
+					
+					int kuuNumber = i;
+					Double palk = 0.0;
+					
+					if(rs2.next()){
+						palk = rs2.getDouble("palk");
+					}
+					
+					TabeliData data = new TabeliData();
+					data.setPalk(palk);
+					data.setKuuNumber(kuuNumber);
+					
+					tabeliAndmed.add(data);
+					
+				}
+
+				Statement stmt3 = con.createStatement();
+				String query3 = "SELECT tulu, osalus, aeg FROM tulud, projektikasutajad WHERE projektikasutajad.kasutaja_ID="+kasutajaID+" AND tulud.projekt_ID=projektikasutajad.projekt_ID";
+				ResultSet rs3 = stmt3.executeQuery(query3);
+				
+				while(rs3.next()){
+					
+					cal.setTime(new Date(rs3.getTimestamp("aeg").getTime()));
+					int kuu = cal.get(Calendar.MONTH)+1; // +1 sest date-s algavad kuud 0-st
+					
+					Double tulu = rs3.getDouble("tulu")*rs3.getDouble("osalus");
+					
+					tabeliAndmed = lisaTuluTabeliAndmetesse(kuu, tulu,tabeliAndmed);
+					
+				}
+				
+				kasutaja.setTabeliAndmed(paneTabelJärjekorda(tabeliAndmed));
+				
+				kasutajad.add(kasutaja);
+			}
+
+		}catch(Exception x){
+			x.printStackTrace();
+			teade = "Viga andmebaasiga";
+		}
+		
+		int[] aastad = {hetkeAasta-3,hetkeAasta-2,hetkeAasta-1,hetkeAasta,hetkeAasta+1,hetkeAasta+2,hetkeAasta+3};
+		
+		m.addAttribute("hetkeAasta", aasta);
+		m.addAttribute("aastad", aastad);
+		m.addAttribute("kuupaevad",Kuud.KUUD_LYHEND);
+		m.addAttribute("kasutajad",kasutajad);
+		m.addAttribute("teade", teade);
+		m.addAttribute("uusTootaja",new Kasutaja());
+		m.addAttribute("kustutaTootaja",new Kasutaja());
+
+		teade = null;
+
+		return "vaadeTootajadTabel";
+
+	}
+	
+	private List<TabeliData> lisaTuluTabeliAndmetesse(int kuu, Double tulu, List<TabeliData> tabeliAndmed){
+
+		for(TabeliData d : tabeliAndmed){
+			if(d.getKuuNumber() == kuu){
+				d.setTulu(d.getTulu()+tulu);
+				break;
+			}
+		}
+
+		return tabeliAndmed;
+	}
+	
+	private List<TabeliData> paneTabelJärjekorda(List<TabeliData> tabeliAndmed){
+		List<TabeliData> uuedAndmed = new ArrayList<TabeliData>();
+
+		int k = 1;
+		
+		while(tabeliAndmed.size()>0){
+			
+			for(int i = 0; i<tabeliAndmed.size() ;i++){
+				
+				if(tabeliAndmed.get(i).getKuuNumber() == k){
+					uuedAndmed.add(tabeliAndmed.get(i));
+					tabeliAndmed.remove(i);
+					break;
+				}
+			}
+			k++;
+		}
+
+		return uuedAndmed;
+	}
+
 	@RequestMapping(value = "/vaadeTootajadGraaf.htm", method = RequestMethod.GET)
 	public String vaadeTootajadGraaf(Model m) {
 		

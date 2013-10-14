@@ -7,6 +7,7 @@
 <html>
 <head>
 
+	<script>var rakenduseNimi = "${pageContext.request.contextPath}"</script>
 	<script src="${pageContext.request.contextPath}/scripts/menu.js" type="text/javascript" ></script>
 	<script src="${pageContext.request.contextPath}/scripts/jquery-1.10.2.js" type="text/javascript" ></script>
 	<script src="${pageContext.request.contextPath}/scripts/projekt.js" type="text/javascript" ></script>

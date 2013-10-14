@@ -5,8 +5,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.List;
 
 import bizint.andmebaas.Mysql;
+import bizint.app.alam.kuuAndmed.TabeliData;
 import bizint.post.UusKasutaja;
 
 public class Kasutaja {
@@ -23,6 +25,7 @@ public class Kasutaja {
 	private Double kuupalk, osalus;
 	private boolean vastutaja, aktiivne;
 	private int projektID,kasutajaID;
+	private List<TabeliData> tabeliAndmed;
 
 	  ///////////\\\\\\\\\\\\
 	 ///// constructors \\\\\\
@@ -181,6 +184,14 @@ public class Kasutaja {
 
 	public void setProjektID(int projektID) {
 		this.projektID = projektID;
+	}
+
+	public List<TabeliData> getTabeliAndmed() {
+		return tabeliAndmed;
+	}
+
+	public void setTabeliAndmed(List<TabeliData> tabeliAndmed) {
+		this.tabeliAndmed = tabeliAndmed;
 	}
 	
 }
