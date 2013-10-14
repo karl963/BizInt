@@ -14,7 +14,17 @@
 <div class=divNextToEachOther>
 	
 	<div class=statustext>
-		${staatus.nimi}<br>
+		<div class="staatuseNimi">
+			<div class="staatuseNimeKiri">${staatus.nimi}</div>
+			<div class="staatuseNimeMuutmine" style="display:none;">
+				<form:form modelAttribute="staatuseNimeMuutmine">
+					<form:input class="staatuseNimeMuutmiseLahter" path="nimi" value="${staatus.nimi}" />
+					<form:input type="hidden" path="id" value="${staatus.id}" />
+					<input type="submit" value="muuda" />
+				</form:form>
+			</div>
+		</div>
+		<br>
 		<div class=tulutext>
 			&euro; ${staatus.kogutulu}
 		</div>

@@ -24,7 +24,6 @@ public class Kasutaja {
 	private boolean vastutaja, aktiivne;
 	private int projektID,kasutajaID;
 
-	
 	  ///////////\\\\\\\\\\\\
 	 ///// constructors \\\\\\
 	/////////////\\\\\\\\\\\\\\
@@ -61,81 +60,62 @@ public class Kasutaja {
 		if(con==null){
 			return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
-		Statement stmt;
-		try {
-			stmt = con.createStatement();
-		} catch (SQLException e) {
+
+		try{
+
+			Statement stmt = con.createStatement();
+			String query = "SELECT töötab FROM kasutajad WHERE kasutajaNimi='"+kasutaja.getKasutajaNimi()+"'";
+			ResultSet rs = stmt.executeQuery(query);
+			
+			// kui kasutaja selle nimega on olemas, aga ta on kustutatud vahepeal töölisete seast, siis paneme ta sinna tagasi
+			
+			if(rs.next()){
+				if(rs.getBoolean("töötab")){
+					return Kasutaja.VIGA_JUBA_EKSISTEERIB;
+				}
+				else{
+					String query2 = "UPDATE kasutajad SET töötab=1 WHERE  kasutajaNimi = '"+kasutaja.getKasutajaNimi()+"'";
+					
+					try {
+						Statement stmt2 = con.createStatement();
+						stmt2.executeUpdate(query2);
+					} catch (SQLException e) {
+						return Kasutaja.VIGA_JUBA_EKSISTEERIB;
+					}
+				}
+			}
+			else{
+				String query2 = "INSERT INTO kasutajad (kasutajaNimi) VALUES ('"+kasutaja.getKasutajaNimi()+"')";
+				
+				try {
+					Statement stmt2 = con.createStatement();
+					stmt2.executeUpdate(query2);
+				} catch (SQLException e) {
+					return Kasutaja.VIGA_JUBA_EKSISTEERIB;
+				}
+			}
+
+		}catch(Exception x){
 			return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
-		}
-		
-		String query = "INSERT INTO kasutajad (kasutajaNimi) VALUES ('"+kasutaja.getKasutajaNimi()+"')";
-		
-		try {
-			stmt.executeUpdate(query);
-		} catch (SQLException e) {
-			return Kasutaja.VIGA_JUBA_EKSISTEERIB;
 		}
 		
 		return Kasutaja.KÕIK_OKEI;
 	}
 	
-	public static int kustutaKasutajaAndmebaasist(Kasutaja kasutaja){
+	public static int muudaKasutajaTöötuksAndmebaasis(Kasutaja kasutaja){
 		
 		Connection con = Mysql.connection;
 		if(con==null){
 			return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
-		String kasutajaNimi = "";
-		ResultSet logile;
-		
 		try {
 			Statement stmt = con.createStatement();
-			String query = "SELECT kasutajaNimi FROM kasutajad WHERE kasutajaID="+kasutaja.getKasutajaID();
-			ResultSet rs = stmt.executeQuery(query);
-			
-			rs.next();
-			
-			kasutajaNimi = rs.getString("kasutajaNimi");
-			
-			Statement stmt2 = con.createStatement();
-			String query2 = "SELECT projekt_ID FROM projektikasutajad WHERE kasutaja_ID = "+kasutaja.getKasutajaID();
-			logile = stmt2.executeQuery(query2);
-			
-		}catch(Exception c){
-			return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
-		}
-		
-		try {
-			Statement stmt = con.createStatement();
-			String query = "DELETE FROM kasutajad WHERE kasutajaID = "+kasutaja.getKasutajaID();
+			String query = "UPDATE kasutajad SET töötab=0 WHERE kasutajaID = "+kasutaja.getKasutajaID();
 			stmt.executeUpdate(query);
-			
-			Statement stmt2 = con.createStatement();
-			String query2 = "DELETE FROM projektikasutajad WHERE kasutaja_ID = "+kasutaja.getKasutajaID();
-			stmt2.executeUpdate(query2);
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
-		}
-		
-		try{
-			while(logile.next()){
-				int projektID = logile.getInt("projekt_ID");
-
-				try {
-					Statement stmt3 = con.createStatement();
-					String query3 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+projektID+","+"'"+"Kasutaja"+" eemaldas kustutaks töötaja, "+kasutajaNimi+", ning ta eemaldati automaatselt projektist')";
-					stmt3.executeUpdate(query3);
-				} catch (SQLException e) {
-					e.printStackTrace();
-					return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
-				}
-			}
-
-		}catch(Exception x){
-			x.printStackTrace();
 			return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		

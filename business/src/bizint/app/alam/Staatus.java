@@ -205,16 +205,28 @@ public class Staatus {
 		return Staatus.KÕIK_OKEI;
 	}
 	
-	public static boolean muudaStaatuseNimeAndmebaasis(Staatus vanaStaatus, Staatus uusStaatus){
+	public static int muudaStaatuseNimeAndmebaasis(Staatus staatus){
 		
-		/******************************************************************
-		 ******************************************************************
-		 ***************************** ANDMEBAAS **************************
-		 ******************************************************************
-		 ******************************************************************
-		 */
+		Connection con = Mysql.connection;
+		if(con==null){
+			return Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+		} catch (SQLException e) {
+			return Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
 		
-		return false;
+		String query = "UPDATE staatused SET staatusNimi = '"+staatus.getNimi()+"' WHERE staatusID="+staatus.getId();
+		
+		try {
+			stmt.executeUpdate(query);
+		} catch (SQLException e) {
+			return Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		return Staatus.KÕIK_OKEI;
 	}
 	
 	  ///////////\\\\\\\\\\\\

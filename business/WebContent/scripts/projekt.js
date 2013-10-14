@@ -102,4 +102,19 @@ $(document).ready(function() {
     $('.looUusInputLahter').blur(function() {
         if ($(this).val() == '') $(this).val($(this).data('default_val'));
     });
+    
+    $('.staatuseNimi').click(function() {
+    	// kõik ülejäänud muudame tagasi
+    	$(".staatuseNimeKiri").show();
+    	$(".staatuseNimeMuutmine").hide();
+    	
+    	// muudame valitud staatust vastavalt
+        $(this).closest(".staatuseNimi").children(".staatuseNimeKiri").hide();
+        $(this).closest(".staatuseNimi").children(".staatuseNimeMuutmine").show();
+        
+        // fokuseerib lahtri peale, aga nii et ta ei selectiks tervet tema väärtust
+        $(this).find("input.staatuseNimeMuutmiseLahter").focus().val($(this).find("input.staatuseNimeMuutmiseLahter").val());
+
+    });
+    
 });

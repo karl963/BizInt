@@ -184,6 +184,7 @@ public class ProjektidController {
 		m.addAttribute("staatused", staatused);
 		m.addAttribute("uusStaatus", new Staatus());
 		m.addAttribute("uusProjekt", new Projekt());
+		m.addAttribute("staatuseNimeMuutmine", new Staatus());
 		m.addAttribute("teade", teade);
 		teade = null;
 		
@@ -233,6 +234,21 @@ public class ProjektidController {
 		}
 		else{
 			teade = "Staatuse kustutamine õnnestus";
+		}
+		
+		return new RedirectView("vaadeProjektid.htm");
+	}
+	
+	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"nimi","id"})
+	public View mudaStaatuseNime(@ModelAttribute("staatuseNimeMuutmine") Staatus staatus, Model m){
+		
+		int vastus = Staatus.muudaStaatuseNimeAndmebaasis(staatus);
+		
+		if(vastus == Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
+			teade = "Viga andmebaasiga ühendumisel";
+		}
+		else{
+			teade = "Staatuse nime muutmine õnnestus";
 		}
 		
 		return new RedirectView("vaadeProjektid.htm");

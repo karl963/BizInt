@@ -18,6 +18,7 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Saab muuta töötajatega seotud andmeid projektis (osalus, aktiivsus, vastutaja)
 * Saab lisada töötajaid
 * Saab kustutada töötajaid
+* Saab muuta staatuse nime
 
 -- Lisamärkused
 * Süntaksiliselt valesti lisatud tulu/kulu asendatakse automaatselt 0 -ga
@@ -25,6 +26,7 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Projektil saab olla ainult üks vastutaja, mitme valitu korral valitakse esimene
 * Süntaksiliselt valesti olev töötaja osalus projektis muudetakse (võetakse ära vigased karakterid, mitme punkti korral arvestatakse vasakult esimest)
 * Staatused on kuvatud vastavalt nende järekorranumbrile
+* Töötaja kustutamine töötaja vaates ei eemalda teda olemas olevatest ning olnud projektidest (ajalugu säilib)
 
 -- Bug fixes
 * Kommentaaride kuupäev parandatud

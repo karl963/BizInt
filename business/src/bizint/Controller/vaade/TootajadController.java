@@ -44,7 +44,7 @@ public class TootajadController {
 		try{
 
 			Statement stmt = con.createStatement();
-			String query = "SELECT kasutajaNimi, kasutajaID FROM kasutajad";
+			String query = "SELECT kasutajaNimi, kasutajaID FROM kasutajad WHERE töötab=1";
 			ResultSet rs = stmt.executeQuery(query);
 			
 			while(rs.next()){
@@ -84,7 +84,7 @@ public class TootajadController {
 		try{
 
 			Statement stmt = con.createStatement();
-			String query = "SELECT kasutajaNimi FROM kasutajad";
+			String query = "SELECT kasutajaNimi FROM kasutajad WHERE töötab=1";
 			ResultSet rs = stmt.executeQuery(query);
 			
 			while(rs.next()){
@@ -131,7 +131,7 @@ public class TootajadController {
 	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.POST, params = {"kasutajaID",})
 	public View kustutaTöötaja(@ModelAttribute("kustutaTootaja") Kasutaja kasutaja, Model m){
 		
-		int vastus = Kasutaja.kustutaKasutajaAndmebaasist(kasutaja);
+		int vastus = Kasutaja.muudaKasutajaTöötuksAndmebaasis(kasutaja);
 		
 		if(vastus == Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
