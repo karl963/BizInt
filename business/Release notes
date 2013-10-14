@@ -19,6 +19,7 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Saab lisada töötajaid
 * Saab kustutada töötajaid
 * Saab muuta staatuse nime
+* Saab nÃ¤ha pipeline vaadet
 
 -- Lisamärkused
 * Süntaksiliselt valesti lisatud tulu/kulu asendatakse automaatselt 0 -ga

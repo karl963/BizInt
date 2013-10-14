@@ -18,6 +18,7 @@ import bizint.andmebaas.Mysql;
 import bizint.app.alam.Kasutaja;
 import bizint.app.alam.Projekt;
 import bizint.app.alam.Staatus;
+import bizint.app.alam.rahaline.Kulu;
 import bizint.app.alam.rahaline.Tulu;
 
 @Controller
@@ -79,7 +80,24 @@ public class PipelineController {
 						tulud.add(tulu);
 					}
 					
+					List<Kulu> kulud = new ArrayList<Kulu>();
+					
+					String query5 = "SELECT kulu FROM kulud WHERE projekt_ID="+projektID;
+					Statement stmt5 = con.createStatement();
+					ResultSet rs5 = stmt5.executeQuery(query5);
+					
+					while(rs5.next()){
+						Kulu kulu = new Kulu();
+						
+						Double summa = rs5.getDouble("kulu");
+						
+						kulu.setSumma(summa);
+						
+						kulud.add(kulu);
+					}
+					
 					projekt.setTulud(tulud);
+					projekt.setKulud(kulud);
 					projekt.setId(projektID);
 					
 					projektid.add(projekt);
@@ -96,8 +114,12 @@ public class PipelineController {
 		}
 		
 		staatused = Staatus.paneJärjekorda(staatused);
+		String staatusteArray = "";
+		for(int i = 0; i < staatused.size(); i++){
+			staatusteArray += staatused.get(i).getNimi() + ";" + staatused.get(i).getKogutulu() + ";" + staatused.get(i).getKogukulu() + ";" + staatused.get(i).getBilanss() + "/";
+		}
 		
-		m.addAttribute("staatused", staatused);
+		m.addAttribute("staatused",staatusteArray);
 		m.addAttribute("teade", teade);
 		
 		return "vaadePipeline";
