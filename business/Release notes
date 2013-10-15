@@ -46,7 +46,6 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Liiga suurte tulude korral muudetakse projektide vaates projekti lahter suuremaks
 * kasutaja kustutamisel ei küsita confirmationit
 * menus liikudes ei muudeta aktiivse lingi välimust
-* töötajate tulud liidetakse iga aasta kohta kokku ( igas aastas on samad )
 
 ---------- version 2.0 alpha patch notes ----------
 

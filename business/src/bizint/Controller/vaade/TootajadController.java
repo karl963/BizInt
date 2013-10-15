@@ -95,12 +95,15 @@ public class TootajadController {
 				while(rs3.next()){
 					
 					cal.setTime(new Date(rs3.getTimestamp("aeg").getTime()));
-					int kuu = cal.get(Calendar.MONTH)+1; // +1 sest date-s algavad kuud 0-st
 					
-					Double tulu = rs3.getDouble("tulu")*rs3.getDouble("osalus");
-					
-					tabeliAndmed = lisaTuluTabeliAndmetesse(kuu, tulu,tabeliAndmed);
-					
+					if(cal.get(Calendar.YEAR) == hetkeAasta){
+
+						int kuu = cal.get(Calendar.MONTH)+1; // +1 sest date-s algavad kuud 0-st
+						
+						Double tulu = rs3.getDouble("tulu")*rs3.getDouble("osalus");
+						
+						tabeliAndmed = lisaTuluTabeliAndmetesse(kuu, tulu,tabeliAndmed);
+					}
 				}
 				
 				kasutaja.setTabeliAndmed(paneTabelJärjekorda(tabeliAndmed));
@@ -182,12 +185,14 @@ public class TootajadController {
 				while(rs3.next()){
 					
 					cal.setTime(new Date(rs3.getTimestamp("aeg").getTime()));
-					int kuu = cal.get(Calendar.MONTH)+1; // +1 sest date-s algavad kuud 0-st
 					
-					Double tulu = rs3.getDouble("tulu")*rs3.getDouble("osalus");
-					
-					tabeliAndmed = lisaTuluTabeliAndmetesse(kuu, tulu,tabeliAndmed);
-					
+					if(cal.get(Calendar.YEAR) == aasta){
+						int kuu = cal.get(Calendar.MONTH)+1; // +1 sest date-s algavad kuud 0-st
+						
+						Double tulu = rs3.getDouble("tulu")*rs3.getDouble("osalus");
+						
+						tabeliAndmed = lisaTuluTabeliAndmetesse(kuu, tulu,tabeliAndmed);
+					}
 				}
 				
 				kasutaja.setTabeliAndmed(paneTabelJärjekorda(tabeliAndmed));
