@@ -103,6 +103,13 @@ $(document).ready(function() {
         if ($(this).val() == '') $(this).val($(this).data('default_val'));
     });
     
+    $('.tootajaVastutajaCheckbox').change(function() {
+    	
+    	// kõik ülejäänud muudame mitte valituks
+        $(".tootajaVastutajaCheckbox").attr('checked', false);
+        this.checked = true;
+    });
+    
     $('.staatuseNimi').click(function() {
     	// kõik ülejäänud muudame tagasi
     	$(".staatuseNimeKiri").show();

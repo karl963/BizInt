@@ -25,7 +25,7 @@ Current RELEASED (taged) verison: 2.0 alpha
 -- Lisamärkused
 * Süntaksiliselt valesti lisatud tulu/kulu asendatakse automaatselt 0 -ga
 * Kasutajaid ei saa projekti mitmekordselt lisada (loogiline)
-* Projektil saab olla ainult üks vastutaja, mitme valitu korral valitakse esimene
+* Projektil saab olla ainult üks vastutaja
 * Süntaksiliselt valesti olev töötaja osalus projektis muudetakse (võetakse ära vigased karakterid, mitme punkti korral arvestatakse vasakult esimest)
 * Staatused on kuvatud vastavalt nende järekorranumbrile
 * Töötaja kustutamine töötaja vaates ei eemalda teda olemas olevatest ning olnud projektidest (ajalugu säilib)
