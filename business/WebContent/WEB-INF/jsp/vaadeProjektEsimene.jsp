@@ -8,7 +8,7 @@
 
 		<div style="display:none" id="projektiNimeMuutmine" >
 			<form:form modelAttribute="uusProjektiNimi">
-				<form:input path="uusNimi" />
+				<form:input maxlength="45" path="uusNimi" />
 				<form:input path="projektID" type="hidden" />
 				<input type="submit" value="muuda nime" />
 			</form:form>
@@ -100,7 +100,7 @@ Projektiga seotud inimesed:
 					${kasutaja.kasutajaNimi}
 				</td>
 				<td>
-					<input value="${kasutaja.osalus}" />
+					<input maxlength="5" value="${kasutaja.osalus}" />
 				</td>
 				<td style="display:none;"><input value="${kasutaja.kasutajaID}" /></td>
 				
@@ -150,7 +150,7 @@ Kirjeldus:
 <form:form modelAttribute="uusKommentaar">
 	<tr>
 		<td>
-			<form:input maxlength="150" path="sonum" />
+			<textarea name="sonum"/></textarea>
 			<form:input path="projektID" value="${projekt.id}" type="hidden"/>
 			<input type="submit" value="lisa" />
 		</td>

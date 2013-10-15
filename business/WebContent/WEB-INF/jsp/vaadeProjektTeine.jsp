@@ -8,7 +8,7 @@
 
 		<div style="display:none" id="projektiNimeMuutmine" >
 			<form:form modelAttribute="uusProjektiNimi">
-				<form:input path="uusNimi"/>
+				<form:input maxlength="45" path="uusNimi"/>
 				<form:input path="projektID" type="hidden" />
 				<input type="submit" value="muuda nime" />
 			</form:form>
@@ -45,7 +45,7 @@ reiting: ${projekt.reitinguHTML}
 
 <form:form modelAttribute="uusTulu">
 	Tulu:      <form:input class="smallInput" path="summa" value="0.0" />
-	Kuupäev:   <form:input class="smallInput" path="stringAeg" />
+	Kuupäev:   <form:input maxlength="10" class="smallInput" path="stringAeg" />
 <br>
 	Kirjeldus: <form:input maxlength="100" class="bigInput" path="tuluNimi" value="" />
 			   <form:input path="projektID" type="hidden" value="${projekt.id}" />
@@ -57,7 +57,7 @@ reiting: ${projekt.reitinguHTML}
 
 <form:form modelAttribute="uusKulu">
 	Kulu:      <form:input class="smallInput" path="summa" value="0.0" />
-	Kuupäev:   <form:input class="smallInput" path="stringAeg" />
+	Kuupäev:   <form:input maxlength="10" class="smallInput" path="stringAeg" />
 <br>
 	Kirjeldus: <form:input maxlength="100" class="bigInput" path="kuluNimi" value="" />
 			   <form:input path="projektID" type="hidden" value="${projekt.id}" />
@@ -114,7 +114,7 @@ Tulud ja kulud:
 <form:form modelAttribute="uusKommentaar">
 	<tr>
 		<td>
-			<form:input maxlength="150" path="sonum" />
+			<textarea name="sonum"/></textarea>
 			<form:input path="projektID" value="${projekt.id}" type="hidden"/>
 			<input type="submit" value="lisa" />
 		</td>

@@ -128,7 +128,7 @@ public class ProjektController {
 			}
 			
 			Statement stmt5 = con.createStatement();
-			String query5 = "SELECT kasutajaNimi, kasutajaID FROM kasutajad";
+			String query5 = "SELECT kasutajaNimi, kasutajaID FROM kasutajad WHERE töötab=1";
 			ResultSet rs5 = stmt5.executeQuery(query5);
 			
 			while(rs5.next()){
