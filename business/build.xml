@@ -5,7 +5,6 @@
   <property name="tcserver.home" 	value="/usr/share/tomcat6" />
   <property name="work.home"    	value="${basedir}/work"/>
   <property name="dist.home"    	value="${basedir}/dist"/>
-  <property name="build.home" 		value="${basedir}/build" />
   <property name="src.home"     	value="${basedir}/src"/>
   <property name="web.home"    		value="${basedir}/WebContent"/>
   <property name="lib.home" 		value="${basedir}/WebContent/WEB-INF/lib"/>
@@ -15,10 +14,10 @@
     <echo>You can use the following targets:</echo>
     <echo> </echo>
     <echo>  help    : (default) Prints this message </echo>
-    <echo>  all     : Cleans, compiles, and packages application</echo>
     <echo>  clean   : Deletes work directories</echo>
     <echo>  compile : Compiles servlets into class files</echo>
     <echo>  dist    : Packages artifacts into a deployable WAR</echo>
+  	<echo>  install    : Installs application</echo>
     <echo></echo>
     <echo>For example, to clean, compile, and package all at once, run:</echo>
     <echo>prompt> ant all </echo>
@@ -29,12 +28,15 @@
     <fileset dir="${tcserver.home}/bin">
       	<include name="*.jar"/>
     </fileset>
+  	
   	<fileset dir="${lib.home}">
   		<include name="*.jar"/>
   	</fileset>
-    <pathelement location="${tcserver.home}/lib"/>
-    <fileset dir="${tcserver.home}/lib">
-      <include name="*.jar"/>
+    
+  	<pathelement location="${tcserver.home}/lib"/>
+    
+  	<fileset dir="${tcserver.home}/lib">
+    	<include name="*.jar"/>
     </fileset>
   </path>
 
@@ -48,13 +50,20 @@
   </target>
 
   <target name="prepare" depends="clean"
-          description="Create working dirs and copy static files to work dir">
+    description="Create working dirs and copy static files to work dir">
     <mkdir  dir="${dist.home}"/>
+  	<mkdir  dir="${dist.home}/WEB-INF"/>
     <mkdir  dir="${work.home}/WEB-INF/classes"/>
+  	
     <!-- Copy static HTML and JSP files to work dir -->
     <copy todir="${work.home}">
       <fileset dir="${web.home}"/>
     </copy>
+  	
+  	<mkdir  dir="${work.home}/WEB-INF/lib"/>
+  		 <copy todir="${work.home}/WEB-INF/lib">
+  	      <fileset dir="${lib.home}"/>
+  	    </copy>
   </target>
 
   <target name="compile" depends="prepare"
@@ -76,7 +85,7 @@
 
 		<!-- Create application JAR file -->
 		<jar jarfile="${dist.home}/${app.name}.war"
-			basedir="${build.home}"/>
+			basedir="${work.home}"/>
 	</target>
 	
 	<target name="install" depends="compile, dist"
