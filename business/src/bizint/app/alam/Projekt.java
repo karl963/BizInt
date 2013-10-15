@@ -101,7 +101,7 @@ public class Projekt {
 	
 	public static int lisaProjektAndmebaasi(Projekt projekt,int staatusID){
 		
-		Connection con = Mysql.connection;
+		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -133,7 +133,7 @@ public class Projekt {
 	
 	public static int muudaProjektiKirjeldusAndmebaasis(UusKirjeldus uusKirjeldus){
 		
-		Connection con = Mysql.connection;
+		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -165,7 +165,7 @@ public class Projekt {
 	
 	public static int lisaUusKasutajaAndmebaasi(UusKasutaja uusKasutaja){
 		
-		Connection con = Mysql.connection;
+		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -209,7 +209,7 @@ public class Projekt {
 	
 	public static int muudaKasutajateAndmeidProjektigaAndmebaasis(String kasutajad, int projektID){
 		
-		Connection con = Mysql.connection;
+		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -300,7 +300,7 @@ public class Projekt {
 	
 	public static int muudaProjektiNimeAndmebaasis(UusProjektiNimi nimi){
 		
-		Connection con = Mysql.connection;
+		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -332,7 +332,7 @@ public class Projekt {
 	
 	public static int muudaProjektiReitingutAndmebaasis(int projektID, int reiting){
 		
-		Connection con = Mysql.connection;
+		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -376,7 +376,7 @@ public class Projekt {
 	
 	public static int lisaKommentaarAndmebaasi(UusKommentaar uusKommentaar){
 		
-		Connection con = Mysql.connection;
+		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -400,7 +400,7 @@ public class Projekt {
 
 	public static int lisaKuluAndmebaasi(Kulu kulu){
 		
-		Connection con = Mysql.connection;
+		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -442,7 +442,7 @@ public class Projekt {
 	}
 	public static int lisaTuluAndmebaasi(Tulu tulu){
 		
-		Connection con = Mysql.connection;
+		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -485,7 +485,7 @@ public class Projekt {
 	
 	public static int kustutaTuluAndmebaasist(Tulu tulu){
 		
-		Connection con = Mysql.connection;
+		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -542,7 +542,7 @@ public class Projekt {
 	
 	public static int kustutaKuluAndmebaasist(Kulu kulu){
 		
-		Connection con = Mysql.connection;
+		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -599,7 +599,7 @@ public class Projekt {
 	
 	public static int kustutaProjektAndmebaasist(int id){
 		
-		Connection con = Mysql.connection;
+		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -646,7 +646,7 @@ public class Projekt {
 	
 	public static int eemaldaKasutajaProjektistAndmebaasis(int kasutajaID, int projektID){
 		
-		Connection con = Mysql.connection;
+		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -681,7 +681,7 @@ public class Projekt {
 	
 	public static int lisaKasutajaProjektiAndmebaasis(String kasutajaNimi, int projektID){
 
-		Connection con = Mysql.connection;
+		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}

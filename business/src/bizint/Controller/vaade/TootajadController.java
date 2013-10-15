@@ -9,6 +9,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -43,7 +46,7 @@ public class TootajadController {
 		
 		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
 	
-		Connection con = Mysql.connection;
+		Connection con = new Mysql().getConnection();
 		
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
@@ -130,7 +133,7 @@ public class TootajadController {
 
 		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
 		
-		Connection con = Mysql.connection;
+		Connection con = new Mysql().getConnection();
 		
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
@@ -251,7 +254,7 @@ public class TootajadController {
 		
 		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
 		
-		Connection con = Mysql.connection;;
+		Connection con = new Mysql().getConnection();
 		
 		try{
 
@@ -313,6 +316,45 @@ public class TootajadController {
 		}
 		
 		return new RedirectView("vaadeTootajadTabel.htm");
+	}
+	
+	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.POST, params = {"tootajad","aastaNumber"})
+	public void salvestaTootajatePalgad(HttpServletRequest request, HttpServletResponse response,@RequestParam("tootajad") String tootajad,@RequestParam("aastaNumber") int aasta, Model m){
+
+		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
+		
+		for(String rida : tootajad.split("/")){
+			
+			List<TabeliData> tabeliAndmed = new ArrayList<TabeliData>();
+			Kasutaja k = new Kasutaja();
+			k.setKasutajaNimi(rida.split("#")[0].split(";")[0]);
+			
+			for(String tootaja : rida.split("#")){
+				
+				TabeliData tabeliData = new TabeliData();
+				
+				tabeliData.setKuuNumber(Integer.parseInt(tootaja.split(";")[1]));
+				tabeliData.setPalk(Double.parseDouble(tootaja.split(";")[2]));
+				tabeliData.setAasta(aasta);
+				
+				tabeliAndmed.add(tabeliData);
+				
+			}
+			
+			k.setTabeliAndmed(tabeliAndmed);
+			kasutajad.add(k);
+			
+		}
+
+		int vastus = Kasutaja.muudaKasutajatePalkasidAndmebaasis(kasutajad);
+		
+		if(vastus == Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
+			teade = "Viga andmebaasiga ühendumisel";
+		}
+		else{
+			teade = "Töötaja palkade muutmine õnnestus";
+		}
+
 	}
 
 }

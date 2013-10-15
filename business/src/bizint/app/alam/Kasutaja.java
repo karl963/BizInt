@@ -14,7 +14,6 @@ import bizint.post.UusKasutaja;
 public class Kasutaja {
 	
 	public static String DEFAULT_NIMI = "nimetu";
-	public static Double DEFAULT_KUUPALK = 0.0;
 	public static Double DEFAULT_OSALUS = 0.0;
 	public static boolean DEFAULT_VASTUTAJA = false;
 	public static boolean DEFAULT_AKTIIVNE = false;
@@ -22,7 +21,7 @@ public class Kasutaja {
 	
 	private String kasutajaNimi;
 	private Date aeg;
-	private Double kuupalk, osalus;
+	private Double osalus;
 	private boolean vastutaja, aktiivne;
 	private int projektID,kasutajaID;
 	private List<TabeliData> tabeliAndmed;
@@ -34,7 +33,6 @@ public class Kasutaja {
 	public Kasutaja(){
 		this.kasutajaNimi = Kasutaja.DEFAULT_NIMI;
 		this.aeg = new Date();
-		this.kuupalk = Kasutaja.DEFAULT_KUUPALK;
 		this.osalus = Kasutaja.DEFAULT_OSALUS;
 		this.vastutaja = Kasutaja.DEFAULT_VASTUTAJA;
 		this.aktiivne = Kasutaja.DEFAULT_AKTIIVNE;
@@ -45,7 +43,6 @@ public class Kasutaja {
 	public Kasutaja(String nimi){
 		this.kasutajaNimi = nimi;
 		this.aeg = new Date();
-		this.kuupalk = Kasutaja.DEFAULT_KUUPALK;
 		this.osalus = Kasutaja.DEFAULT_OSALUS;
 		this.vastutaja = Kasutaja.DEFAULT_VASTUTAJA;
 		this.aktiivne = Kasutaja.DEFAULT_AKTIIVNE;
@@ -59,7 +56,7 @@ public class Kasutaja {
 	
 	public static int lisaKasutajaAndmebaasi(Kasutaja kasutaja){
 		
-		Connection con = Mysql.connection;
+		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -107,7 +104,7 @@ public class Kasutaja {
 	
 	public static int muudaKasutajaTöötuksAndmebaasis(Kasutaja kasutaja){
 		
-		Connection con = Mysql.connection;
+		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -116,6 +113,53 @@ public class Kasutaja {
 			Statement stmt = con.createStatement();
 			String query = "UPDATE kasutajad SET töötab=0 WHERE kasutajaID = "+kasutaja.getKasutajaID();
 			stmt.executeUpdate(query);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		return Kasutaja.KÕIK_OKEI;
+	}
+	
+	public static int muudaKasutajatePalkasidAndmebaasis(List<Kasutaja> kasutajad){
+		
+		Connection con = new Mysql().getConnection();
+		if(con==null){
+			return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		try {
+			
+			for(Kasutaja k : kasutajad){
+				
+				Statement stmt0 = con.createStatement();
+				String query0 = "SELECT kasutajaID FROM kasutajad WHERE kasutajaNimi = '"+k.getKasutajaNimi()+"'";
+				ResultSet rs0 = stmt0.executeQuery(query0);
+				
+				rs0.next();
+				
+				k.setKasutajaID(rs0.getInt("kasutajaID"));
+				
+				for(TabeliData t : k.getTabeliAndmed()){
+					
+					Statement stmt = con.createStatement();
+					String query = "SELECT palk FROM palgad WHERE kasutaja_ID = "+k.getKasutajaID()+" AND kuu="+t.getKuuNumber()+" AND aasta="+t.getAasta();
+					ResultSet rs = stmt.executeQuery(query);
+					
+					if(rs.next()){ // kui meil oli juba sissekanne, siis uuendame
+						Statement stmt2 = con.createStatement();
+						String query2 = "UPDATE palgad SET palk="+t.getPalk()+" WHERE kuu="+t.getKuuNumber()+" AND aasta="+t.getAasta()+" AND kasutaja_ID = "+k.getKasutajaID();
+						stmt2.executeUpdate(query2);
+					}
+					else{ // kui palka polnud lisatud, siis lisame
+						Statement stmt2 = con.createStatement();
+						String query2 = "INSERT INTO palgad (kasutaja_ID,palk,kuu,aasta) VALUES ("+k.getKasutajaID()+","+t.getPalk()+","+t.getKuuNumber()+","+t.getAasta()+")";
+						stmt2.executeUpdate(query2);
+					}
+					
+				}
+			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -141,12 +185,7 @@ public class Kasutaja {
 	public void setAeg(Date aeg) {
 		this.aeg = aeg;
 	}
-	public Double getKuupalk() {
-		return kuupalk;
-	}
-	public void setKuupalk(Double kuupalk) {
-		this.kuupalk = kuupalk;
-	}
+
 	public Double getOsalus() {
 		return osalus;
 	}

@@ -3,7 +3,7 @@ package bizint.app.alam.kuuAndmed;
 public class TabeliData {
 	
 	private String kuu;
-	private int kuuNumber;
+	private int kuuNumber, aasta;
 	private Double palk = 0.0;
 	private Double tulu = 0.0;
 	
@@ -35,6 +35,14 @@ public class TabeliData {
 
 	public void setKuuNumber(int kuuNumber) {
 		this.kuuNumber = kuuNumber;
+	}
+
+	public int getAasta() {
+		return aasta;
+	}
+
+	public void setAasta(int aasta) {
+		this.aasta = aasta;
 	}
 	
 	

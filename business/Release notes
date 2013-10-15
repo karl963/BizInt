@@ -21,6 +21,7 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Saab muuta staatuse nime
 * Saab vaadata pipeline vaadet
 * Saab vaadata töötajate vaates kuupalkasid ja projektide pealt tulevaid tulusid ( osakaal x kõik tulud ) aasta vältel, iga kuu eraldi. Saab valida aastat.
+* Saab muuta töötajate palkasid aastate ja kuude kaupa
 
 -- Lisamärkused
 * Süntaksiliselt valesti lisatud tulu/kulu asendatakse automaatselt 0 -ga
@@ -45,6 +46,7 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Liiga suurte tulude korral muudetakse projektide vaates projekti lahter suuremaks
 * kasutaja kustutamisel ei küsita confirmationit
 * menus liikudes ei muudeta aktiivse lingi välimust
+* töötajate tulud liidetakse iga aasta kohta kokku ( igas aastas on samad )
 
 ---------- version 2.0 alpha patch notes ----------
 

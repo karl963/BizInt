@@ -68,7 +68,7 @@ Projektiga seotud inimesed:
 	<option value="${kasutaja.kasutajaNimi}">${kasutaja.kasutajaNimi}</option>
 </c:forEach>
 </select>
-<input type="button" onclick="lisaProjektiKasutaja('${pageContext.request.contextPath}',${projekt.id});" value="lisa" />
+<input type="button" onclick="lisaProjektiKasutaja(${projekt.id});" value="lisa" />
 
 
 <div class=describe>

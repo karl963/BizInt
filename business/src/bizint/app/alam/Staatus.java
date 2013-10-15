@@ -100,7 +100,7 @@ public class Staatus {
 		
 		int[] projektid = null;
 				
-		Connection con = Mysql.connection;
+		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -183,7 +183,7 @@ public class Staatus {
 	
 	public static int lisaStaatusAndmebaasi(Staatus staatus){
 		
-		Connection con = Mysql.connection;
+		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -207,7 +207,7 @@ public class Staatus {
 	
 	public static int muudaStaatuseNimeAndmebaasis(Staatus staatus){
 		
-		Connection con = Mysql.connection;
+		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}

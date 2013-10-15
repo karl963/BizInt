@@ -18,6 +18,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class Mysql {
 	
+	private static String schema;
+	
 	static{
 	    try {
 			Class.forName("com.mysql.jdbc.Driver");
@@ -27,16 +29,18 @@ public class Mysql {
 		}
 	}
 	
-	public static Connection connection;
-	
 	@Resource(name="andmebaasiProperties")
 	private Properties properties;
 	
 	@PostConstruct
     public void init() throws SQLException {
 		
-		String schema = properties.getProperty("schema");
-		
+		schema = properties.getProperty("schema");
+
+	}
+	
+	public Connection getConnection(){
+		Connection connection = null;
         try {
             // Get DataSource
         	Context initContext = new InitialContext();
@@ -44,8 +48,10 @@ public class Mysql {
         	DataSource datasource = (DataSource)envContext.lookup("jdbc/" + schema);
         	connection = datasource.getConnection();
  
-        } catch (NamingException e) {
-            e.printStackTrace();
+        } catch (Exception x) {
+            x.printStackTrace();
         }
-    }
+        
+        return connection;
+	}
 }

@@ -145,11 +145,46 @@ $(document).ready(function() {
 });
 
 $(document).ready(function() {
-	
+		
     $('#salvestaTootajatePalgad').click(function() {
-       
     	
+    	var table = document.getElementById("tootajateTabel");
+    	var list = "";
+
+    	for (var i = 2, row; row = table.rows[i]; i++) {
+    		
+    		if(i==table.rows.length-1){ // viimast rida me ei taha
+    			break;
+    		}
+    		
+    		var sisemineList = "";
+    		var nimi = row.getElementsByClassName("tootajaNimi")[0].innerHTML;
+    		
+    		var cells = row.getElementsByClassName("tootajaPalk");
+
+    		for (var j = 0; j<cells.length ; j++) {
+
+    			var palk = cells[j].getElementsByClassName("tootajaPalkText")[0].innerHTML;
+    		   	sisemineList += nimi + ";"+ (j+1) +";" + palk + "#";
+    		   	
+    		}
+    		
+    		list += sisemineList + "/";
+    	}
+
+    	var aasta = $('#aastateValikud').val();
     	
+    	$.ajax({
+    	    type : "POST",
+    	    url : rakenduseNimi+"/vaadeTootajadTabel.htm",
+    	    data : {tootajad: list, aastaNumber: aasta},
+    	    success : function(response) {
+    	    	document.location.href = "vaadeTootajadTabel.htm?aasta="+aasta;
+    	    },
+    	    error : function(e) {
+    	    	document.location.href = "vaadeTootajadTabel.htm?aasta="+aasta;
+    	    }
+    	});
     	
     });
     
@@ -159,10 +194,15 @@ $(document).ready(function() {
 
 });
 
+
 google.load("visualization", "1", {packages:["corechart"]});
 google.setOnLoadCallback(tekitaTabel);
 
 function tekitaTabel(sisendString){
+
+	if(sisendString.target){ // kui on event, ehk ei laeta pipeline vaadet
+		return;
+	}
 	
     var andmed = sisendString.split("/");
     var tabel = new Array();

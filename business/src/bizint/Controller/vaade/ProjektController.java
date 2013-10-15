@@ -54,7 +54,7 @@ public class ProjektController {
 		String kirjeldus = null;
 		int reiting = 1;
 		
-		Connection con = Mysql.connection;;
+		Connection con = new Mysql().getConnection();;
 		
 		try{
 			
@@ -231,7 +231,7 @@ public class ProjektController {
 		String nimi = null;
 		int reiting = 1;
 		
-		Connection con = Mysql.connection;;
+		Connection con = new Mysql().getConnection();;
 		
 		try{
 			
@@ -574,7 +574,7 @@ public class ProjektController {
 	}
 	
 	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.GET, params={"reiting","projektID"})
-	public View muudaReitingut(@RequestParam("reiting") int reiting,@RequestParam("projektID") int projektID, Model m){
+	public View muudaReitingut1(@RequestParam("reiting") int reiting,@RequestParam("projektID") int projektID, Model m){
 		
 		
 		int vastus = Projekt.muudaProjektiReitingutAndmebaasis(projektID, reiting);
@@ -587,6 +587,22 @@ public class ProjektController {
 		}
 
 		return new RedirectView("vaadeProjektEsimene.htm?id="+projektID);
+	}
+	
+	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.GET, params={"reiting","projektID"})
+	public View muudaReitingut2(@RequestParam("reiting") int reiting,@RequestParam("projektID") int projektID, Model m){
+		
+		
+		int vastus = Projekt.muudaProjektiReitingutAndmebaasis(projektID, reiting);
+		
+		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
+			teade = "Viga andmebaasiga ühendumisel";
+		}
+		else{
+			teade = "Reitingu muutmine õnnestus";
+		}
+
+		return new RedirectView("vaadeProjektTeine.htm?id="+projektID);
 	}
 	
 	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"teade"})

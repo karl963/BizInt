@@ -29,7 +29,7 @@ ${teade}
     </c:forEach>
 </select>
  
-<table border=1>
+<table border=1 id="tootajateTabel">
 	<tr>
 		<th>Töötajad</th>
 		<th> </th>
@@ -50,7 +50,7 @@ ${teade}
 		<form:form modelAttribute="kustutaTootaja">
 			<form:input type="hidden" path="kasutajaID" value="${tootaja.kasutajaID}" />
 		<tr>
-			<td>${tootaja.kasutajaNimi}</td>
+			<td class="tootajaNimi">${tootaja.kasutajaNimi}</td>
 			<td><input type="submit" value="X" /></td>
 			<c:forEach items="${tootaja.tabeliAndmed}" var="yhik">
 				<td class="tootajaPalk" style="width:40px">
@@ -77,4 +77,4 @@ ${teade}
 
 <br>
 
-<button type="button" id="salvestaTootajatePalgad" >Salvesta</button>
+<button type="button" id="salvestaTootajatePalgad" >Salvesta palgad</button>

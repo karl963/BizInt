@@ -97,7 +97,7 @@ public class ProjektidController {
 		
 		staatused = new ArrayList<Staatus>();
 		
-		Connection con = Mysql.connection;;
+		Connection con = new Mysql().getConnection();;
 		
 		try{
 			
