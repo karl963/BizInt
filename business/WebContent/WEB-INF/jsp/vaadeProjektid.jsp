@@ -22,6 +22,11 @@
 					<form:input type="hidden" path="id" value="${staatus.id}" />
 					<input type="submit" value="muuda" />
 				</form:form>
+				<form:form modelAttribute="staatuseKustutamine">
+					<form:input type="hidden" path="id" value="${staatus.id}" />
+					<form:input type="hidden" path="kustuta" value="jah" />
+					<input type="submit" value="kustuta staatus" />
+				</form:form>
 			</div>
 		</div>
 		<br>

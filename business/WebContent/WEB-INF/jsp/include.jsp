@@ -6,5 +6,6 @@
 
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/projektiStiil.css" type="text/css" />
 <link rel="stylesheet" href="${pageContext.request.contextPath}/css/menuStiil.css" type="text/css" />
+<link rel="stylesheet" href="${pageContext.request.contextPath}/css/pipelineStiil.css" type="text/css" />
 
 <title><tiles:insertAttribute name="title" ignore="true" /> </title>  

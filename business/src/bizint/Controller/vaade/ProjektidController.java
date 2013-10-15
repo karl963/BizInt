@@ -180,7 +180,7 @@ public class ProjektidController {
 			x.printStackTrace();
 		}
 		
-		
+		m.addAttribute("staatuseKustutamine", new Staatus());
 		m.addAttribute("staatused", staatused);
 		m.addAttribute("uusStaatus", new Staatus());
 		m.addAttribute("uusProjekt", new Projekt());
@@ -224,13 +224,16 @@ public class ProjektidController {
 		return new RedirectView("vaadeProjektid.htm");
 	}
 	
-	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"staatusID"})
-	public View kustutaStaatus(@RequestParam("kasutajad") int staatusID, Model m){
+	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"id","kustuta"})
+	public View kustutaStaatus(@RequestParam("id") int staatusID, Model m){
 		
 		int vastus = Staatus.kustutaStaatusAndmebaasist(staatusID);
 		
 		if(vastus == Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
+		}
+		else if(vastus == Staatus.ERROR_STAATUS_POLE_TÜHI){
+			teade = "Viga, staatuses on veel kehtivaid projekte";
 		}
 		else{
 			teade = "Staatuse kustutamine õnnestus";
@@ -240,7 +243,7 @@ public class ProjektidController {
 	}
 	
 	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"nimi","id"})
-	public View mudaStaatuseNime(@ModelAttribute("staatuseNimeMuutmine") Staatus staatus, Model m){
+	public View muudaStaatuseNime(@ModelAttribute("staatuseNimeMuutmine") Staatus staatus, Model m){
 		
 		int vastus = Staatus.muudaStaatuseNimeAndmebaasis(staatus);
 		
