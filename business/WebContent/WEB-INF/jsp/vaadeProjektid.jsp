@@ -37,7 +37,7 @@
 		<form:form modelAttribute="uusProjekt">
 			<tr>
 				<td>
-					<form:input class="uusProjekt looUusInputLahter" path="nimi" />
+					<form:input maxlength="45" class="uusProjekt looUusInputLahter" path="nimi" />
 					<form:input path="staatusID" value="${staatus.id}" type="hidden"/>
 					<input class=addbutton type="submit" value="+" style="background:url(${pageContext.request.contextPath}/images/addbutton.png) no-repeat;" />
 				</td>
@@ -74,7 +74,7 @@
 	<div class="statustext divNextToEachOther newStatus">
 		
 			<form:form modelAttribute="uusStaatus">
-				<form:input class="uusProjekt looUusInputLahter" path="nimi" />
+				<form:input maxlength="45" class="uusProjekt looUusInputLahter" path="nimi" />
 				<input class=addbutton type="submit" value="+" style="background:url(${pageContext.request.contextPath}/images/addbutton.png) no-repeat;" />
 					<!-- <img class=addbutton src="${pageContext.request.contextPath}/images/addbutton.png">-->
 			</form:form>

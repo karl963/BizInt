@@ -68,7 +68,7 @@ ${teade}
 	<tr>
 		<td>
 		<form:form modelAttribute="uusTootaja">
-			<form:input class="looUusInputLahter" path="kasutajaNimi" value="uus töötaja" />
+			<form:input maxlength="45" class="looUusInputLahter" path="kasutajaNimi" value="uus töötaja" />
 			<input type="submit" value="lisa töötaja">
 		</form:form>
 		</td>

@@ -150,7 +150,7 @@ Kirjeldus:
 <form:form modelAttribute="uusKommentaar">
 	<tr>
 		<td>
-			<form:input path="sonum" />
+			<form:input maxlength="150" path="sonum" />
 			<form:input path="projektID" value="${projekt.id}" type="hidden"/>
 			<input type="submit" value="lisa" />
 		</td>
