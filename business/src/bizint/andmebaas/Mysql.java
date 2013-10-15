@@ -7,6 +7,11 @@ import java.util.Properties;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.servlet.ServletException;
+import javax.sql.DataSource;
 
 import org.springframework.stereotype.Component;
 
@@ -28,21 +33,19 @@ public class Mysql {
 	private Properties properties;
 	
 	@PostConstruct
-	public void setConnection(){
-
-		String dbms = properties.getProperty("dbms");
-		String nimi = properties.getProperty("serveriNimi");
-		String port = properties.getProperty("serveriPort");
+    public void init() throws SQLException {
+		
 		String schema = properties.getProperty("schema");
-		String kasutaja = properties.getProperty("kasutajaNimi");
-		String parool = properties.getProperty("kasutajaParool");
 		
-		try {
-			connection =  DriverManager.getConnection("jdbc:" + dbms + "://" + nimi + ":" + port + "/" + schema, kasutaja, parool);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-	}
-
+        try {
+            // Get DataSource
+        	Context initContext = new InitialContext();
+        	Context envContext  = (Context)initContext.lookup("java:/comp/env");
+        	DataSource datasource = (DataSource)envContext.lookup("jdbc/" + schema);
+        	connection = datasource.getConnection();
+ 
+        } catch (NamingException e) {
+            e.printStackTrace();
+        }
+    }
 }
