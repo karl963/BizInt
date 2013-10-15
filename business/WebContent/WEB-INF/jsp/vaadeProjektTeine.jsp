@@ -44,10 +44,10 @@ reiting: ${projekt.reitinguHTML}
 
 
 <form:form modelAttribute="uusTulu">
-	Tulu:      <form:input maxlength="100" class="smallInput" path="summa" value="0.0" />
+	Tulu:      <form:input class="smallInput" path="summa" value="0.0" />
 	Kuupäev:   <form:input class="smallInput" path="stringAeg" />
 <br>
-	Kirjeldus: <form:input class="bigInput" path="tuluNimi" value="" />
+	Kirjeldus: <form:input maxlength="100" class="bigInput" path="tuluNimi" value="" />
 			   <form:input path="projektID" type="hidden" value="${projekt.id}" />
 	           <form:input path="aeg.time" type="hidden"/>
 	           <input type="submit" value="lisa">
@@ -56,10 +56,10 @@ reiting: ${projekt.reitinguHTML}
 <br>
 
 <form:form modelAttribute="uusKulu">
-	Kulu:      <form:input maxlength="100" class="smallInput" path="summa" value="0.0" />
+	Kulu:      <form:input class="smallInput" path="summa" value="0.0" />
 	Kuupäev:   <form:input class="smallInput" path="stringAeg" />
 <br>
-	Kirjeldus: <form:input class="bigInput" path="kuluNimi" value="" />
+	Kirjeldus: <form:input maxlength="100" class="bigInput" path="kuluNimi" value="" />
 			   <form:input path="projektID" type="hidden" value="${projekt.id}" />
 	           <form:input path="aeg.time" type="hidden" />
 	           <input type="submit" value="lisa">
