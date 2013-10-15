@@ -87,8 +87,8 @@ Projektiga seotud inimesed:
 
 				<td>
 					<c:choose>
-						<c:when test="${kasutaja.vastutaja=='true'}"><input type="checkbox" checked /></c:when>
-						<c:otherwise><input type="checkbox"/></c:otherwise>
+						<c:when test="${kasutaja.vastutaja=='true'}"><input type="checkbox" checked class="tootajaVastutajaCheckbox"/></c:when>
+						<c:otherwise><input type="checkbox" class="tootajaVastutajaCheckbox"/></c:otherwise>
 					</c:choose>
 				</td>
 				<td>
