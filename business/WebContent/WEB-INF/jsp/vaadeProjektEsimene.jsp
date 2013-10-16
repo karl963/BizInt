@@ -4,22 +4,24 @@
 <p>${teade}</p>
 <body class=darkBack>
 <div class=detailViewDiv>
-<div class=detailViewHeader>
+
+<div class=detailViewHeader >
 
 		<div style="display:none" id="projektiNimeMuutmine" >
 			<form:form modelAttribute="uusProjektiNimi">
-				<form:input maxlength="45" path="uusNimi" />
+				<form:input maxlength="45" path="uusNimi" style="width:330px"/>
 				<form:input path="projektID" type="hidden" />
-				<input type="submit" value="muuda nime" />
+				<input class="projektDetailNupp" type="submit" value="muuda nime" />
 			</form:form>
 		</div>
 		
+
 		<h1 id="projektiNimi" >${projekt.nimi}</h1>
-		
+
 		<div class=muudaKustuta>
 		
-			<button type="button" id="projektiNimeMuutmiseNupp" >Muuda nime</button>
-			<button type="button" onclick="javascript:document.kustutaProjekt.submit()" >Kustuta projekt</button>
+			<button class="projektDetailNupp" type="button" id="projektiNimeMuutmiseNupp" >Muuda nime</button>
+			<button class="projektDetailNupp" type="button" onclick="javascript:document.kustutaProjekt.submit()" >Kustuta projekt</button>
 		</div>
 
 <form name="kustutaProjekt" method="POST" action="vaadeProjektEsimene.htm">
@@ -27,23 +29,13 @@
 	<input type="hidden" name="kustuta" value="jah">
 </form>
 
-<div class=tuluKulu>
+<div class=tuluKulu >
 Tulu: <b class="tuluSumma">${projekt.kogutulu}</b> Kulu: <b class="kuluSumma">${projekt.kogukulu}</b>
 </div>
 
 <div class=reiting>
 
-<!--
-<c:choose>
-	<c:when test="${projekt.reiting==1}">  </c:when>
-	<c:when test="${projekt.reiting==2}">  </c:when>
-	<c:when test="${projekt.reiting==3}">  </c:when>
-	<c:when test="${projekt.reiting==4}">  </c:when>
-	<c:otherwise>  </c:otherwise>
-</c:choose>
--->
-
-reiting: ${projekt.reitinguHTML}
+Reiting: ${projekt.reitinguHTML}
 
 </div>
 
@@ -58,9 +50,10 @@ reiting: ${projekt.reitinguHTML}
 
 </div>
 </div>
+
 <div class=leftSideDiv>
 
-Projektiga seotud inimesed:
+<b>Projektiga seotud inimesed:</b>
 <br>
 
 <select id="uueKasutajaList">
@@ -68,18 +61,18 @@ Projektiga seotud inimesed:
 	<option value="${kasutaja.kasutajaNimi}">${kasutaja.kasutajaNimi}</option>
 </c:forEach>
 </select>
-<input type="button" onclick="lisaProjektiKasutaja(${projekt.id});" value="lisa" />
+<input class="projektDetailNupp" type="button" onclick="lisaProjektiKasutaja(${projekt.id});" value="lisa" />
 
 
 <div class=describe>
 
-<table class=table id="kasutajateTabel" >
+<table class="table" id="kasutajateTabel" >
 	<tr>
-		<th class=smallCell>Vastuaja</th>
-		<th class=smallCell>Aktiivne</th>
-		<th class=nameCell>Nimi</th>
-		<th class=smallCell>Osalus</th>
-		<th></th>
+		<th class="vastutajaVeerg">Vastuaja</th>
+		<th class="aktiivneVeerg">Aktiivne</th>
+		<th class="nimeVeerg">Nimi</th>
+		<th class="osalusVeerg">Osalus</th>
+		<th class="tyhiVeerg"></th>
 	</tr>
 
 	<c:forEach items="${projekt.kasutajad}" var="kasutaja">
@@ -107,35 +100,34 @@ Projektiga seotud inimesed:
 			<form:form modelAttribute="eemaldaKasutaja">
 				<form:input type="hidden" path="kasutajaID" value="${kasutaja.kasutajaID}" />
 				<form:input type="hidden" path="projektID" value="${projekt.id}" />
-				<td><button type="submit">Kustuta</button></td>
+				<td><button class="projektDetailNupp" type="submit">Eemalda</button></td>
 			</form:form>
 		</tr>
 	</c:forEach>
 </table>
 </div>
 <div class=buttonAlign>
-<button type="button" onclick="listiProjektiKasutajadJaSalvesta(${projekt.id});" >Salvesta töötajad</button>
+<button class="projektDetailNupp" type="button" onclick="listiProjektiKasutajadJaSalvesta(${projekt.id});" >Salvesta töötajad</button>
 </div>
 <br>
-Kirjeldus:
+<b>Kirjeldus:</b>
 
 <form:form modelAttribute="uusKirjeldus">
 
 <table>
 	<tr>
 		<td><textarea name="kirjeldus" id="kirjelduseVali" >${projekt.kirjeldus}</textarea></td>
+		<td class="viiAlla"><input class="projektDetailNupp addbutton" type="submit" value="muuda"/></td>
 	</tr>
 	<form:input path="projektID" value="${projekt.id}" type="hidden" />
 </table>
 
-<div class=buttonAlign>
-	<input class=addbutton type="submit" value="muuda"/>
-</div>
+
 </form:form>
 
-<table>
+<table class="logiTabel">
 	<tr>
-		<th>Logi</th>
+		<td>Logi</td>
 	</tr>
 	<c:forEach items="${projekt.logi}" var="logi">
 	<tr>
@@ -148,18 +140,22 @@ Kirjeldus:
 <div class=rightSideDiv>
 
 <form:form modelAttribute="uusKommentaar">
-	<tr>
-		<td>
-			<textarea name="sonum"/></textarea>
-			<form:input path="projektID" value="${projekt.id}" type="hidden"/>
-			<input type="submit" value="lisa" />
-		</td>
-	</tr>
-</form:form>
-
 <table>
 	<tr>
-		<th>Kommentaarid</th>
+		<td>
+			<textarea name="sonum" class="kommentaariVali"/></textarea>
+			<form:input path="projektID" value="${projekt.id}" type="hidden"/>
+		</td>
+		<td>
+			<input class="projektDetailNupp" type="submit" value="kommenteeri" />
+		</td>
+	</tr>
+</table>
+</form:form>
+
+<table class="kommentaariTabel">
+	<tr>
+		<td>Kommentaarid</td>
 	</tr>
 	<c:forEach items="${projekt.kommentaarid}" var="kommentaar">
 	<tr>

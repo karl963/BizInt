@@ -243,9 +243,17 @@ h1
 {
 	font-family:arial;
 }
+#projektiNimi{
+	position:absolute;
+	top:-10px;
+	margin-left:10px;
+}
 
 .detailViewDiv
 {
+	moz-border-radius: 20px;
+  	-webkit-border-radius: 20px;
+	
 	position:absolute;
 	left:100px;
 	top:50px;
@@ -262,10 +270,21 @@ h1
 
 .detailViewHeader
 {
+	moz-border-radius: 20px;
+  	-webkit-border-radius: 20px;
+  	
 	position:absolute;
+	left:0px;
+	height:90px;
+	width:1250px;
+	background-color:#CCF5FF;
+}
+#projektiNimeMuutmine{
+	position:absolute;
+	top:10px;
 	left:10px;
-	height:50px;
-	width:1400px;
+	height:70px;
+	width:1250px;
 }
 
 .leftSideDiv
@@ -294,25 +313,57 @@ h1
 .tuluKulu
 {
 	position:absolute;
-	left:0px;
-	top:70px;
+	left:10px;
+	top:60px;
 	width:300px;
 }
 
 .reiting
 {
 	position:absolute;
-	left:200px;
-	top:75px;
+	left:950px;
+	top:20px;
 	width:300px;
 	height=16px;
+	font-weight:bold;
 }
 
 .muudaKustuta
 {
 	position:absolute;
-	left:350px;
-	top:40px;
+	left:310px;
+	top:55px;
+}
+
+.projektDetailNupp{
+	-webkit-border-top-left-radius:6px;
+	-moz-border-radius-topleft:6px;
+	border-top-left-radius:6px;
+	-webkit-border-top-right-radius:6px;
+	-moz-border-radius-topright:6px;
+	border-top-right-radius:6px;
+	-webkit-border-bottom-right-radius:6px;
+	-moz-border-radius-bottomright:6px;
+	border-bottom-right-radius:6px;
+	-webkit-border-bottom-left-radius:6px;
+	-moz-border-radius-bottomleft:6px;
+	border-bottom-left-radius:6px;
+	display:inline-block;
+	-moz-box-shadow:inset 0px 1px 0px 0px #000000;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #000000;
+	box-shadow:inset 0px 1px 0px 0px #ffffff;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #3FBBFF), color-stop(1, #3FBBFF) );
+	background:-moz-linear-gradient( center top, #ededed 5%, #3FBBFF 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#3FBBFF', endColorstr='#3FBBFF');
+	
+	font-weight:bold;
+	background-color:#3FBBFF;
+	border:1px solid #000000;
+}
+
+.projektDetailNupp:hover{
+	opacity: 0.6;
+	border:1px solid #ffffff;
 }
 
 .viewTabs
@@ -333,22 +384,38 @@ h1
 
 .describe
 {
-	width:500px;
-	height:300px;
+	width:620px;
 	overflow:auto;
 	border:1px solid #F6F4F0;
 }
 
-.smallCell
-{
-	width:50px;
-	border:1px dotted #686767;
+.osalusVeerg{
+	width:40px;
+	border:1px dotted;
 }
-
+.nimeVeerg {
+	width:270px;
+	border:1px dotted;
+}
+.aktiivneVeerg {
+	width:70px;
+	border:1px dotted;
+}
+.vastutajaVeerg {
+	width:70px;
+	border:1px dotted;
+}
+.tyhiVeerg{
+	width:80px;
+}
 .nameCell
 {
 	width:300px;
 	border:1px dotted #686767;
+}
+
+.kasutajateTabel {
+	width:600px;
 }
 
 .table
@@ -359,7 +426,7 @@ h1
 .buttonAlign
 {
 	position:relative;
-	left:450px;
+	left:500px;
 }
 
 .closeView

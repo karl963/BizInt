@@ -37,6 +37,7 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Kommentaaride kuupäev parandatud
 * Kommentaaride järjekord parandatud ( vanemad asuvad all pool )
 * kirjelduse lahter on textarea, enne oli textfield
+* kommentaarimise lahter on nüüd textarea
 
 -- Teada olevad probleemid
 * projekti detailivaade on liiga algeline

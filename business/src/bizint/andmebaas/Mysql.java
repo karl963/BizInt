@@ -41,6 +41,7 @@ public class Mysql {
 	
 	public Connection getConnection(){
 		Connection connection = null;
+		
         try {
             // Get DataSource
         	Context initContext = new InitialContext();
@@ -53,5 +54,16 @@ public class Mysql {
         }
         
         return connection;
+        /*
+        try {
+			return DriverManager.getConnection("jdbc:mysql://localhost/bizint?"
+			                + "user=root&password=");
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+        return null;
+        */
 	}
 }

@@ -17,8 +17,8 @@
 		<h1 id="projektiNimi" >${projekt.nimi}</h1>
 		
 		<div class=muudaKustuta>
-			<button type="button" id="projektiNimeMuutmiseNupp">Muuda nime</button>
-			<button type="button">Kustuta projekt</button>
+			<button class="projektDetailNupp" type="button" id="projektiNimeMuutmiseNupp">Muuda nime</button>
+			<button class="projektDetailNupp" type="button">Kustuta projekt</button>
 		</div>
 		
 <div class=tuluKulu>
@@ -26,7 +26,7 @@ Tulu: <b class="tuluSumma">${projekt.kogutulu}</b> Kulu: <b class="kuluSumma">${
 </div>
 
 <div class=reiting>
-reiting: ${projekt.reitinguHTML}
+Reiting: ${projekt.reitinguHTML}
 </div>
 
 
@@ -50,7 +50,7 @@ reiting: ${projekt.reitinguHTML}
 	Kirjeldus: <form:input maxlength="100" class="bigInput" path="tuluNimi" value="" />
 			   <form:input path="projektID" type="hidden" value="${projekt.id}" />
 	           <form:input path="aeg.time" type="hidden"/>
-	           <input type="submit" value="lisa">
+	           <input class="projektDetailNupp" type="submit" value="lisa">
 </form:form>
 
 <br>
@@ -62,10 +62,10 @@ reiting: ${projekt.reitinguHTML}
 	Kirjeldus: <form:input maxlength="100" class="bigInput" path="kuluNimi" value="" />
 			   <form:input path="projektID" type="hidden" value="${projekt.id}" />
 	           <form:input path="aeg.time" type="hidden" />
-	           <input type="submit" value="lisa">
+	           <input class="projektDetailNupp" type="submit" value="lisa">
 </form:form>
 
-Tulud ja kulud:
+<b>Tulud ja kulud:</b>
 
 <div class=describe>
 <c:forEach items="${projekt.tulud}" var="tulu">
@@ -80,7 +80,7 @@ Tulud ja kulud:
 		${tulu.tuluNimi}
 		<i><b>${tulu.formaaditudAeg}</b></i>
 	</small>
-	<input type="submit" value="kustuta" />
+	<input class="projektDetailNupp" type="submit" value="kustuta" />
 	<br>
 	
 	</form:form>
@@ -99,7 +99,7 @@ Tulud ja kulud:
 			${kulu.kuluNimi}
 			<i><b>${kulu.formaaditudAeg}</b></i>
 		</small>
-		<input type="submit" value="kustuta" />
+		<input class="projektDetailNupp" type="submit" value="kustuta" />
 		<br>
 		
 	</form:form>
@@ -112,18 +112,22 @@ Tulud ja kulud:
 <div class=rightSideDiv>
 
 <form:form modelAttribute="uusKommentaar">
-	<tr>
-		<td>
-			<textarea name="sonum"/></textarea>
-			<form:input path="projektID" value="${projekt.id}" type="hidden"/>
-			<input type="submit" value="lisa" />
-		</td>
-	</tr>
-</form:form>
-
 <table>
 	<tr>
-		<th>Kommentaarid</th>
+		<td>
+			<textarea name="sonum" class="kommentaariVali"/></textarea>
+			<form:input path="projektID" value="${projekt.id}" type="hidden"/>
+		</td>
+		<td>
+			<input class="projektDetailNupp" type="submit" value="kommenteeri" />
+		</td>
+	</tr>
+</table>
+</form:form>
+
+<table class="kommentaariTabel">
+	<tr>
+		<td>Kommentaarid</td>
 	</tr>
 	<c:forEach items="${projekt.kommentaarid}" var="kommentaar">
 	<tr>
