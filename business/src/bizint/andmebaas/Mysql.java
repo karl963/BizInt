@@ -54,6 +54,7 @@ public class Mysql {
         }
         
         return connection;
+        
         /*
         try {
 			return DriverManager.getConnection("jdbc:mysql://localhost/bizint?"

@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
-<p>${teade}</p>
+<p class="teade">${teade}</p>
 <body class=darkBack>
 <div class=detailViewDiv>
 
@@ -78,22 +78,22 @@ Reiting: ${projekt.reitinguHTML}
 	<c:forEach items="${projekt.kasutajad}" var="kasutaja">
 		<tr>
 
-				<td>
+				<td class="vastutajaVeerg">
 					<c:choose>
 						<c:when test="${kasutaja.vastutaja=='true'}"><input type="checkbox" checked class="tootajaVastutajaCheckbox"/></c:when>
 						<c:otherwise><input type="checkbox" class="tootajaVastutajaCheckbox"/></c:otherwise>
 					</c:choose>
 				</td>
-				<td>
+				<td class="aktiivneVeerg">
 					<c:choose>
 						<c:when test="${kasutaja.aktiivne=='true'}"><input type="checkbox" checked /></c:when>
 						<c:otherwise><input type="checkbox"/></c:otherwise>
 					</c:choose>
-				<td>
+				<td class="nimeVeerg">
 					${kasutaja.kasutajaNimi}
 				</td>
-				<td>
-					<input maxlength="5" value="${kasutaja.osalus}" />
+				<td class="osalusVeerg">
+					<input maxlength="5" class="osalusVeerg" value="${kasutaja.osalus}" />
 				</td>
 				<td style="display:none;"><input value="${kasutaja.kasutajaID}" /></td>
 				
@@ -111,6 +111,7 @@ Reiting: ${projekt.reitinguHTML}
 </div>
 <br>
 <b>Kirjeldus:</b>
+
 
 <form:form modelAttribute="uusKirjeldus">
 

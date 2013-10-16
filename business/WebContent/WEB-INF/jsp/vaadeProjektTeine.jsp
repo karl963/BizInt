@@ -1,7 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
-<p>${teade}</p>
+<p class="teade">${teade}</p>
 <body class=darkBack>
 <div class=detailViewDiv>
 <div class=detailViewHeader>

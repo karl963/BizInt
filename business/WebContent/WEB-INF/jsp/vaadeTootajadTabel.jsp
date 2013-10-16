@@ -11,8 +11,7 @@
 </div>
 </div>
 
-<br><br><br><br>
-
+<div id="tootajadTabelDiv">
 ${teade}
 
 <div>
@@ -39,20 +38,19 @@ ${teade}
     </c:forEach>
 </select>
  
-<table border=1 id="tootajateTabel">
+<button type="button" id="salvestaTootajatePalgad" class="projektDetailNupp" >Salvesta valitud aasta palgad</button>
+ 
+<table id="tootajateTabel">
 	<tr>
-		<th>Töötajad</th>
-		<th> </th>
+		<th rowspan=2 colspan=2 class="tootajaTabelHeaderVäli">Töötajad</th>
 		<c:forEach items="${kuupaevad}" var="kuupaev">
-			<th COLSPAN=2>${kuupaev}</th>
+			<th COLSPAN=2 class="tootajaTabelHeaderVäli">${kuupaev}</th>
 		</c:forEach>
 	</tr>
 	<tr>
-		<th></th>
-		<th></th>
 		<c:forEach items="${kuupaevad}" var="kuupaev">
-			<th>Palk</th>
-			<th>Tulu</th>
+			<th class="tootajaPalk">Palk</th>
+			<th class="tuluLahter">Tulu</th>
 		</c:forEach>
 	</tr>
 	<c:forEach items="${kasutajad}" var="tootaja" >
@@ -61,30 +59,28 @@ ${teade}
 			<form:input type="hidden" path="kasutajaID" value="${tootaja.kasutajaID}" />
 		<tr>
 			<td class="tootajaNimi">${tootaja.kasutajaNimi}</td>
-			<td><input type="submit" value="X" /></td>
+			<td><input class="projektDetailNupp" type="submit" value="X" /></td>
 			<c:forEach items="${tootaja.tabeliAndmed}" var="yhik">
-				<td class="tootajaPalk" style="width:40px">
+				<td class="tootajaPalk">
 					<div class="tootajaPalgaMuutmine" style="display:none;">
 						<input style="width:40px" class="tootajaPalgaMuutmiseLahter" value="${yhik.palk}" />
 					</div>
 					<div class="tootajaPalkText">${yhik.palk}</div>
 				</td>
-				<td>${yhik.tulu}</td>
+				<td class="tuluLahter">${yhik.tulu}</td>
 			</c:forEach>
 		</tr>
 		
 		</form:form>
 	</c:forEach>
 	<tr>
-		<td>
+		<td colspan=12>
 		<form:form modelAttribute="uusTootaja">
 			<form:input maxlength="45" class="looUusInputLahter" path="kasutajaNimi" value="uus töötaja" />
-			<input type="submit" value="lisa töötaja">
+			<input class="projektDetailNupp" type="submit" value="lisa töötaja">
 		</form:form>
 		</td>
 	</tr>
 </table>
 
-<br>
-
-<button type="button" id="salvestaTootajatePalgad" >Salvesta palgad</button>
+</div>

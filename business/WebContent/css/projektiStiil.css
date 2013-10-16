@@ -13,18 +13,79 @@
 }
 
 .kommentaariVali {
-	width:430px;
+	width:420px;
 	heigh:50px;
 }
 
-.osalusTabeliLahter {
-	width:50px;
+#kasutajateTabel{
+	min-width:620px;
+	max-width:620px;
+}
+.osalusVeerg {
+	max-width:70px;
+	align:center;
+	text-align:center;
+}
+.vastutajaVeerg{
+	max-width:100px;
+	text-align:center;
+}
+.aktiivneVeerg{
+	max-width:100px;
+	text-align:center;
+}
+.nimeVeerg{
+	max-width:250px;
+}
+
+.teade{
+	font-weight:bold;
+}
+
+.tootajaPalk{
+	background-color:#FFC1C1;
+}
+.tuluLahter{
+	background-color:#B2FFB2;
+}
+.tootajaTabelHeaderVäli{
+	background-color:#70DBFF;
+}
+#tootajateTabel{
+	margin-left:10px;
+}
+#tootajateTabel td.tootajaNimi{
+	min-width:150px;
+	max-width:150px;
+}
+#salvestaTootajatePalgad{
+	margin-left:10px;
+}
+#aastateValikud{
+	margin-left:10px;
+}
+#tootajadTabelDiv{
+	position:absolute;
+	top:170px;
+	width:1170px;
+	height:485px;
+	overflow-x:auto;
+	overflow-y:auto;
+}
+.tootajaPalgaMuutmiseLahter{
+	min-width:50px;
+	max-width:50px;
 }
 
 
+
+.logiTabel td{
+	max-width:630px;
+	word-wrap: break-word;
+}
 .logiTabel {
 	margin:0px;padding:0px;
-	width:100%;
+	width:630;
 	box-shadow: 10px 10px 5px #888888;
 	border:1px dotted #000000;
 	
@@ -121,10 +182,14 @@
 
 
 
-
+.kommentaariTabel td{
+	max-width:515px;
+	word-wrap: break-word;
+}
 .kommentaariTabel {
 	margin:0px;padding:0px;
-	width:100%;
+	max-width:515px;
+	width:515px;
 	border:1px dotted #000000;
 	
 	-moz-border-radius-bottomleft:0px;
