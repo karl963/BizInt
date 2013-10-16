@@ -34,5 +34,8 @@
 <Resource name="jdbc/bizint" auth="Container" type="javax.sql.DataSource"
                maxActive="100" maxIdle="30" maxWait="1000"
                username="root" password="" driverClassName="com.mysql.jdbc.Driver"
-               url="jdbc:mysql://localhost:3306/bizint"/>
+               url="jdbc:mysql://localhost:3306/bizint"
+               timeBetweenEvictionRunsMillis="300000"
+               removeAbandonedTimeout="60"
+               />
 </Context>

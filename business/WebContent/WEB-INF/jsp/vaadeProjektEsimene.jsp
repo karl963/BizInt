@@ -9,7 +9,7 @@
 
 		<div style="display:none" id="projektiNimeMuutmine" >
 			<form:form modelAttribute="uusProjektiNimi">
-				<form:input maxlength="45" path="uusNimi" style="width:330px"/>
+				<form:input class="projektiNimeLahter" maxlength="45" path="uusNimi"/>
 				<form:input path="projektID" type="hidden" />
 				<input class="projektDetailNupp" type="submit" value="muuda nime" />
 			</form:form>
