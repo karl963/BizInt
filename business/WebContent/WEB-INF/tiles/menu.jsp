@@ -1,6 +1,4 @@
-<div class=menu_position>
-	<img class=projekt_selected_pos src="${pageContext.request.contextPath}/images/projektselect.png">
-</div>
+
 
 <div class=menu_position>
 	<div class=menu_button_text>

@@ -121,7 +121,7 @@ Tulud ja kulud:
 	</tr>
 </form:form>
 
-<table style="border:1px solid black">
+<table>
 	<tr>
 		<th>Kommentaarid</th>
 	</tr>

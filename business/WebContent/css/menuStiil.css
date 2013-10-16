@@ -51,7 +51,7 @@
 .centered_frame
 {
 	position:absolute;
-	left:200px;
+	left:100px;
 }
 
 .banner_position
@@ -76,17 +76,20 @@
 
 .pipeline_selected_pos
 {
+	position:absolute;
 	left:151px;
 }
 
 .tootajad_selected_pos
 {
-	left:132px;
+	position:absolute;
+	left:283px;
 }
 
 .rahavoog_selected_pos
 {
-	left:140px;
+	position:absolute;
+	left:423px;
 }
 
 .menu_button_text
@@ -247,7 +250,7 @@ h1
 	left:100px;
 	top:50px;
 	height:700px;
-	width:1400px;
+	width:1250px;
 	background-color:white;
 }
 
@@ -285,7 +288,7 @@ h1
 	overflow:auto;
 	border:1px solid #F6F4F0;
 	height:595px;
-	width:650px;
+	width:550px;
 }
 
 .tuluKulu
@@ -300,7 +303,7 @@ h1
 {
 	position:absolute;
 	left:200px;
-	top:70px;
+	top:75px;
 	width:300px;
 	height=16px;
 }
@@ -315,8 +318,8 @@ h1
 .viewTabs
 {
 	position:absolute;
-	left:120px;
-	top:110px;
+	left:200px;
+	top:115px;
 	font-family:arial;
 	font-size:20;
 	text-decoration:bold;
@@ -362,14 +365,15 @@ h1
 .closeView
 {
 	position:absolute;
-	left:1465px;
+	left:1325px;
 	top:30px;
 	height:50px;
 	width:50px;
-	align:center;
+	text-align:center;
 	background-color:#C22828;
 	border:2px solid black;
 	font-family:arial;
+	color:white;
 	text-decoration:bold;
 	font-size:50;
 }

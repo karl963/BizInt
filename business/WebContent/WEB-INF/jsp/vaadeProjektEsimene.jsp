@@ -120,14 +120,14 @@ Projektiga seotud inimesed:
 Kirjeldus:
 
 <form:form modelAttribute="uusKirjeldus">
-<div class=describe>
+
 <table>
 	<tr>
 		<td><textarea name="kirjeldus" id="kirjelduseVali" >${projekt.kirjeldus}</textarea></td>
 	</tr>
 	<form:input path="projektID" value="${projekt.id}" type="hidden" />
 </table>
-</div>
+
 <div class=buttonAlign>
 	<input class=addbutton type="submit" value="muuda"/>
 </div>
@@ -157,7 +157,7 @@ Kirjeldus:
 	</tr>
 </form:form>
 
-<table style="border:1px solid black">
+<table>
 	<tr>
 		<th>Kommentaarid</th>
 	</tr>

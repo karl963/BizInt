@@ -1,6 +1,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
+<div class=menu_position>
+	<img class=projekt_selected_pos src="${pageContext.request.contextPath}/images/projektselect.png">
+</div>
+
+<div class=menu_position>
+<div class=menu_button_text> Projektid</div>
+</div>
+
 <div class=textontop>
 
 <div class=message>
@@ -83,3 +91,5 @@
 	
 	</div>
 </div>
+
+
