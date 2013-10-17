@@ -11,7 +11,7 @@ import bizint.andmebaas.Mysql;
 
 public class Staatus {
 	
-	public static final String DEFAULT_NIMI = "lahe staatus";
+	public static final String DEFAULT_NIMI = "uus staatus";
 	public static final int DEFAULT_JÄRJEKORRA_NUMBER = 0;
 	public static final  int ERROR_JUBA_EKSISTEERIB = 0, VIGA_ANDMEBAASIGA_ÜHENDUMISEL = 1, KÕIK_OKEI = 2, ERROR_STAATUS_POLE_TÜHI = 3;
 	

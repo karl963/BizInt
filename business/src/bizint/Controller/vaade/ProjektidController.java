@@ -210,7 +210,7 @@ public class ProjektidController {
 	}
 	
 	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"nimi","staatusID"})
-	public View addStaatus(@ModelAttribute("uusProjekt") Projekt projekt, int staatusID, Model m){
+	public View addProjekt(@ModelAttribute("uusProjekt") Projekt projekt,@RequestParam(value="staatusID", required=true) int staatusID, Model m){
 
 		int vastus = Projekt.lisaProjektAndmebaasi(projekt,staatusID);
 		
