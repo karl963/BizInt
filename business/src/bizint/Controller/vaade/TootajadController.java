@@ -86,6 +86,8 @@ public class TootajadController {
 					
 					tabeliAndmed.add(data);
 					
+					try{rs2.close();stmt2.close();}catch(Exception x){}
+					
 				}
 
 				Statement stmt3 = con.createStatement();
@@ -106,15 +108,21 @@ public class TootajadController {
 					}
 				}
 				
+				try{rs3.close();stmt3.close();}catch(Exception x){}
+				
 				kasutaja.setTabeliAndmed(paneTabelJärjekorda(tabeliAndmed));
 				
 				kasutajad.add(kasutaja);
 			}
-
+			
+			try{rs.close();stmt.close();}catch(Exception x){}
+			
 		}catch(Exception x){
 			x.printStackTrace();
 			teade = "Viga andmebaasiga";
-		}
+		}finally {
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
+        }
 		
 		int[] aastad = {hetkeAasta-3,hetkeAasta-2,hetkeAasta-1,hetkeAasta,hetkeAasta+1,hetkeAasta+2,hetkeAasta+3};
 		
@@ -176,6 +184,8 @@ public class TootajadController {
 					
 					tabeliAndmed.add(data);
 					
+					try{rs2.close();stmt2.close();}catch(Exception x){}
+					
 				}
 
 				Statement stmt3 = con.createStatement();
@@ -195,15 +205,21 @@ public class TootajadController {
 					}
 				}
 				
+				try{rs3.close();stmt3.close();}catch(Exception x){}
+				
 				kasutaja.setTabeliAndmed(paneTabelJärjekorda(tabeliAndmed));
 				
 				kasutajad.add(kasutaja);
 			}
-
+			
+			try{rs.close();stmt.close();}catch(Exception x){}
+			
 		}catch(Exception x){
 			x.printStackTrace();
 			teade = "Viga andmebaasiga";
-		}
+		}finally {
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
+        }
 		
 		int[] aastad = {hetkeAasta-3,hetkeAasta-2,hetkeAasta-1,hetkeAasta,hetkeAasta+1,hetkeAasta+2,hetkeAasta+3};
 		

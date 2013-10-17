@@ -80,6 +80,8 @@ public class PipelineController {
 						tulud.add(tulu);
 					}
 					
+					try{rs4.close();stmt4.close();}catch(Exception x){}
+					
 					List<Kulu> kulud = new ArrayList<Kulu>();
 					
 					String query5 = "SELECT kulu FROM kulud WHERE projekt_ID="+projektID;
@@ -102,16 +104,24 @@ public class PipelineController {
 					
 					projektid.add(projekt);
 					
+					try{rs5.close();stmt5.close();}catch(Exception x){}
+					
 				}
-				
+
 				staatus.setProjektid(projektid);
 				
 				staatused.add(staatus);
+				
+				try{rs2.close();stmt2.close();}catch(Exception x){}
 			}
+			
+			try{rs.close();stmt.close();}catch(Exception x){}
 			
 		}catch(Exception x){
 			x.printStackTrace();
-		}
+		}finally {
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
+        }
 		
 		staatused = Staatus.paneJärjekorda(staatused);
 		String staatusteArray = "";

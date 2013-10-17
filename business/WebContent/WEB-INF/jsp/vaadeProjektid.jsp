@@ -28,12 +28,12 @@
 				<form:form modelAttribute="staatuseNimeMuutmine">
 					<form:input maxlength="45" class="staatuseNimeMuutmiseLahter" path="nimi" value="${staatus.nimi}" />
 					<form:input type="hidden" path="id" value="${staatus.id}" />
-					<input type="submit" value="muuda" />
+					<input type="submit" class="projektDetailNupp" value="muuda" />
 				</form:form>
 				<form:form modelAttribute="staatuseKustutamine">
 					<form:input type="hidden" path="id" value="${staatus.id}" />
 					<form:input type="hidden" path="kustuta" value="jah" />
-					<input type="submit" value="kustuta staatus" />
+					<input type="submit" class="punaneProjektDetailNupp" value="kustuta staatus" />
 				</form:form>
 			</div>
 		</div>
@@ -47,7 +47,7 @@
 				<td>
 					<form:input maxlength="45" class="uusProjekt looUusInputLahter" path="nimi" />
 					<form:input path="staatusID" value="${staatus.id}" type="hidden"/>
-					<input class=addbutton type="submit" value="+" style="background:url(${pageContext.request.contextPath}/images/addbutton.png) no-repeat;" />
+					<input type="submit" class="projektDetailNupp" value="+" /><!--style="background:url(${pageContext.request.contextPath}/images/addbutton.png) no-repeat;" />-->
 				</td>
 			</tr>
 		</form:form>
@@ -83,7 +83,7 @@
 		
 			<form:form modelAttribute="uusStaatus">
 				<form:input maxlength="45" class="uusProjekt looUusInputLahter" path="nimi" />
-				<input class=addbutton type="submit" value="+" style="background:url(${pageContext.request.contextPath}/images/addbutton.png) no-repeat;" />
+				<input type="submit" value="+" class="projektDetailNupp"/><!-- style="background:url(${pageContext.request.contextPath}/images/addbutton.png) no-repeat;" />-->
 					<!-- <img class=addbutton src="${pageContext.request.contextPath}/images/addbutton.png">-->
 			</form:form>
 		

@@ -105,18 +105,16 @@ public class Projekt {
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
+		
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
-		} catch (SQLException e) {
-			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
-		}
-		
-		String query = "INSERT INTO projektid (projektNimi, staatus_ID) VALUES ('"+projekt.getNimi()+"',"+staatusID+")";
-		
-		try {
+			String query = "INSERT INTO projektid (projektNimi, staatus_ID) VALUES ('"+projekt.getNimi()+"',"+staatusID+")";
 			stmt.executeUpdate(query);
+			
+			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
@@ -124,10 +122,11 @@ public class Projekt {
 			Statement stmt2 = con.createStatement();
 			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+projekt.getId()+","+"'Projekt loodi kasutaja "+"Kasutaja"+" poolt')";
 			stmt2.executeUpdate(query2);
+			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
 		}
 		
-		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Projekt.KÕIK_OKEI;
 	}
 	
@@ -140,16 +139,14 @@ public class Projekt {
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
-		} catch (SQLException e) {
-			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
-		}
-		
-		String query = "UPDATE projektid SET kirjeldus = '"+uusKirjeldus.getKirjeldus()+"' WHERE projektID="+uusKirjeldus.getProjektID();
-		
-		try {
+			String query = "UPDATE projektid SET kirjeldus = '"+uusKirjeldus.getKirjeldus()+"' WHERE projektID="+uusKirjeldus.getProjektID();
 			stmt.executeUpdate(query);
+			
+			try{stmt.close();}catch(Exception x){}
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
@@ -157,9 +154,12 @@ public class Projekt {
 			Statement stmt2 = con.createStatement();
 			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+uusKirjeldus.getProjektID()+","+"'"+"Kasutaja"+" muutis projekti kirjeldust')";
 			stmt2.executeUpdate(query2);
+			
+			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
 		}
 		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Projekt.KÕIK_OKEI;
 	}
 	
@@ -172,16 +172,13 @@ public class Projekt {
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
-		} catch (SQLException e) {
-			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
-		}
-		
-		String query = "INSERT INTO projektikasutajad (kasutaja_ID, projekt_ID) VALUES ((SELECT kasutajaID FROM kasutajad WHERE kasutajaNimi='"+uusKasutaja.getKasutajaNimi()+"'),"+uusKasutaja.getProjektID()+")";
-		
-		try {
+			String query = "INSERT INTO projektikasutajad (kasutaja_ID, projekt_ID) VALUES ((SELECT kasutajaID FROM kasutajad WHERE kasutajaNimi='"+uusKasutaja.getKasutajaNimi()+"'),"+uusKasutaja.getProjektID()+")";
 			stmt.executeUpdate(query);
+			
+			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
@@ -189,22 +186,13 @@ public class Projekt {
 			Statement stmt2 = con.createStatement();
 			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+uusKasutaja.getProjektID()+","+"'"+"Kasutaja"+" määras "+uusKasutaja.getKasutajaNimi()+" projekti töötajaks')";
 			stmt2.executeUpdate(query2);
+			
+			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
 		}
 		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Projekt.KÕIK_OKEI;
-	}
-	
-	public static boolean muudaKasutajaKuupalkaAndmebaasis(Projekt projekt, Kasutaja kasutaja, Double Kuupalk, Date aeg){
-		
-		/******************************************************************
-		 ******************************************************************
-		 ***************************** ANDMEBAAS **************************
-		 ******************************************************************
-		 ******************************************************************
-		 */
-		
-		return false;
 	}
 	
 	public static int muudaKasutajateAndmeidProjektigaAndmebaasis(String kasutajad, int projektID){
@@ -261,16 +249,13 @@ public class Projekt {
 			Statement stmt;
 			try {
 				stmt = con.createStatement();
-			} catch (SQLException e) {
-				return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
-			}
-			
-			String query = "UPDATE projektikasutajad SET aktiivne="+aktiivne+", osalus="+osalus+",vastutaja="+vastutaja+" WHERE projekt_ID="+projektID+" AND kasutaja_ID="+kasutajaID;
-			
-			try {
+				String query = "UPDATE projektikasutajad SET aktiivne="+aktiivne+", osalus="+osalus+",vastutaja="+vastutaja+" WHERE projekt_ID="+projektID+" AND kasutaja_ID="+kasutajaID;
 				stmt.executeUpdate(query);
+				
+				try{stmt.close();}catch(Exception x){}
 			} catch (SQLException e) {
 				e.printStackTrace();
+				if (con!=null) try {con.close();}catch (Exception ignore) {}
 				return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 			}
 			
@@ -280,9 +265,12 @@ public class Projekt {
 			Statement stmt2 = con.createStatement();
 			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+projektID+","+"'"+"Kasutaja"+" muutis töötajate andmeid projektis";
 			stmt2.executeUpdate(query2);
+			
+			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
 		}
 		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Projekt.KÕIK_OKEI;
 	}
 	
@@ -307,16 +295,13 @@ public class Projekt {
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
-		} catch (SQLException e) {
-			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
-		}
-		
-		String query = "UPDATE projektid SET projektNimi = '"+nimi.getUusNimi()+"' WHERE projektID="+nimi.getProjektID();
-		
-		try {
+			String query = "UPDATE projektid SET projektNimi = '"+nimi.getUusNimi()+"' WHERE projektID="+nimi.getProjektID();
 			stmt.executeUpdate(query);
+			
+			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
@@ -324,9 +309,12 @@ public class Projekt {
 			Statement stmt2 = con.createStatement();
 			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+nimi.getProjektID()+","+"'"+"Kasutaja"+" määras projektile uue nime : "+nimi.getUusNimi()+"')";
 			stmt2.executeUpdate(query2);
+			
+			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
 		}
 		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Projekt.KÕIK_OKEI;
 	}
 	
@@ -339,16 +327,13 @@ public class Projekt {
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
-		} catch (SQLException e) {
-			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
-		}
-		
-		String query = "UPDATE projektid SET reiting = "+reiting+" WHERE projektID="+projektID;
-		
-		try {
+			String query = "UPDATE projektid SET reiting = "+reiting+" WHERE projektID="+projektID;
 			stmt.executeUpdate(query);
+			
+			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
@@ -356,9 +341,12 @@ public class Projekt {
 			Statement stmt2 = con.createStatement();
 			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+projektID+","+"'"+"Kasutaja"+" muutis projekti reitingut : "+reiting+"')";
 			stmt2.executeUpdate(query2);
+			
+			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
 		}
 		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Projekt.KÕIK_OKEI;
 	}
 	
@@ -383,18 +371,16 @@ public class Projekt {
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
-		} catch (SQLException e) {
-			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
-		}
-		
-		String query = "INSERT INTO kommentaarid (sonum, projekt_ID, kasutaja_ID) VALUES ('"+uusKommentaar.getSonum()+"',"+uusKommentaar.getProjektID()+",1)";
-		
-		try {
+			String query = "INSERT INTO kommentaarid (sonum, projekt_ID, kasutaja_ID) VALUES ('"+uusKommentaar.getSonum()+"',"+uusKommentaar.getProjektID()+",1)";
 			stmt.executeUpdate(query);
+			
+			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Projekt.KÕIK_OKEI;
 	}
 
@@ -407,18 +393,16 @@ public class Projekt {
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
-		} catch (SQLException e) {
-			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
-		}
+			
+			Timestamp aeg = new Timestamp(kulu.getAeg().getTime());
 		
-		Timestamp aeg = new Timestamp(kulu.getAeg().getTime());
-		
-		String query = "INSERT INTO kulud (kulu, aeg, kuluNimi, projekt_ID) "
+			String query = "INSERT INTO kulud (kulu, aeg, kuluNimi, projekt_ID) "
 				+ "VALUES ("+kulu.getSumma()+",'"+aeg+"','"+kulu.getKuluNimi()+"',"+kulu.getProjektID()+")";
-		
-		try {
 			stmt.executeUpdate(query);
+			
+			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
@@ -434,9 +418,12 @@ public class Projekt {
 
 			}
 			stmt2.executeUpdate(query2);
+			
+			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
 		}
 		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Projekt.KÕIK_OKEI;
 		
 	}
@@ -449,19 +436,17 @@ public class Projekt {
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
-		} catch (SQLException e) {
-			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
-		}
-		
-		Timestamp aeg = new Timestamp(tulu.getAeg().getTime());
-		
-		String query = "INSERT INTO tulud (tulu, aeg, tuluNimi, projekt_ID) "
+			
+			Timestamp aeg = new Timestamp(tulu.getAeg().getTime());
+			String query = "INSERT INTO tulud (tulu, aeg, tuluNimi, projekt_ID) "
 				+ "VALUES ("+tulu.getSumma()+",'"+aeg+"','"+tulu.getTuluNimi()+"',"+tulu.getProjektID()+")";
-		
-		try {
+
 			stmt.executeUpdate(query);
+			
+			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
@@ -477,9 +462,12 @@ public class Projekt {
 
 			}
 			stmt2.executeUpdate(query2);
+			
+			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
 		}
 		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Projekt.KÕIK_OKEI;
 	}
 	
@@ -489,12 +477,10 @@ public class Projekt {
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
-		Statement stmt;
+		Statement stmt = null;
 		try {
 			stmt = con.createStatement();
-		} catch (SQLException e) {
-			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
-		}
+		}catch(Exception x){return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;}
 		
 		Timestamp aeg = null;
 		String query = null;
@@ -518,7 +504,10 @@ public class Projekt {
 		
 		try {
 			stmt.executeUpdate(query);
+			
+			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
@@ -534,9 +523,12 @@ public class Projekt {
 
 			}
 			stmt2.executeUpdate(query2);
+			
+			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
 		}
 		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Projekt.KÕIK_OKEI;
 	}
 	
@@ -550,6 +542,7 @@ public class Projekt {
 		try {
 			stmt = con.createStatement();
 		} catch (SQLException e) {
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
@@ -575,7 +568,10 @@ public class Projekt {
 		
 		try {
 			stmt.executeUpdate(query);
+			
+			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
@@ -591,9 +587,12 @@ public class Projekt {
 
 			}
 			stmt2.executeUpdate(query2);
+			
+			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
 		}
 		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Projekt.KÕIK_OKEI;
 	}
 	
@@ -610,8 +609,10 @@ public class Projekt {
 			String query = "DELETE FROM projektid WHERE projektID="+id;
 			stmt.executeUpdate(query);
 			
+			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
@@ -637,10 +638,16 @@ public class Projekt {
 			String query5 = "DELETE FROM kommentaarid WHERE projekt_ID="+id;
 			stmt5.executeUpdate(query5);
 			
+			try{stmt.close();}catch(Exception x){}
+			try{stmt2.close();}catch(Exception x){}
+			try{stmt3.close();}catch(Exception x){}
+			try{stmt4.close();}catch(Exception x){}
+			try{stmt5.close();}catch(Exception x){}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Projekt.KÕIK_OKEI;
 	}
 	
@@ -655,8 +662,11 @@ public class Projekt {
 			Statement stmt = con.createStatement();
 			String query = "DELETE FROM projektikasutajad WHERE projekt_ID="+projektID+" AND kasutaja_ID="+kasutajaID+" LIMIT 1";
 			stmt.executeUpdate(query);
+			
+			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
@@ -672,10 +682,14 @@ public class Projekt {
 			Statement stmt3 = con.createStatement();
 			String query3 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+projektID+","+"'"+"Kasutaja"+" eemaldas projektist töötaja : "+nimi+"')";
 			stmt3.executeUpdate(query3);
+			
+			try{stmt.close();}catch(Exception x){}
+			try{stmt3.close();}catch(Exception x){}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Projekt.KÕIK_OKEI;
 	}
 	
@@ -690,8 +704,11 @@ public class Projekt {
 			Statement stmt = con.createStatement();
 			String query = "INSERT INTO projektikasutajad (kasutaja_ID, projekt_ID) VALUES ((SELECT kasutajaID FROM kasutajad WHERE kasutajaNimi='"+kasutajaNimi+"'), "+projektID+")";
 			stmt.executeUpdate(query);
+			
+			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
@@ -699,9 +716,12 @@ public class Projekt {
 			Statement stmt2 = con.createStatement();
 			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+projektID+","+"'"+"Kasutaja"+" lisas projekti töötaja : "+kasutajaNimi+"')";
 			stmt2.executeUpdate(query2);
+			
+			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
 		}
 		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Projekt.KÕIK_OKEI;
 	}
 	  ///////////\\\\\\\\\\\\

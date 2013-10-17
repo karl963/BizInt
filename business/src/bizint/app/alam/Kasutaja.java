@@ -71,6 +71,7 @@ public class Kasutaja {
 			
 			if(rs.next()){
 				if(rs.getBoolean("töötab")){
+					if (con!=null) try {con.close();}catch (Exception ignore) {}
 					return Kasutaja.VIGA_JUBA_EKSISTEERIB;
 				}
 				else{
@@ -79,7 +80,9 @@ public class Kasutaja {
 					try {
 						Statement stmt2 = con.createStatement();
 						stmt2.executeUpdate(query2);
+						try{stmt2.close();}catch(Exception x){}
 					} catch (SQLException e) {
+						if (con!=null) try {con.close();}catch (Exception ignore) {}
 						return Kasutaja.VIGA_JUBA_EKSISTEERIB;
 					}
 				}
@@ -90,15 +93,20 @@ public class Kasutaja {
 				try {
 					Statement stmt2 = con.createStatement();
 					stmt2.executeUpdate(query2);
+					try{stmt2.close();}catch(Exception x){}
 				} catch (SQLException e) {
 					return Kasutaja.VIGA_JUBA_EKSISTEERIB;
 				}
 			}
 
+			try{rs.close();stmt.close();}catch(Exception x){}
+			
 		}catch(Exception x){
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Kasutaja.KÕIK_OKEI;
 	}
 	
@@ -113,12 +121,14 @@ public class Kasutaja {
 			Statement stmt = con.createStatement();
 			String query = "UPDATE kasutajad SET töötab=0 WHERE kasutajaID = "+kasutaja.getKasutajaID();
 			stmt.executeUpdate(query);
-			
+			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Kasutaja.KÕIK_OKEI;
 	}
 	
@@ -141,6 +151,8 @@ public class Kasutaja {
 				
 				k.setKasutajaID(rs0.getInt("kasutajaID"));
 				
+				try{rs0.close();stmt0.close();}catch(Exception x){}
+				
 				for(TabeliData t : k.getTabeliAndmed()){
 					
 					Statement stmt = con.createStatement();
@@ -151,21 +163,27 @@ public class Kasutaja {
 						Statement stmt2 = con.createStatement();
 						String query2 = "UPDATE palgad SET palk="+t.getPalk()+" WHERE kuu="+t.getKuuNumber()+" AND aasta="+t.getAasta()+" AND kasutaja_ID = "+k.getKasutajaID();
 						stmt2.executeUpdate(query2);
+						try{stmt2.close();}catch(Exception x){}
 					}
 					else{ // kui palka polnud lisatud, siis lisame
 						Statement stmt2 = con.createStatement();
 						String query2 = "INSERT INTO palgad (kasutaja_ID,palk,kuu,aasta) VALUES ("+k.getKasutajaID()+","+t.getPalk()+","+t.getKuuNumber()+","+t.getAasta()+")";
 						stmt2.executeUpdate(query2);
+						try{stmt2.close();}catch(Exception x){}
 					}
+					
+					try{rs.close();stmt.close();}catch(Exception x){}
 					
 				}
 			}
 			
 		} catch (SQLException e) {
 			e.printStackTrace();
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Kasutaja.KÕIK_OKEI;
 	}
 	

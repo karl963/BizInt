@@ -18,8 +18,13 @@
 		
 		<div class=muudaKustuta>
 			<button class="projektDetailNupp" type="button" id="projektiNimeMuutmiseNupp">Muuda nime</button>
-			<button class="projektDetailNupp" type="button">Kustuta projekt</button>
+			<button class="punaneProjektDetailNupp" type="button" onclick="javascript:document.kustutaProjekt.submit()" >Kustuta projekt</button>
 		</div>
+		
+<form name="kustutaProjekt" method="POST" action="vaadeProjektTeine.htm">
+	<input type="hidden" name="projektID" value="${projekt.id}">
+	<input type="hidden" name="kustuta" value="jah">
+</form>
 		
 <div class=tuluKulu>
 Tulu: <b class="tuluSumma">${projekt.kogutulu}</b> Kulu: <b class="kuluSumma">${projekt.kogukulu}</b>
@@ -80,7 +85,7 @@ Reiting: ${projekt.reitinguHTML}
 	<td><b class="tuluSumma">+ ${tulu.summa}</b></td>
 	<td><small>${tulu.tuluNimi}</small></td>
 	<td><small><i><b>${tulu.formaaditudAeg}</b></i></small></td>
-	<td><input class="projektDetailNupp" type="submit" value="kustuta" /></td>
+	<td><input class="punaneProjektDetailNupp" type="submit" value="X" /></td>
 	</form:form>
 </tr>
 </c:forEach>
@@ -97,7 +102,7 @@ Reiting: ${projekt.reitinguHTML}
 		<td><b class="kuluSumma">- ${kulu.summa}</b></td>
 		<td><small>${kulu.kuluNimi}</small></td>
 		<td><small><i><b>${kulu.formaaditudAeg}</b></i></small></td>
-		<td><input class="projektDetailNupp" type="submit" value="kustuta" /></td>
+		<td><input class="punaneProjektDetailNupp" type="submit" value="X" /></td>
 		
 	</form:form>
 </tr>

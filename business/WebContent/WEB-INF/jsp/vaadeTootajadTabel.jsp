@@ -59,7 +59,7 @@ ${teade}
 			<form:input type="hidden" path="kasutajaID" value="${tootaja.kasutajaID}" />
 		<tr>
 			<td class="tootajaNimi">${tootaja.kasutajaNimi}</td>
-			<td><input class="projektDetailNupp" type="submit" value="X" /></td>
+			<td><input class="punaneProjektDetailNupp" type="submit" value="X" /></td>
 			<c:forEach items="${tootaja.tabeliAndmed}" var="yhik">
 				<td class="tootajaPalk">
 					<div class="tootajaPalgaMuutmine" style="display:none;">

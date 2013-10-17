@@ -68,6 +68,8 @@ public class ProjektController {
 			kirjeldus = rs.getString("kirjeldus");
 			reiting = rs.getInt("reiting");
 			
+			try{rs.close();stmt.close();}catch(Exception x){}
+			
 			Statement stmt2 = con.createStatement();
 			String query2 = "SELECT kasutajaNimi,aktiivne,vastutaja,osalus,kasutajaID FROM projektikasutajad, kasutajad WHERE projektikasutajad.projekt_ID="+projektID+" AND kasutajad.kasutajaID=projektikasutajad.kasutaja_ID";
 			ResultSet rs2 = stmt2.executeQuery(query2);
@@ -90,6 +92,8 @@ public class ProjektController {
 				kasutajad.add(kasutaja);
 			}
 			
+			try{rs2.close();stmt2.close();}catch(Exception x){}
+			
 			Statement stmt3 = con.createStatement();
 			String query3 = "SELECT sonum,aeg FROM logid WHERE projekt_ID="+projektID;
 			ResultSet rs3 = stmt3.executeQuery(query3);
@@ -105,6 +109,8 @@ public class ProjektController {
 				
 				logi.add(log);
 			}
+			
+			try{rs3.close();stmt3.close();}catch(Exception x){}
 
 			Statement stmt4 = con.createStatement();
 			String query4 = "SELECT sonum, aeg, kasutajaNimi FROM kommentaarid, kasutajad WHERE kommentaarid.projekt_ID="+projektID+" AND kommentaarid.kasutaja_ID=kasutajad.kasutajaID";
@@ -127,6 +133,8 @@ public class ProjektController {
 				kommentaarid.add(kommentaar);
 			}
 			
+			try{rs4.close();stmt4.close();}catch(Exception x){}
+			
 			Statement stmt5 = con.createStatement();
 			String query5 = "SELECT kasutajaNimi, kasutajaID FROM kasutajad WHERE töötab=1";
 			ResultSet rs5 = stmt5.executeQuery(query5);
@@ -143,6 +151,8 @@ public class ProjektController {
 				kõikKasutajad.add(kasutaja);
 			}
 			
+			try{rs5.close();stmt5.close();}catch(Exception x){}
+			
 			Statement stmt7 = con.createStatement();
 			String query7 = "SELECT tulu FROM tulud WHERE projekt_ID="+projektID;
 			ResultSet rs7 = stmt7.executeQuery(query7);
@@ -157,6 +167,8 @@ public class ProjektController {
 				tulud.add(tulu);
 			}
 			
+			try{rs7.close();stmt7.close();}catch(Exception x){}
+			
 			Statement stmt6 = con.createStatement();
 			String query6 = "SELECT kulu FROM kulud WHERE projekt_ID="+projektID;
 			ResultSet rs6 = stmt6.executeQuery(query6);
@@ -169,10 +181,14 @@ public class ProjektController {
 				
 				kulud.add(kulu);
 			}
+			
+			try{rs6.close();stmt6.close();}catch(Exception x){}
 		}catch(Exception x){
 			x.printStackTrace();
 			teade = "Viga andmebaasiga";
-		}
+		}finally {
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
+        }
 		
 		
 		// võtame välja kasutajad (kõikKasutajad listist) kes juba osalevad projektis
@@ -244,6 +260,8 @@ public class ProjektController {
 			nimi = rs.getString("projektNimi");
 			reiting = rs.getInt("reiting");
 			
+			try{rs.close();stmt.close();}catch(Exception x){}
+			
 			Statement stmt2 = con.createStatement();
 			String query2 = "SELECT tulu, tuluNimi, aeg FROM tulud WHERE projekt_ID="+projektID;
 			ResultSet rs2 = stmt2.executeQuery(query2);
@@ -263,6 +281,8 @@ public class ProjektController {
 				tulud.add(tulu);
 			}
 			
+			try{rs2.close();stmt2.close();}catch(Exception x){}
+			
 			Statement stmt3 = con.createStatement();
 			String query3 = "SELECT kulu, kuluNimi, aeg FROM kulud WHERE projekt_ID="+projektID;
 			ResultSet rs3 = stmt3.executeQuery(query3);
@@ -280,6 +300,8 @@ public class ProjektController {
 				
 				kulud.add(kulu);
 			}
+			
+			try{rs3.close();stmt3.close();}catch(Exception x){}
 			
 			Statement stmt4 = con.createStatement();
 			String query4 = "SELECT sonum, aeg, kasutajaNimi FROM kommentaarid, kasutajad WHERE kommentaarid.projekt_ID="+projektID+" AND kommentaarid.kasutaja_ID=kasutajad.kasutajaID";
@@ -301,9 +323,13 @@ public class ProjektController {
 				
 				kommentaarid.add(kommentaar);
 			}
+			
+			try{rs4.close();stmt4.close();}catch(Exception x){}
 		}catch(Exception x){
 			x.printStackTrace();
-		}
+		}finally {
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
+        }
 		
 		// teeme reitinguHTML-i
 		String html = "";
@@ -478,7 +504,7 @@ public class ProjektController {
 	}
 	
 	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"kustuta","projektID"})
-	public View kustutaProjekt(@RequestParam("projektID") int id,@RequestParam("kustuta") String käsk, Model m){
+	public View kustutaProjekt1(@RequestParam("projektID") int id,@RequestParam("kustuta") String käsk, Model m){
 
 		if(käsk.equals("jah")){
 			
@@ -487,6 +513,28 @@ public class ProjektController {
 			if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 				teade = "Viga andmebaasiga ühendumisel";
 				return new RedirectView("vaadeProjektEsimene.htm?id="+id);
+			}
+			else{
+				//teade = "Projekti kustutamine õnnestus";
+				return new RedirectView("vaadeProjektid.htm");
+			}
+			
+		}
+		else{
+			return new RedirectView("vaadeProjektEsimene.htm?id="+id);
+		}
+	}
+	
+	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"kustuta","projektID"})
+	public View kustutaProjekt2(@RequestParam("projektID") int id,@RequestParam("kustuta") String käsk, Model m){
+
+		if(käsk.equals("jah")){
+			
+			int vastus = Projekt.kustutaProjektAndmebaasist(id);
+			
+			if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
+				teade = "Viga andmebaasiga ühendumisel";
+				return new RedirectView("vaadeProjektTeine.htm?id="+id);
 			}
 			else{
 				//teade = "Projekti kustutamine õnnestus";

@@ -111,11 +111,14 @@ public class Staatus {
 			ResultSet rs = stmt.executeQuery(query);
 
 			if(rs.next()){
+				if (con!=null) try {con.close();}catch (Exception ignore) {}
 				return Staatus.ERROR_STAATUS_POLE_TÜHI;
 			}
 			
+			try{rs.close();stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
@@ -125,12 +128,14 @@ public class Staatus {
 			String query = "DELETE FROM staatused WHERE staatusID="+staatusID;
 			stmt.executeUpdate(query);
 			
+			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
 			e.printStackTrace();
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 
-		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Projekt.KÕIK_OKEI;
 	}
 	
@@ -143,18 +148,16 @@ public class Staatus {
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
-		} catch (SQLException e) {
-			return Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
-		}
-		
-		String query = "INSERT INTO staatused (staatusNimi) VALUES ('"+staatus.getNimi()+"')";
-		
-		try {
+			String query = "INSERT INTO staatused (staatusNimi) VALUES ('"+staatus.getNimi()+"')";
 			stmt.executeUpdate(query);
+			
+			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Staatus.ERROR_JUBA_EKSISTEERIB;
 		}
 		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Staatus.KÕIK_OKEI;
 	}
 	
@@ -167,18 +170,16 @@ public class Staatus {
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
-		} catch (SQLException e) {
-			return Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
-		}
-		
-		String query = "UPDATE staatused SET staatusNimi = '"+staatus.getNimi()+"' WHERE staatusID="+staatus.getId();
-		
-		try {
+			String query = "UPDATE staatused SET staatusNimi = '"+staatus.getNimi()+"' WHERE staatusID="+staatus.getId();
 			stmt.executeUpdate(query);
+			
+			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Staatus.KÕIK_OKEI;
 	}
 	

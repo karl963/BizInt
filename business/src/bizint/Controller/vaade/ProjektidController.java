@@ -9,6 +9,11 @@ import java.util.List;
 
 
 
+
+
+
+
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -33,67 +38,6 @@ public class ProjektidController {
 	
 	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.GET)
 	public String vaadeProjektid(Model m){
-		
-		
-		/*
-		 * STAATILINE KOOD, ilma andmebaasita
-		 * staatus(järjekorranr,nimi,projekt(nimi,vastutaja,kogutulu))
-		 */
-		/*
-		staatused = new ArrayList<Staatus>();
-
-		Staatus s1 = new Staatus("Suvalised",0);
-		
-		Projekt p1 = new Projekt("Veebileht");
-		Kasutaja ka1 = new Kasutaja("Mehike");
-		ka1.setVastutaja(true);
-		p1.setKasutajad(Arrays.asList(ka1));
-		//p1.setVastutaja(new Kasutaja("Dolan"));
-		List<Tulu> tulud1 = new ArrayList<Tulu>();
-		tulud1.add(new Tulu(123.4));
-		tulud1.add(new Tulu(234.57));
-		p1.setTulud(tulud1);
-		
-		Projekt p2 = new Projekt("Spring mvc");
-		Kasutaja ka2 = new Kasutaja("Kalle");
-		ka2.setVastutaja(true);
-		p2.setKasutajad(Arrays.asList(ka2));
-		//p2.setVastutaja(new Kasutaja("Springer"));
-		List<Tulu> tulud2 = new ArrayList<Tulu>();
-		tulud2.add(new Tulu(9999.99));
-		p1.setTulud(tulud2);
-		
-		Projekt p3 = new Projekt("Kodukas");
-		//p3.setVastutaja(new Kasutaja("Tark mees"));
-
-		List<Tulu> tulud3 = new ArrayList<Tulu>();
-		tulud3.add(new Tulu(0.01));
-		p1.setTulud(tulud3);
-		s1.addProjekt(p1);
-		s1.addProjekt(p2);
-		s1.addProjekt(p3);
-		
-		Staatus s2 = new Staatus("Teine staatus",1);
-		
-		Projekt p11 = new Projekt("Mõttetu projekt");
-		//p11.setVastutaja(new Kasutaja("kaval Pea"));
-		List<Tulu> tulud11 = new ArrayList<Tulu>();
-		tulud11.add(new Tulu(1111.1));
-		p11.setTulud(tulud11);
-		
-		Projekt p21 = new Projekt("Lahe projekt");
-		p21.setKasutajad(Arrays.asList(ka2));
-		//p21.setVastutaja(new Kasutaja("jobu"));
-		List<Tulu> tulud21 = new ArrayList<Tulu>();
-		tulud21.add(new Tulu(412.0));
-		p11.setTulud(tulud21);
-		
-		s2.addProjekt(p11);
-		s2.addProjekt(p21);
-		
-		staatused.add(s1);
-		staatused.add(s2);
-		 */
 		
 		staatused = new ArrayList<Staatus>();
 		
@@ -148,6 +92,8 @@ public class ProjektidController {
 						kasutajad.add(kasutaja);
 					}
 					
+					try{rs3.close();stmt3.close();}catch(Exception x){}
+					
 					String query4 = "SELECT tulu FROM tulud WHERE projekt_ID="+projektID;
 					Statement stmt4 = con.createStatement();
 					ResultSet rs4 = stmt4.executeQuery(query4);
@@ -162,6 +108,8 @@ public class ProjektidController {
 						tulud.add(tulu);
 					}
 					
+					try{rs4.close();stmt4.close();}catch(Exception x){}
+					
 					projekt.setNimi(projektNimi);
 					projekt.setTulud(tulud);
 					projekt.setKasutajad(kasutajad);
@@ -171,14 +119,20 @@ public class ProjektidController {
 					
 				}
 				
+				try{rs2.close();stmt2.close();}catch(Exception x){}
+				
 				staatus.setProjektid(projektid);
 				
 				staatused.add(staatus);
 			}
 			
+			try{rs.close();stmt.close();}catch(Exception x){}
+			
 		}catch(Exception x){
 			x.printStackTrace();
-		}
+		}finally {
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
+        }
 		
 		m.addAttribute("staatuseKustutamine", new Staatus());
 		m.addAttribute("staatused", staatused);

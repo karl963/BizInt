@@ -21,7 +21,7 @@
 		<div class=muudaKustuta>
 		
 			<button class="projektDetailNupp" type="button" id="projektiNimeMuutmiseNupp" >Muuda nime</button>
-			<button class="projektDetailNupp" type="button" onclick="javascript:document.kustutaProjekt.submit()" >Kustuta projekt</button>
+			<button class="punaneProjektDetailNupp" type="button" onclick="javascript:document.kustutaProjekt.submit()" >Kustuta projekt</button>
 		</div>
 
 <form name="kustutaProjekt" method="POST" action="vaadeProjektEsimene.htm">
@@ -71,8 +71,7 @@ Reiting: ${projekt.reitinguHTML}
 		<th class="vastutajaVeerg">Vastuaja</th>
 		<th class="aktiivneVeerg">Aktiivne</th>
 		<th class="nimeVeerg">Nimi</th>
-		<th class="osalusVeerg">Osalus</th>
-		<th class="tyhiVeerg"></th>
+		<th colspan=2 class="osalusVeerg">Osalus</th>
 	</tr>
 
 	<c:forEach items="${projekt.kasutajad}" var="kasutaja">
@@ -89,19 +88,22 @@ Reiting: ${projekt.reitinguHTML}
 						<c:when test="${kasutaja.aktiivne=='true'}"><input type="checkbox" checked /></c:when>
 						<c:otherwise><input type="checkbox"/></c:otherwise>
 					</c:choose>
+				</td>
 				<td class="nimeVeerg">
 					${kasutaja.kasutajaNimi}
 				</td>
 				<td class="osalusVeerg">
 					<input maxlength="5" class="osalusVeerg" value="${kasutaja.osalus}" />
 				</td>
-				<td style="display:none;"><input value="${kasutaja.kasutajaID}" /></td>
+				<td style="display:none;max-width:10px;">
+					<input value="${kasutaja.kasutajaID}" />
+				</td>
 				
-			<form:form modelAttribute="eemaldaKasutaja">
-				<form:input type="hidden" path="kasutajaID" value="${kasutaja.kasutajaID}" />
-				<form:input type="hidden" path="projektID" value="${projekt.id}" />
-				<td><button class="projektDetailNupp" type="submit">Eemalda</button></td>
-			</form:form>
+				<form:form modelAttribute="eemaldaKasutaja">
+					<form:input type="hidden" path="kasutajaID" value="${kasutaja.kasutajaID}" />
+					<form:input type="hidden" path="projektID" value="${projekt.id}" />
+					<td class="tyhiVeerg"><button class="punaneProjektDetailNupp" type="submit">X</button></td>
+				</form:form>
 		</tr>
 	</c:forEach>
 </table>

@@ -39,7 +39,12 @@
 	text-align:center;
 }
 .nimeVeerg{
-	max-width:250px;
+	min-width:300px;
+	max-width:300px;
+}
+.tyhiVeerg{
+	min-width:20px;
+	max-width:20px;
 }
 
 .teade{
@@ -79,6 +84,71 @@
 .tootajaPalgaMuutmiseLahter{
 	min-width:50px;
 	max-width:50px;
+}
+
+
+.projektDetailNupp{
+	-webkit-border-top-left-radius:6px;
+	-moz-border-radius-topleft:6px;
+	border-top-left-radius:6px;
+	-webkit-border-top-right-radius:6px;
+	-moz-border-radius-topright:6px;
+	border-top-right-radius:6px;
+	-webkit-border-bottom-right-radius:6px;
+	-moz-border-radius-bottomright:6px;
+	border-bottom-right-radius:6px;
+	-webkit-border-bottom-left-radius:6px;
+	-moz-border-radius-bottomleft:6px;
+	border-bottom-left-radius:6px;
+	display:inline-block;
+	-moz-box-shadow:inset 0px 1px 0px 0px #666666;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #666666;
+	box-shadow:inset 0px 1px 0px 0px #ffffff;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #9BD7FF), color-stop(1, #9BD7FF) );
+	background:-moz-linear-gradient( center top, #ededed 5%, #3FBBFF 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#9BD7FF', endColorstr='#9BD7FF');
+	
+	font-weight:bold;
+	background-color:#9BD7FF;
+	border:1px solid #0066FF;
+}
+
+.projektDetailNupp:hover{
+	opacity: 0.6;
+	border:1px solid #ffffff;
+}
+
+
+
+.punaneProjektDetailNupp{
+	-webkit-border-top-left-radius:6px;
+	-moz-border-radius-topleft:6px;
+	border-top-left-radius:6px;
+	-webkit-border-top-right-radius:6px;
+	-moz-border-radius-topright:6px;
+	border-top-right-radius:6px;
+	-webkit-border-bottom-right-radius:6px;
+	-moz-border-radius-bottomright:6px;
+	border-bottom-right-radius:6px;
+	-webkit-border-bottom-left-radius:6px;
+	-moz-border-radius-bottomleft:6px;
+	border-bottom-left-radius:6px;
+	display:inline-block;
+	-moz-box-shadow:inset 0px 1px 0px 0px #666666;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #666666;
+	box-shadow:inset 0px 1px 0px 0px #ffffff;
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #FF6666), color-stop(1, #FF6666) );
+	background:-moz-linear-gradient( center top, #ededed 5%, #3FBBFF 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF6666', endColorstr='#FF6666');
+	
+	font-weight:bold;
+	background-color:#9BD7FF;
+	border:1px solid #FF1919;
+}
+
+.punaneProjektDetailNupp:hover{
+	opacity: 0.6;
+	border:1px solid #ffffff;
 }
 
 
