@@ -90,7 +90,6 @@
 .logiTabel {
 	margin:0px;padding:0px;
 	width:630;
-	box-shadow: 10px 10px 5px #888888;
 	border:1px dotted #000000;
 	
 	-moz-border-radius-bottomleft:0px;
@@ -131,7 +130,7 @@
 	-webkit-border-bottom-left-radius:0px;
 	border-bottom-left-radius:0px;
 }.logiTabel tr:hover td{
-	background-color:#ffffff;
+	background-color:#b5daff;
 		
 
 }
@@ -143,7 +142,7 @@
 	border:1px dotted #000000;
 	border-width:0px 1px 1px 0px;
 	text-align:left;
-	padding:4px;
+	padding:5px;
 	font-size:13px;
 	font-family:Arial;
 	font-weight:normal;
@@ -156,11 +155,11 @@
 	border-width:0px 0px 0px 0px;
 }
 .logiTabel tr:first-child td{
-		background:-o-linear-gradient(bottom, #cccccc 5%, #cccccc 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #cccccc), color-stop(1, #cccccc) );
-	background:-moz-linear-gradient( center top, #cccccc 5%, #cccccc 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#cccccc", endColorstr="#cccccc");	background: -o-linear-gradient(top,#cccccc,cccccc);
+		background:-o-linear-gradient(bottom, #b5daff 5%, #b5daff 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #b5daff), color-stop(1, #b5daff) );
+	background:-moz-linear-gradient( center top, #b5daff 5%, #b5daff 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#b5daff", endColorstr="#b5daff");	background: -o-linear-gradient(top,#b5daff,b5daff);
 
-	background-color:#cccccc;
+	background-color:#b5daff;
 	border:0px dotted #000000;
 	text-align:center;
 	border-width:0px 0px 1px 1px;
@@ -170,11 +169,11 @@
 	color:#000000;
 }
 .logiTabel tr:first-child:hover td{
-	background:-o-linear-gradient(bottom, #cccccc 5%, #cccccc 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #cccccc), color-stop(1, #cccccc) );
-	background:-moz-linear-gradient( center top, #cccccc 5%, #cccccc 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#cccccc", endColorstr="#cccccc");	background: -o-linear-gradient(top,#cccccc,cccccc);
+	background:-o-linear-gradient(bottom, #b5daff 5%, #b5daff 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #b5daff), color-stop(1, #b5daff) );
+	background:-moz-linear-gradient( center top, #b5daff 5%, #b5daff 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#b5daff", endColorstr="#b5daff");	background: -o-linear-gradient(top,#b5daff,b5daff);
 
-	background-color:#cccccc;
+	background-color:#b5daff;
 }
 .logiTabel tr:first-child td:first-child{
 	border-width:0px 0px 1px 0px;
