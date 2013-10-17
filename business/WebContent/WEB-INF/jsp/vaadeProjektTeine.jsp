@@ -68,25 +68,25 @@ Reiting: ${projekt.reitinguHTML}
 <b>Tulud ja kulud:</b>
 
 <div class=describe>
+<table>
 <c:forEach items="${projekt.tulud}" var="tulu">
+<tr>
 	<form:form modelAttribute="kustutaTulu">
 	<form:input path="tuluNimi" type="hidden" value="${tulu.tuluNimi}" />
 	<form:input path="summa" type="hidden" value="${tulu.summa}" />
 	<form:input path="stringAeg" type="hidden" value="${tulu.formaaditudAeg}" />
 	<form:input path="projektID" type="hidden" value="${projekt.id}" />
 
-	<b class="tuluSumma">+ ${tulu.summa}</b>
-	<small>
-		${tulu.tuluNimi}
-		<i><b>${tulu.formaaditudAeg}</b></i>
-	</small>
-	<input class="projektDetailNupp" type="submit" value="kustuta" />
-	<br>
-	
+	<td><b class="tuluSumma">+ ${tulu.summa}</b></td>
+	<td><small>${tulu.tuluNimi}</small></td>
+	<td><small><i><b>${tulu.formaaditudAeg}</b></i></small></td>
+	<td><input class="projektDetailNupp" type="submit" value="kustuta" /></td>
 	</form:form>
+</tr>
 </c:forEach>
 
 <c:forEach items="${projekt.kulud}" var="kulu">
+<tr>
 	<form:form modelAttribute="kustutaKulu">
 		<form:input path="kuluNimi" type="hidden" value="${kulu.kuluNimi}" />
 		<form:input path="summa" type="hidden" value="${kulu.summa}" />
@@ -94,17 +94,15 @@ Reiting: ${projekt.reitinguHTML}
 		<form:input path="projektID" type="hidden" value="${projekt.id}" />
 
 
-		<b class="kuluSumma">- ${kulu.summa}</b>
-		<small>
-			${kulu.kuluNimi}
-			<i><b>${kulu.formaaditudAeg}</b></i>
-		</small>
-		<input class="projektDetailNupp" type="submit" value="kustuta" />
-		<br>
+		<td><b class="kuluSumma">- ${kulu.summa}</b></td>
+		<td><small>${kulu.kuluNimi}</small></td>
+		<td><small><i><b>${kulu.formaaditudAeg}</b></i></small></td>
+		<td><input class="projektDetailNupp" type="submit" value="kustuta" /></td>
 		
 	</form:form>
+</tr>
 </c:forEach>
-
+</table>
 
 </div>
 
