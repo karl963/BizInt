@@ -337,5 +337,5 @@ function tekitaTootajateGraaf(sisendString){
 */
 $(document).ready(function(){
 	$("#pipelineAndmed").trigger("click");
-	$("#tootajateGraafAndmed").trigger("click");
+	//$("#tootajateGraafAndmed").trigger("click");
 });
