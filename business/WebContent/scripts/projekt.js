@@ -204,7 +204,7 @@ $(document).ready(function() {
     	$(this).closest(".tootajaPalk").children(".tootajaPalkText").html($(this).val());
     });
     
-    $('.tootajaNimi').click(function() {
+    $('.tootajaNimi').children(".tootajaNimiAlam").children(".staatuseNimeKiri").click(function() {
     	// kõik ülejäänud muudame tagasi
     	$(".kasutajaVanaNimeDiv").show();
     	$(".kasutajaUueNimeDiv").hide();
