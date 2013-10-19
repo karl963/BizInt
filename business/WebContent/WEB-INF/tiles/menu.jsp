@@ -16,5 +16,6 @@
 </div>
 
 <div class=login_as> 
-	Olete sisseloginud kui: <a href=vaadeProjektid.htm>Kasutaja</a>
+	Olete sisseloginud kui: <a href=vaadeProjektid.htm><%= session.getAttribute("kasutajaNimi")%></a>
+	<a href="vaadeProjektid.htm?logivalja=1">LOGI VÄLJA</a>
 </div>

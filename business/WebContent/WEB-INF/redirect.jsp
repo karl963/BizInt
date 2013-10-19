@@ -1,1 +1,1 @@
-<% response.sendRedirect("vaadeProjektid.htm"); %>
+<% response.sendRedirect("vaadeLogin.htm"); %>

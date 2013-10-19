@@ -12,7 +12,6 @@
 	<put-attribute name="header" value="/WEB-INF/tiles/header.jsp" />
 	<put-attribute name="menu" value="/WEB-INF/tiles/menu.jsp" />
 	<put-attribute name="body"  value="/WEB-INF/jsp/vaadeProjektid.jsp"/>
-	<put-attribute name="footer" value="/WEB-INF/tiles/footer.jsp" />
 </definition>
  
 <definition name="vaadeProjektid" extends="menuTemplate">
@@ -55,6 +54,18 @@
 <definition name="vaadeProjektTeine" extends="projektTemplate">
     <put-attribute name="title" value="Projekti detailvaade" />  
 	<put-attribute name="body" value="/WEB-INF/jsp/vaadeProjektTeine.jsp" />
+</definition>
+
+<!-- login leht -->
+ 
+<definition name="loginTemplate" template="/WEB-INF/tiles/loginTemplate.jsp">
+    <put-attribute name="title" value="Bizint login" />  
+	<put-attribute name="body" value="/WEB-INF/jsp/vaadeLogin.jsp" />
+</definition>
+
+<definition name="vaadeLogin" extends="loginTemplate">
+    <put-attribute name="title" value="Bizint login" />  
+	<put-attribute name="body" value="/WEB-INF/jsp/vaadeLogin.jsp" />
 </definition>
  
 </tiles-definitions>

@@ -1,0 +1,16 @@
+.loginBody{
+	background-color:#FFFFFF;
+	/*background-color:#CCF5FF;*/
+}
+
+.loginFormDiv{
+	background-color:#F6F4F0;
+	position:absolute;
+    width:300px;
+    height:300px;
+    z-index:15;
+    top:50%;
+    left:50%;
+    margin:-150px 0 0 -150px;
+    text-align:center;
+}

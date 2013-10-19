@@ -6,13 +6,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-
-
-
-
-
-
-
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,7 +23,6 @@ import bizint.app.alam.Kasutaja;
 import bizint.app.alam.Projekt;
 import bizint.app.alam.Staatus;
 import bizint.app.alam.rahaline.Tulu;
-import bizint.post.UusKirjeldus;
 
 @Controller
 public class ProjektidController {
@@ -37,8 +31,8 @@ public class ProjektidController {
 	private String teade;
 	
 	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.GET)
-	public String vaadeProjektid(Model m){
-		
+	public String vaadeProjektid(HttpServletRequest request,Model m){
+
 		staatused = new ArrayList<Staatus>();
 		
 		Connection con = new Mysql().getConnection();;
@@ -134,6 +128,7 @@ public class ProjektidController {
 			if (con!=null) try {con.close();}catch (Exception ignore) {}
         }
 		
+		m.addAttribute("kasutajanimi",request.getSession().getAttribute("kasutajaNimi"));
 		m.addAttribute("staatuseKustutamine", new Staatus());
 		m.addAttribute("staatused", staatused);
 		m.addAttribute("uusStaatus", new Staatus());
@@ -209,6 +204,19 @@ public class ProjektidController {
 		}
 		
 		return new RedirectView("vaadeProjektid.htm");
+	}
+	
+	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.GET, params={"logivalja"})
+	public View logiVälja(HttpServletRequest request, HttpServletResponse response,@RequestParam(value="logivalja", required=true) String välja){
+
+		if(välja.equals("1")){
+			request.getSession().removeAttribute("kasutajaNimi");
+			request.getSession().invalidate();
+			return new RedirectView("vaadeLogin.htm");
+		}
+		else{
+			return new RedirectView("vaadeProjektid.htm");
+		}
 	}
 	
 }
