@@ -16,6 +16,6 @@
 </div>
 
 <div class=login_as> 
-	Olete sisseloginud kui: <a href=vaadeProjektid.htm><%= session.getAttribute("kasutajaNimi")%></a>
-	<a href="vaadeProjektid.htm?logivalja=1">LOGI VÄLJA</a>
+	Logitud kui: <b><%= session.getAttribute("kasutajaNimi")%></b> ,
+	<button type="button" class="projektDetailNupp" onclick="javascript:document.location.href='vaadeProjektid.htm?logivalja=1'">logi välja</button>
 </div>

@@ -16,7 +16,7 @@ import bizint.post.SisseLogija;
 @Controller
 public class LoginController {
 	
-	private String teade;
+	private String teade = "parool ja kasutajanimi peavad olema samad";
 	
 	@RequestMapping(value = "/vaadeLogin.htm", method = RequestMethod.GET)
 	public String vaadeLgin(Model m) {
@@ -24,7 +24,7 @@ public class LoginController {
 		m.addAttribute("login",new bizint.post.SisseLogija());
 		m.addAttribute("teade",teade);
 		
-		teade = null;
+		teade = "parool ja kasutajanimi peavad olema samad";
 		
 		return "vaadeLogin";
 	}
