@@ -8,6 +8,39 @@ $(document).ready(function(){
 
 });
 
+$(document).ready(function(){
+
+	$(".kustutaProjektNupp").click(function(){
+		$(".muudaKustutaEsimene").hide();
+		$(".muudaKustutaTeine").show();
+	});
+	$(".katkestaProjektiKustutamine").click(function(){
+		$(".muudaKustutaEsimene").show();
+		$(".muudaKustutaTeine").hide();
+	});
+	
+	$(".tootajaKustutaNupp").click(function(){
+		$(this).closest(".tootajaRida").children(".tootajaNimi").children(".tootajaKustutajaComfirmation").show();
+		$(this).closest(".tootajaRida").children(".tootajaNimi").children(".tootajaNimiAlam").hide();
+	});
+	$(".katkestaTootajaKustutamine").click(function(){
+		$(".tootajaKustutajaComfirmation").hide();
+		$(".tootajaNimiAlam").show();
+	});
+	
+	$(".kustutaStaatusNupp").click(function(){
+		$(this).closest(".staatuseNimi").children(".staatuseNimeKiri").hide();
+		$(this).closest(".staatuseNimi").children(".staatuseNimeMuutmine").hide();
+		$(this).closest(".staatuseNimi").children(".kustutaStaatusConfirmationDiv").show();
+	});
+	$(".katkestaStaatuseKustutamine").click(function(){
+		$(this).closest(".staatuseNimi").children(".staatuseNimeKiri").show();
+		$(this).closest(".staatuseNimi").children(".staatuseNimeMuutmine").hide();
+		$(this).closest(".staatuseNimi").children(".kustutaStaatusConfirmationDiv").hide();
+	});
+	
+});
+
 function lisaProjektiKasutaja(pid){
 
 	var e = document.getElementById("uueKasutajaList");
@@ -139,7 +172,7 @@ $(document).ready(function() {
         this.checked = true;
     });
     
-    $('.staatuseNimi').click(function() {
+    $('.staatuseNimi').children(".staatuseNimeKiri").click(function() {
     	// kõik ülejäänud muudame tagasi
     	$(".staatuseNimeKiri").show();
     	$(".staatuseNimeMuutmine").hide();
@@ -177,8 +210,8 @@ $(document).ready(function() {
     	$(".kasutajaUueNimeDiv").hide();
     	
     	// muudame valitud lahtrit vastavalt
-        $(this).closest(".tootajaNimi").children(".kasutajaVanaNimeDiv").hide();
-        $(this).closest(".tootajaNimi").children(".kasutajaUueNimeDiv").show();
+        $(this).closest(".tootajaNimi").children(".tootajaNimiAlam").children(".kasutajaVanaNimeDiv").hide();
+        $(this).closest(".tootajaNimi").children(".tootajaNimiAlam").children(".kasutajaUueNimeDiv").show();
         
         // fokuseerib lahtri peale
         $(this).find("input.uueKasutajaNimeLahter").focus().val($(this).find("input.uueKasutajaNimeLahter").val());
@@ -199,7 +232,7 @@ $(document).ready(function() {
     		}
     		
     		var sisemineList = "";
-    		var nimi = row.getElementsByClassName("tootajaNimi")[0].getElementsByClassName("kasutajaVanaNimeDiv")[0].innerHTML;
+    		var nimi = row.getElementsByClassName("tootajaNimi")[0].getElementsByClassName("tootajaNimiAlam")[0].getElementsByClassName("kasutajaVanaNimeDiv")[0].innerHTML;
     		
     		var cells = row.getElementsByClassName("tootajaPalk");
 
@@ -237,9 +270,9 @@ $(document).ready(function() {
 
 
 google.load("visualization", "1", {packages:["corechart"]});
-google.setOnLoadCallback(tekitaTabel);
+google.setOnLoadCallback(tekitaPipelineGraaf);
 
-function tekitaTabel(sisendString){
+function tekitaPipelineGraaf(sisendString){
 
 	if(sisendString.target){ // kui on event, ehk ei laeta pipeline vaadet
 		return;
@@ -268,6 +301,41 @@ function tekitaTabel(sisendString){
     chart.draw(data, options);
 }
 
+/*
+google.load("visualization", "1", {packages:["corechart"]});
+google.setOnLoadCallback(tekitaTootajateGraaf);
+
+function tekitaTootajateGraaf(sisendString){
+
+	if(sisendString.target){ // kui on event, ehk ei laeta töötajate graafi vaadet
+		return;
+	}
+	
+    var andmed = sisendString.split("/");
+    var tabel = new Array();
+    tabel[0]= ["Staatus", "Tulu", "Palgad" , "Kasum"] ;
+    
+    for(var i = 1;i < andmed.length ; i++){
+    	var vaheTabel = andmed[i-1].split(";");
+    		tabel[i] = [vaheTabel[0], parseFloat(vaheTabel[1]),parseFloat(vaheTabel[2]),parseFloat(vaheTabel[3])];	
+    }
+    
+    var data = google.visualization.LineChart(tabel);
+
+    var options = {
+      legend: {position: 'top'},
+      colors: ['green','red', 'blue'],
+      width: 150 * (tabel.length-1),
+      vAxis: {title: '€', titleTextStyle: {color: 'red'}},
+      hAxis: {title: 'Töötaja', titleTextStyle: {color: 'red'} }
+    	
+    };
+
+    var chart = new google.visualization.ColumnChart(document.getElementById('tootajateGraafDiv'));
+    chart.draw(data, options);
+}
+*/
 $(document).ready(function(){
 	$("#pipelineAndmed").trigger("click");
+	$("#tootajateGraafAndmed").trigger("click");
 });

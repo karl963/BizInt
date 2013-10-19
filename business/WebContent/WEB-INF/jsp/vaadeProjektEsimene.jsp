@@ -18,10 +18,14 @@
 
 		<h1 id="projektiNimi" >${projekt.nimi}</h1>
 
-		<div class=muudaKustuta>
-		
+		<div class="muudaKustuta muudaKustutaEsimene">
 			<button class="projektDetailNupp" type="button" id="projektiNimeMuutmiseNupp" >Muuda nime</button>
-			<button class="punaneProjektDetailNupp" type="button" onclick="javascript:document.kustutaProjekt.submit()" >Kustuta projekt</button>
+			<button class="punaneProjektDetailNupp kustutaProjektNupp" type="button" >Kustuta projekt</button>
+		</div>
+		<div class="muudaKustuta muudaKustutaTeine" style="display:none;">
+			<b>Kustuta Projekt ? </b>
+			<button class="punaneProjektDetailNupp" type="button" onclick="javascript:document.kustutaProjekt.submit()" >Jah</button>
+			<button class="projektDetailNupp katkestaProjektiKustutamine" type="button" >Katkesta</button>
 		</div>
 
 <form name="kustutaProjekt" method="POST" action="vaadeProjektEsimene.htm">

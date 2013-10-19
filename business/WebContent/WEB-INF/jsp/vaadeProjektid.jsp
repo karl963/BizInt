@@ -25,15 +25,29 @@
 		<div class="staatuseNimi">
 			<div class="staatuseNimeKiri">${staatus.nimi}</div>
 			<div class="staatuseNimeMuutmine" style="display:none;">
+			
 				<form:form modelAttribute="staatuseNimeMuutmine">
 					<form:input maxlength="45" class="staatuseNimeMuutmiseLahter" path="nimi" value="${staatus.nimi}" />
 					<form:input type="hidden" path="id" value="${staatus.id}" />
 					<input type="submit" class="projektDetailNupp" value="muuda" />
 				</form:form>
+				
+				<button type="button" class="punaneProjektDetailNupp kustutaStaatusNupp" >kustuta staatus</button>
+				
+			</div>
+			<div class="kustutaStaatusConfirmationDiv" style="display:none;">
+				
 				<form:form modelAttribute="staatuseKustutamine">
+				
 					<form:input type="hidden" path="id" value="${staatus.id}" />
 					<form:input type="hidden" path="kustuta" value="jah" />
-					<input type="submit" class="punaneProjektDetailNupp" value="kustuta staatus" />
+					
+					<b>Kustuta staatus ?</b>
+					<br>
+					<input class="punaneProjektDetailNupp" type="submit" value="Jah" />
+					<button class="projektDetailNupp katkestaStaatuseKustutamine" type="button" >Katkesta</button>
+					
+				
 				</form:form>
 			</div>
 		</div>

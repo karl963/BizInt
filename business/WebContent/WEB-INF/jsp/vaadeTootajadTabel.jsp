@@ -56,21 +56,25 @@
 	</tr>
 	<c:forEach items="${kasutajad}" var="tootaja" >
 	
-		<tr>
+		<tr class="tootajaRida">
 			<td class="tootajaNimi">
-				<div class="kasutajaVanaNimeDiv">${tootaja.kasutajaNimi}</div>
-				<div class="kasutajaUueNimeDiv" style="display:none;">
-					<input class="uueKasutajaNimeLahter" value="${tootaja.kasutajaNimi}" />
-					<input class="kasutajaId" value="${tootaja.kasutajaID}" type="hidden"/>
-					<button type="button" class="projektDetailNupp kasutjaNimeMuutmiseNupp">muuda</button>
+				<div class="tootajaNimiAlam">
+					<div class="kasutajaVanaNimeDiv">${tootaja.kasutajaNimi}</div>
+					<div class="kasutajaUueNimeDiv" style="display:none;">
+						<input class="uueKasutajaNimeLahter" value="${tootaja.kasutajaNimi}" />
+						<input class="kasutajaId" value="${tootaja.kasutajaID}" type="hidden"/>
+						<button type="button" class="projektDetailNupp kasutjaNimeMuutmiseNupp">muuda</button>
+					</div>
+				</div>
+				<div style="display:none;" class="tootajaKustutajaComfirmation">
+					<form:form modelAttribute="kustutaTootaja">
+						<form:input type="hidden" path="kasutajaID" value="${tootaja.kasutajaID}" />
+						<input type="submit" class="punaneProjektDetailNupp" value="Jah" />
+						<button class="projektDetailNupp katkestaTootajaKustutamine" type="button" >Katkesta</button>
+					</form:form>
 				</div>
 			</td>
-				<form:form modelAttribute="kustutaTootaja">
-					<form:input type="hidden" path="kasutajaID" value="${tootaja.kasutajaID}" />
-			<td>
-					<input class="punaneProjektDetailNupp" type="submit" value="X" />
-			</td>
-				</form:form>
+			<td><input class="punaneProjektDetailNupp tootajaKustutaNupp" type="button" value="X" /></td>
 			<c:forEach items="${tootaja.tabeliAndmed}" var="yhik">
 				<td class="tootajaPalk">
 					<div class="tootajaPalgaMuutmine" style="display:none;">
