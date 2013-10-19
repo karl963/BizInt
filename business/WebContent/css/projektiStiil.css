@@ -138,11 +138,11 @@
 	-webkit-box-shadow:inset 0px 1px 0px 0px #666666;
 	box-shadow:inset 0px 1px 0px 0px #ffffff;
 	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #FF6666), color-stop(1, #FF6666) );
-	background:-moz-linear-gradient( center top, #ededed 5%, #3FBBFF 100% );
+	background:-moz-linear-gradient( center top, #ededed 5%, #FF6666 100% );
 	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#FF6666', endColorstr='#FF6666');
 	
 	font-weight:bold;
-	background-color:#9BD7FF;
+	background-color:#FF6666;
 	border:1px solid #FF1919;
 }
 

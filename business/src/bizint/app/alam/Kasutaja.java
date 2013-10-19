@@ -54,6 +54,30 @@ public class Kasutaja {
 	 ///////// methods \\\\\\\
 	/////////////\\\\\\\\\\\\\\
 	
+	public static int muudaKasutajaNimeAndmebaasis(int kasutajaID, String uusNimi){
+
+		Connection con = new Mysql().getConnection();
+		if(con==null){
+			return Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		try{
+			
+			Statement stmt = con.createStatement();
+			String query = "UPDATE kasutajad SET kasutajaNimi='"+uusNimi+"' WHERE kasutajaID="+kasutajaID;
+			stmt.executeUpdate(query);
+
+			try{stmt.close();}catch(Exception x){}
+			
+		}catch(Exception x){
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
+			return Kasutaja.VIGA_JUBA_EKSISTEERIB;
+		}
+		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
+		return Kasutaja.KÕIK_OKEI;
+	}
+	
 	public static int lisaKasutajaAndmebaasi(Kasutaja kasutaja){
 		
 		Connection con = new Mysql().getConnection();

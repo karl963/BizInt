@@ -12,7 +12,8 @@
 </div>
 
 <div id="tootajadTabelDiv">
-${teade}
+<br>
+<div class="teade">${teade}</div>
 
 <div>
 	<table>
@@ -55,11 +56,21 @@ ${teade}
 	</tr>
 	<c:forEach items="${kasutajad}" var="tootaja" >
 	
-		<form:form modelAttribute="kustutaTootaja">
-			<form:input type="hidden" path="kasutajaID" value="${tootaja.kasutajaID}" />
 		<tr>
-			<td class="tootajaNimi">${tootaja.kasutajaNimi}</td>
-			<td><input class="punaneProjektDetailNupp" type="submit" value="X" /></td>
+			<td class="tootajaNimi">
+				<div class="kasutajaVanaNimeDiv">${tootaja.kasutajaNimi}</div>
+				<div class="kasutajaUueNimeDiv" style="display:none;">
+					<input class="uueKasutajaNimeLahter" value="${tootaja.kasutajaNimi}" />
+					<input class="kasutajaId" value="${tootaja.kasutajaID}" type="hidden"/>
+					<button type="button" class="projektDetailNupp kasutjaNimeMuutmiseNupp">muuda</button>
+				</div>
+			</td>
+				<form:form modelAttribute="kustutaTootaja">
+					<form:input type="hidden" path="kasutajaID" value="${tootaja.kasutajaID}" />
+			<td>
+					<input class="punaneProjektDetailNupp" type="submit" value="X" />
+			</td>
+				</form:form>
 			<c:forEach items="${tootaja.tabeliAndmed}" var="yhik">
 				<td class="tootajaPalk">
 					<div class="tootajaPalgaMuutmine" style="display:none;">
@@ -70,8 +81,7 @@ ${teade}
 				<td class="tuluLahter">${yhik.tulu}</td>
 			</c:forEach>
 		</tr>
-		
-		</form:form>
+
 	</c:forEach>
 	<tr>
 		<td colspan=12>

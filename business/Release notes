@@ -23,6 +23,7 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Saab vaadata töötajate vaates kuupalkasid ja projektide pealt tulevaid tulusid ( osakaal x kõik tulud ) aasta vältel, iga kuu eraldi. Saab valida aastat.
 * Saab muuta töötajate palkasid aastate ja kuude kaupa
 * Saab kustutada staatust
+* Saab muuta töötaja nime
 
 -- Lisamärkused
 * Süntaksiliselt valesti lisatud tulu/kulu asendatakse automaatselt 0 -ga

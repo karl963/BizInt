@@ -50,11 +50,11 @@ function listiProjektiKasutajadJaSalvesta(pid){
 		
 	}
 	
-	salvestaProjektiKasutajad(rakenduseNimi,pid,kasutajad);
+	salvestaProjektiKasutajad(pid,kasutajad);
 }
 
 
-function salvestaProjektiKasutajad(rakenduseNimi,pid,kasutajadList){
+function salvestaProjektiKasutajad(pid,kasutajadList){
 
 	$.ajax({
 	    type : "POST",
@@ -67,6 +67,35 @@ function salvestaProjektiKasutajad(rakenduseNimi,pid,kasutajadList){
 	    	document.location.href = "vaadeProjektEsimene.htm?id="+pid;
 	    }
 	});
+};
+
+$(document).ready(function(){
+
+	$(".kasutjaNimeMuutmiseNupp").click(function(){
+
+		var id = $(this).closest(".kasutajaUueNimeDiv").children("input.kasutajaId").val();
+		var nimi = $(this).closest(".kasutajaUueNimeDiv").children(".uueKasutajaNimeLahter").val();
+
+		salvestaKasutajaNimi(id,nimi);
+	});
+
+});
+
+function salvestaKasutajaNimi(id,nimi){
+
+	$.ajax({
+	    type : "POST",
+	    url : rakenduseNimi+"/vaadeTootajadTabel.htm",
+	    data : {uusNimi: nimi, kid: id},
+	    success : function(response) {
+	    	document.location.href = "vaadeTootajadTabel.htm";
+	    },
+	    error : function(e) {
+	    	document.location.href = "vaadeTootajadTabel.htm";
+	    }
+	});
+	
+	
 };
 
 function valideeriOsalus(osalus){
@@ -142,6 +171,18 @@ $(document).ready(function() {
     	$(this).closest(".tootajaPalk").children(".tootajaPalkText").html($(this).val());
     });
     
+    $('.tootajaNimi').click(function() {
+    	// kõik ülejäänud muudame tagasi
+    	$(".kasutajaVanaNimeDiv").show();
+    	$(".kasutajaUueNimeDiv").hide();
+    	
+    	// muudame valitud lahtrit vastavalt
+        $(this).closest(".tootajaNimi").children(".kasutajaVanaNimeDiv").hide();
+        $(this).closest(".tootajaNimi").children(".kasutajaUueNimeDiv").show();
+        
+        // fokuseerib lahtri peale
+        $(this).find("input.uueKasutajaNimeLahter").focus().val($(this).find("input.uueKasutajaNimeLahter").val());
+    });
 });
 
 $(document).ready(function() {
@@ -158,7 +199,7 @@ $(document).ready(function() {
     		}
     		
     		var sisemineList = "";
-    		var nimi = row.getElementsByClassName("tootajaNimi")[0].innerHTML;
+    		var nimi = row.getElementsByClassName("tootajaNimi")[0].getElementsByClassName("kasutajaVanaNimeDiv")[0].innerHTML;
     		
     		var cells = row.getElementsByClassName("tootajaPalk");
 

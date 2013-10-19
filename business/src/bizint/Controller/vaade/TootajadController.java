@@ -308,7 +308,7 @@ public class TootajadController {
 	
 	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.POST, params = {"kasutajaNimi"})
 	public View lisaUusTöötaja(@ModelAttribute("uusTootaja") Kasutaja kasutaja, Model m){
-		
+
 		int vastus = Kasutaja.lisaKasutajaAndmebaasi(kasutaja);
 		
 		if(vastus == Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
@@ -324,9 +324,9 @@ public class TootajadController {
 		return new RedirectView("vaadeTootajadTabel.htm");
 	}
 	
-	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.POST, params = {"kasutajaID",})
+	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.POST, params = {"kasutajaID"})
 	public View kustutaTöötaja(@ModelAttribute("kustutaTootaja") Kasutaja kasutaja, Model m){
-		
+
 		int vastus = Kasutaja.muudaKasutajaTöötuksAndmebaasis(kasutaja);
 		
 		if(vastus == Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
@@ -340,7 +340,7 @@ public class TootajadController {
 	}
 	
 	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.POST, params = {"tootajad","aastaNumber"})
-	public void salvestaTootajatePalgad(HttpServletRequest request, HttpServletResponse response,@RequestParam("tootajad") String tootajad,@RequestParam("aastaNumber") int aasta, Model m){
+	public void salvestaTootajatePalgad(HttpServletRequest request, HttpServletResponse response,@RequestParam("tootajad") String tootajad,@RequestParam("aastaNumber") int aasta){
 
 		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
 		
@@ -374,6 +374,23 @@ public class TootajadController {
 		}
 		else{
 			teade = "Töötaja palkade muutmine õnnestus";
+		}
+
+	}
+	
+	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.POST, params = {"kid","uusNimi"})
+	public void muudaTöötajaNime(HttpServletRequest request, HttpServletResponse response,@RequestParam("kid") int kasutajaID,@RequestParam("uusNimi") String uusNimi){
+
+		int vastus = Kasutaja.muudaKasutajaNimeAndmebaasis(kasutajaID,uusNimi);
+		
+		if(vastus == Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
+			teade = "Viga andmebaasiga ühendumisel";
+		}
+		else if(vastus == Kasutaja.VIGA_JUBA_EKSISTEERIB){
+			teade  = "Selle nimega töötaja juba eksisteerib";
+		}
+		else{
+			teade = "Töötaja nime muutmine õnnestus";
 		}
 
 	}
