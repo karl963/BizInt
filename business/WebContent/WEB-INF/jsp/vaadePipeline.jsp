@@ -10,7 +10,7 @@
 </div>
 </div>
 
-<button type="button" style= "display:none;" id = "pipelineAndmed" onclick="javascript:tekitaTootajateGraaf('${staatused}');drawChart()"></button>
+<button type="button" style= "display:none;" id = "pipelineAndmed" onclick="javascript:tekitaPipelineGraaf('${staatused}');drawChart()"></button>
 
 <br>
 <br>

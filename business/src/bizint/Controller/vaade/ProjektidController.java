@@ -128,6 +128,8 @@ public class ProjektidController {
 			if (con!=null) try {con.close();}catch (Exception ignore) {}
         }
 		
+		staatused = paneJärjekorda(staatused);
+		
 		m.addAttribute("kasutajanimi",request.getSession().getAttribute("kasutajaNimi"));
 		m.addAttribute("staatuseKustutamine", new Staatus());
 		m.addAttribute("staatused", staatused);
@@ -138,6 +140,33 @@ public class ProjektidController {
 		teade = null;
 		
 		return "vaadeProjektid";
+	}
+	
+	private List<Staatus> paneJärjekorda(List<Staatus> staatused){
+		List<Staatus> uusList = new ArrayList<Staatus>();
+		
+		while(staatused.size()>0){
+			
+			int väikseimI = 0;
+			int väikseim = 99;
+			int index = 0;
+			
+			for(Staatus s : staatused){
+				
+				if(s.getJärjekorraNumber()<väikseim){
+					väikseim = s.getJärjekorraNumber();
+					väikseimI = index;
+				}
+				
+				index++;
+			}
+			
+			uusList.add(staatused.get(väikseimI));
+			staatused.remove(väikseimI);
+			
+		}
+		
+		return uusList;
 	}
 
 	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"nimi"})

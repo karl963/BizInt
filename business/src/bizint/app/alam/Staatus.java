@@ -145,14 +145,26 @@ public class Staatus {
 		if(con==null){
 			return Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
-		Statement stmt;
+		
 		try {
-			stmt = con.createStatement();
-			String query = "INSERT INTO staatused (staatusNimi) VALUES ('"+staatus.getNimi()+"')";
+			
+			int järjekorraNR = 1;
+			
+			Statement stmt0 = con.createStatement();
+			String query0 = "SELECT MAX(järjekorraNR) AS max FROM staatused";
+			ResultSet rs = stmt0.executeQuery(query0);
+			
+			if(rs.next()){
+				järjekorraNR = rs.getInt("max") + 1;
+			}
+			
+			Statement stmt = con.createStatement();
+			String query = "INSERT INTO staatused (staatusNimi, järjekorraNR) VALUES ('"+staatus.getNimi()+"',"+järjekorraNR+")";
 			stmt.executeUpdate(query);
 			
 			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			e.printStackTrace();
 			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Staatus.ERROR_JUBA_EKSISTEERIB;
 		}
