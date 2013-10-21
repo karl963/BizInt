@@ -67,9 +67,10 @@
 		</form:form>
 	</div>
 
-	<div class=scrollwindow>
+	<div class="scrollwindow" ondragenter="return dragEnter(event,${staatus.id})" ondragover="return dragOver(event)" ondrop="return dragDrop(event)" >
 	
 		<c:forEach items="${staatus.projektid}" var="projekt">
+		<div draggable="true" ondragstart="return dragStart(event,${projekt.id})">
 			<a href="vaadeProjektEsimene.htm?id=${projekt.id}">
 			<table class=project>
 				<tr>
@@ -86,6 +87,7 @@
 			</table>
 			</a>
 			<p></p>
+			</div>
 		</c:forEach>
 		
 	</div>

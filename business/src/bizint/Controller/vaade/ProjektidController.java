@@ -253,4 +253,20 @@ public class ProjektidController {
 		}
 	}
 	
+	
+	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"projektDragId","staatusDragId"})
+	public View muudaProjektiStaatust(@RequestParam(value="staatusDragId", required=true) int staatusID,@RequestParam(value="projektDragId", required=true) int projektID, Model m){
+
+		int vastus = Projekt.muudaProjektiStaatustAndmebaasis(projektID,staatusID);
+		
+		if(vastus == Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
+			teade = "Viga andmebaasiga ühendumisel";
+		}
+		else{
+			teade = "Projekti staatuse muutmine õnnestus";
+		}
+		
+		return new RedirectView("vaadeProjektid.htm");
+	}
+	
 }

@@ -291,7 +291,7 @@ function tekitaPipelineGraaf(sisendString){
     var options = {
       legend: {position: 'top'},
       colors: ['green','red', 'blue'],
-      width: 150 * (tabel.length-1),
+      width: 500 + (150 * (tabel.length-1)),
       vAxis: {title: '€', titleTextStyle: {color: 'red'}},
       hAxis: {title: 'Staatus', titleTextStyle: {color: 'red'} }
     	
@@ -339,3 +339,43 @@ $(document).ready(function(){
 	$("#pipelineAndmed").trigger("click");
 	//$("#tootajateGraafAndmed").trigger("click");
 });
+
+
+var draggableProjektID;
+var draggableStaatusID;
+
+function dragStart(ev, projektID) {
+	draggableProjektID = projektID;
+	return true;
+}
+
+function dragEnter(ev,staatusID) {
+	draggableStaatusID = staatusID;
+	event.preventDefault();
+	return true;
+}
+
+function dragOver(ev) {
+	return false;
+}
+
+function dragDrop(ev) {
+	muudaProjektiStaatust();
+	return false;
+}
+
+function muudaProjektiStaatust(){
+
+	$.ajax({
+	    type : "POST",
+	    url : rakenduseNimi+"/vaadeProjektid.htm",
+	    data : {staatusDragId: draggableStaatusID, projektDragId: draggableProjektID},
+	    success : function(response) {
+	    	document.location.href = "vaadeProjektid.htm";
+	    },
+	    error : function(e) {
+	    	document.location.href = "vaadeProjektid.htm";
+	    }
+	});
+};
+

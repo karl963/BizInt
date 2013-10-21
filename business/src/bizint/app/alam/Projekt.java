@@ -724,6 +724,29 @@ public class Projekt {
 		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Projekt.KÕIK_OKEI;
 	}
+	
+	public static int muudaProjektiStaatustAndmebaasis(int projektID, int staatusID) {
+		Connection con = new Mysql().getConnection();
+		if(con==null){
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+			String query = "UPDATE projektid SET staatus_ID="+ staatusID + " where projektID=" + projektID;
+			stmt.executeUpdate(query);
+			
+			try{stmt.close();}catch(Exception x){}
+		} catch (SQLException e) {
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
+		return Projekt.KÕIK_OKEI;
+	}
+	
+	
 	  ///////////\\\\\\\\\\\\
 	 // getters and setters \\
 	/////////////\\\\\\\\\\\\\\
@@ -835,5 +858,7 @@ public class Projekt {
 	public void setReitinguHTML(String reitinguHTML) {
 		this.reitinguHTML = reitinguHTML;
 	}
+
+
 	
 }
