@@ -277,7 +277,7 @@ h1
 	left:0px;
 	height:90px;
 	width:1250px;
-	background-color:#CCF5FF;
+	background-color:#A0E0FF;
 }
 #projektiNimeMuutmine{
 	position:absolute;
@@ -325,7 +325,7 @@ h1
 	left:950px;
 	top:20px;
 	width:300px;
-	height=16px;
+	height:16px;
 	font-weight:bold;
 }
 
@@ -349,7 +349,7 @@ h1
 
 .activeTab
 {
-	background-color:#3FBBFF;
+	background-color:#74CEFF;
 }
 
 .describe
@@ -411,6 +411,7 @@ h1
 	color:white;
 	text-decoration:bold;
 	font-size:50;
+
 }
 
 .smallInput

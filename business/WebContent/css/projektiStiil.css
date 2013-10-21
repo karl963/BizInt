@@ -58,7 +58,7 @@
 	background-color:#E6FAE6;
 }
 .tootajaTabelHeaderVäli{
-	background-color:#70DBFF;
+	background-color:#74CEFF;
 }
 #tootajateTabel{
 	margin-left:10px;
@@ -104,12 +104,12 @@
 	-moz-box-shadow:inset 0px 1px 0px 0px #666666;
 	-webkit-box-shadow:inset 0px 1px 0px 0px #666666;
 	box-shadow:inset 0px 1px 0px 0px #ffffff;
-	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #9BD7FF), color-stop(1, #9BD7FF) );
+	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #74CEFF), color-stop(1, #74CEFF) );
 	background:-moz-linear-gradient( center top, #ededed 5%, #3FBBFF 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#9BD7FF', endColorstr='#9BD7FF');
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#74CEFF', endColorstr='#74CEFF');
 	
 	font-weight:bold;
-	background-color:#9BD7FF;
+	background-color:#74CEFF;
 	border:1px solid #0066FF;
 }
 
@@ -200,7 +200,7 @@
 	-webkit-border-bottom-left-radius:0px;
 	border-bottom-left-radius:0px;
 }.logiTabel tr:hover td{
-	background-color:#b5daff;
+	background-color:#74CEFF;
 		
 
 }
@@ -225,11 +225,11 @@
 	border-width:0px 0px 0px 0px;
 }
 .logiTabel tr:first-child td{
-		background:-o-linear-gradient(bottom, #b5daff 5%, #b5daff 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #b5daff), color-stop(1, #b5daff) );
-	background:-moz-linear-gradient( center top, #b5daff 5%, #b5daff 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#b5daff", endColorstr="#b5daff");	background: -o-linear-gradient(top,#b5daff,b5daff);
+		background:-o-linear-gradient(bottom, #74CEFF 5%, #74CEFF 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #74CEFF), color-stop(1, #74CEFF) );
+	background:-moz-linear-gradient( center top, #74CEFF 5%, #74CEFF 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#74CEFF", endColorstr="#74CEFF");	background: -o-linear-gradient(top,#74CEFF,#74CEFF);
 
-	background-color:#b5daff;
+	background-color:#74CEFF;
 	border:0px dotted #000000;
 	text-align:center;
 	border-width:0px 0px 1px 1px;
@@ -239,11 +239,11 @@
 	color:#000000;
 }
 .logiTabel tr:first-child:hover td{
-	background:-o-linear-gradient(bottom, #b5daff 5%, #b5daff 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #b5daff), color-stop(1, #b5daff) );
-	background:-moz-linear-gradient( center top, #b5daff 5%, #b5daff 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#b5daff", endColorstr="#b5daff");	background: -o-linear-gradient(top,#b5daff,b5daff);
+	background:-o-linear-gradient(bottom, #74CEFF 5%, #74CEFF 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #74CEFF), color-stop(1, #74CEFF) );
+	background:-moz-linear-gradient( center top, #74CEFF 5%, #74CEFF 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#74CEFF", endColorstr="#74CEFF");	background: -o-linear-gradient(top,#74CEFF,#74CEFF);
 
-	background-color:#b5daff;
+	background-color:#74CEFF;
 }
 .logiTabel tr:first-child td:first-child{
 	border-width:0px 0px 1px 0px;
@@ -303,7 +303,7 @@
 	-webkit-border-bottom-left-radius:0px;
 	border-bottom-left-radius:0px;
 }.kommentaariTabel tr:hover td{
-	background-color:#b5daff;
+	background-color:#74CEFF;
 		
 
 }
@@ -328,11 +328,11 @@
 	border-width:0px 0px 0px 0px;
 }
 .kommentaariTabel tr:first-child td{
-		background:-o-linear-gradient(bottom, #b5daff 5%, #b5daff 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #b5daff), color-stop(1, #b5daff) );
-	background:-moz-linear-gradient( center top, #b5daff 5%, #b5daff 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#b5daff", endColorstr="#b5daff");	background: -o-linear-gradient(top,#b5daff,b5daff);
+	background:-o-linear-gradient(bottom, #74CEFF 5%, #74CEFF 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #74CEFF), color-stop(1, #74CEFF) );
+	background:-moz-linear-gradient( center top, #74CEFF 5%, #74CEFF 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#74CEFF", endColorstr="#74CEFF");	background: -o-linear-gradient(top,#74CEFF,#74CEFF);
 
-	background-color:#b5daff;
+	background-color:#74CEFF;
 	border:0px dotted #000000;
 	text-align:center;
 	border-width:0px 0px 1px 1px;
@@ -342,11 +342,11 @@
 	color:#000000;
 }
 .kommentaariTabel tr:first-child:hover td{
-	background:-o-linear-gradient(bottom, #b5daff 5%, #b5daff 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #b5daff), color-stop(1, #b5daff) );
-	background:-moz-linear-gradient( center top, #b5daff 5%, #b5daff 100% );
-	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#b5daff", endColorstr="#b5daff");	background: -o-linear-gradient(top,#b5daff,b5daff);
+	background:-o-linear-gradient(bottom, #74CEFF 5%, #74CEFF 100%);	background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #74CEFF), color-stop(1, #74CEFF) );
+	background:-moz-linear-gradient( center top, #74CEFF 5%, #74CEFF 100% );
+	filter:progid:DXImageTransform.Microsoft.gradient(startColorstr="#74CEFF", endColorstr="#74CEFF");	background: -o-linear-gradient(top,#74CEFF,#74CEFF);
 
-	background-color:#b5daff;
+	background-color:#74CEFF;
 }
 .kommentaariTabel tr:first-child td:first-child{
 	border-width:0px 0px 1px 0px;

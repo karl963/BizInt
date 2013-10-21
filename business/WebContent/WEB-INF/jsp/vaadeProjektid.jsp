@@ -74,7 +74,7 @@
 			<a href="vaadeProjektEsimene.htm?id=${projekt.id}">
 			<table class=project>
 				<tr>
-					<th COLSPAN=2>${projekt.nimi}</th>
+					<th COLSPAN=2 style="background-color:#74CEFF">${projekt.nimi}</th>
 				</tr>
 				<tr>
 					<td>Vastutaja:</td>
