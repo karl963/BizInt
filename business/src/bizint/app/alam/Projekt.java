@@ -106,24 +106,40 @@ public class Projekt {
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
-		Statement stmt;
 		try {
-			stmt = con.createStatement();
+			Statement stmt = con.createStatement();
 			String query = "INSERT INTO projektid (projektNimi, staatus_ID) VALUES ('"+projekt.getNimi()+"',"+staatusID+")";
-			stmt.executeUpdate(query);
+			stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+			
+			ResultSet rs = stmt.getGeneratedKeys();
+			
+			if(rs.next()){
+				try {
+					
+					Statement stmt2 = con.createStatement();
+					String query2 = "SELECT staatusNimi FROM staatused WHERE staatusID="+staatusID;
+					ResultSet rs2 = stmt2.executeQuery(query2);
+					
+					rs2.next();
+					
+					String staatusnimi = rs2.getString("staatusNimi");
+					
+					Statement stmt3 = con.createStatement();
+					String query3 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+rs.getInt(1)+",'Kasutaja kasutaja tekitas projekti staatusesse : "+staatusnimi+"')";
+					stmt3.executeUpdate(query3);
+				
+					try{rs2.close();stmt2.close();}catch(Exception x){}
+					try{stmt3.close();}catch(Exception x){}
+				} catch (SQLException e) {
+					e.printStackTrace();
+				}
+			}
 			
 			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			e.printStackTrace();
 			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
-		}
-		
-		try {
-			Statement stmt2 = con.createStatement();
-			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+projekt.getId()+","+"'Projekt loodi kasutaja "+"Kasutaja"+" poolt')";
-			stmt2.executeUpdate(query2);
-			try{stmt2.close();}catch(Exception x){}
-		} catch (SQLException e) {
 		}
 		
 		if (con!=null) try {con.close();}catch (Exception ignore) {}
@@ -740,6 +756,24 @@ public class Projekt {
 		} catch (SQLException e) {
 			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		try {
+			Statement stmt1 = con.createStatement();
+			String query1 = "SELECT staatusNimi FROM staatused WHERE staatusID="+staatusID;
+			ResultSet rs = stmt1.executeQuery(query1);
+			
+			rs.next();
+			
+			String staatusnimi = rs.getString("staatusNimi");
+			
+			Statement stmt2 = con.createStatement();
+			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+projektID+","+"'"+"Kasutaja"+" muutis projekti staatust : "+staatusnimi+"')";
+			stmt2.executeUpdate(query2);
+			
+			try{rs.close();stmt.close();}catch(Exception x){}
+			try{stmt2.close();}catch(Exception x){}
+		} catch (SQLException e) {
 		}
 		
 		if (con!=null) try {con.close();}catch (Exception ignore) {}

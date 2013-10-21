@@ -11,7 +11,6 @@
 	<script src="${pageContext.request.contextPath}/scripts/menu.js" type="text/javascript" ></script>
 	<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 	<script src="${pageContext.request.contextPath}/scripts/projekt.js" type="text/javascript" ></script>
-	<script src="${pageContext.request.contextPath}/scripts/dragNdrop.js" type="text/javascript" ></script>
 	
 	<link rel="shortcut icon" href="${pageContext.request.contextPath}/images/bizint2.ico">
 
