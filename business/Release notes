@@ -11,34 +11,35 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Saab projektide kulusid kustutada
 * Saab muuta projekti nime
 * Saab kustutada projekti
-* Logifunktsioon, mis jäädvustab kõik kasutaja tegevused ning hiljemalt kuvab need logisse
-* Saab eemaldada projektist projektiga seotud töötajaid
-* Saab lisada töötajaid projekti
-* Saab eemaldada töötajaid projektist
-* Saab muuta töötajatega seotud andmeid projektis (osalus, aktiivsus, vastutaja)
-* Saab lisada töötajaid
-* Saab kustutada töötajaid
+* Logifunktsioon, mis jï¿½ï¿½dvustab kï¿½ik kasutaja tegevused ning hiljemalt kuvab need logisse
+* Saab eemaldada projektist projektiga seotud tï¿½ï¿½tajaid
+* Saab lisada tï¿½ï¿½tajaid projekti
+* Saab eemaldada tï¿½ï¿½tajaid projektist
+* Saab muuta tï¿½ï¿½tajatega seotud andmeid projektis (osalus, aktiivsus, vastutaja)
+* Saab lisada tï¿½ï¿½tajaid
+* Saab kustutada tï¿½ï¿½tajaid
 * Saab muuta staatuse nime
 * Saab vaadata pipeline vaadet
-* Saab vaadata töötajate vaates kuupalkasid ja projektide pealt tulevaid tulusid ( osakaal x kõik tulud ) aasta vältel, iga kuu eraldi. Saab valida aastat.
-* Saab muuta töötajate palkasid aastate ja kuude kaupa
+* Saab vaadata tï¿½ï¿½tajate vaates kuupalkasid ja projektide pealt tulevaid tulusid ( osakaal x kï¿½ik tulud ) aasta vï¿½ltel, iga kuu eraldi. Saab valida aastat.
+* Saab muuta tï¿½ï¿½tajate palkasid aastate ja kuude kaupa
 * Saab kustutada staatust
-* Saab muuta töötaja nime
+* Saab muuta tï¿½ï¿½taja nime
+* Saab projekti tÃµsta Ã¼hest staatusest teise
 
--- Lisamärkused
-* Süntaksiliselt valesti lisatud tulu/kulu asendatakse automaatselt 0 -ga
+-- Lisamï¿½rkused
+* Sï¿½ntaksiliselt valesti lisatud tulu/kulu asendatakse automaatselt 0 -ga
 * Kasutajaid ei saa projekti mitmekordselt lisada (loogiline)
-* Projektil saab olla ainult üks vastutaja
-* Süntaksiliselt valesti olev töötaja osalus projektis muudetakse (võetakse ära vigased karakterid, mitme punkti korral arvestatakse vasakult esimest)
-* Staatused on kuvatud vastavalt nende järekorranumbrile
-* Töötaja kustutamine töötaja vaates ei eemalda teda olemas olevatest ning olnud projektidest (ajalugu säilib)
-* Staatust saab kustutada ainult siis, kui temaga pole seotud ühtegi projekti
+* Projektil saab olla ainult ï¿½ks vastutaja
+* Sï¿½ntaksiliselt valesti olev tï¿½ï¿½taja osalus projektis muudetakse (vï¿½etakse ï¿½ra vigased karakterid, mitme punkti korral arvestatakse vasakult esimest)
+* Staatused on kuvatud vastavalt nende jï¿½rekorranumbrile
+* Tï¿½ï¿½taja kustutamine tï¿½ï¿½taja vaates ei eemalda teda olemas olevatest ning olnud projektidest (ajalugu sï¿½ilib)
+* Staatust saab kustutada ainult siis, kui temaga pole seotud ï¿½htegi projekti
 
 -- Bug fixes
-* Kommentaaride kuupäev parandatud
-* Kommentaaride järjekord parandatud ( vanemad asuvad all pool )
+* Kommentaaride kuupï¿½ev parandatud
+* Kommentaaride jï¿½rjekord parandatud ( vanemad asuvad all pool )
 * kirjelduse lahter on textarea, enne oli textfield
-* kommentaarimise lahter on nüüd textarea
+* kommentaarimise lahter on nï¿½ï¿½d textarea
 
 -- Teada olevad probleemid
 * Liiga suurte tulude/kulude korral kuvab *10 astmetega (E)
