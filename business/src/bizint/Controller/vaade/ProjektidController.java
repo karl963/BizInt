@@ -32,7 +32,12 @@ public class ProjektidController {
 	
 	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.GET)
 	public String vaadeProjektid(HttpServletRequest request,Model m){
-
+		
+		if(request.getSession().getAttribute("kasutajaNimi") == null){
+			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
+			return "redirect:/vaadeViga.htm";
+		}
+		
 		staatused = new ArrayList<Staatus>();
 		
 		Connection con = new Mysql().getConnection();;

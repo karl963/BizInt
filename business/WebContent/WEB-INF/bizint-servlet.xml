@@ -21,6 +21,12 @@ xsi:schemaLocation="http://www.springframework.org/schema/mvc http://www.springf
     <context:component-scan base-package="bizint.post" />
        
     <bean id="viewResolver" class="org.springframework.web.servlet.view.ResourceBundleViewResolver" p:basename="views" />
+   
+    <bean id="urlViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">
+    	<property name="viewClass" value="org.springframework.web.servlet.view.tiles2.TilesView" />
+    	<property name="order" value="2" />
+    </bean>  
+    
     <bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer" p:definitions="/WEB-INF/tiles-configuration.xml" />    
 
 	<bean id="andmebaasiProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">

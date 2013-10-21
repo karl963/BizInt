@@ -10,5 +10,5 @@
 </div>
 
 <center>  
-<h1>${message}</h1>
+<h1>${teade}</h1>
 </center> 

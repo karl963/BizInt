@@ -41,7 +41,12 @@ public class ProjektController {
 	private String teade = null;
 	
 	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.GET, params={"id"})
-	public String vaadeProjektEsimene(@RequestParam("id") int projektID, Model m) {
+	public String vaadeProjektEsimene(HttpServletRequest request,@RequestParam("id") int projektID, Model m) {
+		
+		if(request.getSession().getAttribute("kasutajaNimi") == null){
+			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
+			return "redirect:/vaadeViga.htm";
+		}
 		
 		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
 		List<Logi> logi = new ArrayList<Logi>();
@@ -238,7 +243,12 @@ public class ProjektController {
 	}
 
 	@RequestMapping("/vaadeProjektTeine.htm")
-	public String vaadeProjektTeine(@RequestParam("id") int projektID, Model m) {
+	public String vaadeProjektTeine(HttpServletRequest request,@RequestParam("id") int projektID, Model m) {
+		
+		if(request.getSession().getAttribute("kasutajaNimi") == null){
+			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
+			return "redirect:/vaadeViga.htm";
+		}
 		
 		List<Kulu> kulud = new ArrayList<Kulu>();
 		List<Tulu> tulud = new ArrayList<Tulu>();

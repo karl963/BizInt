@@ -6,6 +6,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.view.RedirectView;
 
 import bizint.andmebaas.Mysql;
 import bizint.app.alam.Kasutaja;
@@ -28,7 +32,12 @@ public class PipelineController {
 	private String teade;
 
 	@RequestMapping(value = "/vaadePipeline.htm", method = RequestMethod.GET)
-	public String vaadePipeline(Model m) {
+	public String vaadePipeline(HttpServletRequest request,Model m) {
+		
+		if(request.getSession().getAttribute("kasutajaNimi") == null){
+			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
+			return "redirect:/vaadeViga.htm";
+		}
 		
 		staatused = new ArrayList<Staatus>();
 		

@@ -42,7 +42,12 @@ public class TootajadController {
 	private String teade;
 
 	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.GET)
-	public String vaadeTootajadTabel(Model m) {
+	public String vaadeTootajadTabel(HttpServletRequest request,Model m) {
+		
+		if(request.getSession().getAttribute("kasutajaNimi") == null){
+			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
+			return "redirect:/vaadeViga.htm";
+		}
 		
 		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
 	
@@ -140,8 +145,13 @@ public class TootajadController {
 	}
 	
 	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.GET, params = {"aasta"})
-	public String vaadeTootajadTabelValitudAasta(@RequestParam("aasta") int aasta, Model m) {
+	public String vaadeTootajadTabelValitudAasta(HttpServletRequest request,@RequestParam("aasta") int aasta, Model m) {
 
+		if(request.getSession().getAttribute("kasutajaNimi") == null){
+			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
+			return "redirect:/vaadeViga.htm";
+		}
+		
 		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
 		
 		Connection con = new Mysql().getConnection();
@@ -271,7 +281,12 @@ public class TootajadController {
 	}
 
 	@RequestMapping(value = "/vaadeTootajadGraaf.htm", method = RequestMethod.GET)
-	public String vaadeTootajadGraaf(Model m) {
+	public String vaadeTootajadGraaf(HttpServletRequest request,Model m) {
+		
+		if(request.getSession().getAttribute("kasutajaNimi") == null){
+			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
+			return "redirect:/vaadeViga.htm";
+		}
 		
 		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
 		
@@ -341,7 +356,7 @@ public class TootajadController {
 	
 	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.POST, params = {"tootajad","aastaNumber"})
 	public void salvestaTootajatePalgad(HttpServletRequest request, HttpServletResponse response,@RequestParam("tootajad") String tootajad,@RequestParam("aastaNumber") int aasta){
-
+		
 		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
 		
 		for(String rida : tootajad.split("/")){
