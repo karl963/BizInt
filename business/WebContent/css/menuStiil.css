@@ -423,3 +423,16 @@ h1
 {
 	width:200px;
 }
+
+.ajutineDiv {  
+	position:relative;
+	left:10px;
+	width:178px;
+	height: 50px;  
+	border: solid 1px #c0c0c0;  
+	background-color: #e1e1e1;
+}
+
+.ribaDiv{
+	height: 10px;
+}

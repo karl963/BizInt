@@ -351,9 +351,53 @@ function dragStart(ev, projektID) {
 
 function dragEnter(ev,staatusID) {
 	draggableStaatusID = staatusID;
-	event.preventDefault();
+	ev.preventDefault();
 	return true;
 }
+
+var kasTuhiDivOnLoodud = false;
+var kasOnSamalDivil;
+
+function dragOverStaatus(ev,staatusID) {
+	var divID;
+	divID = staatusID;
+	if(!kasTuhiDivOnLoodud){
+		kasOnSamalDivil = divID;
+		var divTag = document.createElement("div"); 
+		divTag.id = "ajutine"; 
+		divTag.className = "ajutineDiv";
+		var divIdNimi = divID+"staatusDiv";
+		document.getElementById(divIdNimi).appendChild(divTag);
+		kasTuhiDivOnLoodud = true;		
+	}
+	if(kasOnSamalDivil != divID){
+		document.getElementById("ajutine").remove();
+		kasTuhiDivOnLoodud = false;
+	}
+	return false;
+}
+
+function dragOverProjekt(ev,projektID) {
+	var divID;
+	divID = projektID;
+	if(!kasTuhiDivOnLoodud){
+			kasOnSamalDivil = divID;
+			var divTag = document.createElement("div"); 
+			divTag.id = "ajutine"; 
+			divTag.className = "ajutineDiv";
+			var divIdNimi = divID+"projektDiv";
+			document.getElementById(divIdNimi).appendChild(divTag);
+			kasTuhiDivOnLoodud = true;
+		
+		}
+		if(kasOnSamalDivil != divID){
+			document.getElementById("ajutine").remove();
+			kasTuhiDivOnLoodud = false;
+		}
+	
+	return false;
+}
+
 
 function dragOver(ev) {
 	return false;
@@ -378,4 +422,5 @@ function muudaProjektiStaatust(){
 	    }
 	});
 };
+
 
