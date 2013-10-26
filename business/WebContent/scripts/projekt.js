@@ -39,6 +39,17 @@ $(document).ready(function(){
 		$(this).closest(".staatuseNimi").children(".kustutaStaatusConfirmationDiv").hide();
 	});
 	
+	$("#logiAvamine").click(function () {
+		if($(this).html()=="Ava logi"){
+			$("#logiTabel").show();
+			$(this).html("Sulge logi");
+		}
+		else{
+			$("#logiTabel").hide();
+			$(this).html("Ava logi");
+		}
+	});
+	
 });
 
 function lisaProjektiKasutaja(pid){
