@@ -24,7 +24,7 @@ public class Kasutaja {
 	private Double osalus;
 	private boolean vastutaja, aktiivne;
 	private int projektID,kasutajaID;
-	private List<TabeliData> tabeliAndmed;
+	private TabeliData tabeliAndmed;
 
 	  ///////////\\\\\\\\\\\\
 	 ///// constructors \\\\\\
@@ -156,7 +156,7 @@ public class Kasutaja {
 		return Kasutaja.KÕIK_OKEI;
 	}
 	
-	public static int muudaKasutajatePalkasidAndmebaasis(List<Kasutaja> kasutajad){
+	public static int muudaKasutajatePalkasidAndmebaasis(List<Kasutaja> kasutajad,int aasta){
 		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -177,21 +177,25 @@ public class Kasutaja {
 				
 				try{rs0.close();stmt0.close();}catch(Exception x){}
 				
-				for(TabeliData t : k.getTabeliAndmed()){
+				for(int i = 0;i<3;i++){
+					
+					Double palk = k.getTabeliAndmed().getPalgad()[i];
+					int kuu = k.getTabeliAndmed().getKuud()[i];
+					int päev = k.getTabeliAndmed().getPalgaKuupäevad()[i];
 					
 					Statement stmt = con.createStatement();
-					String query = "SELECT palk FROM palgad WHERE kasutaja_ID = "+k.getKasutajaID()+" AND kuu="+t.getKuuNumber()+" AND aasta="+t.getAasta();
+					String query = "SELECT palk FROM palgad WHERE kasutaja_ID = "+k.getKasutajaID()+" AND kuu="+kuu+" AND aasta="+aasta;
 					ResultSet rs = stmt.executeQuery(query);
 					
 					if(rs.next()){ // kui meil oli juba sissekanne, siis uuendame
 						Statement stmt2 = con.createStatement();
-						String query2 = "UPDATE palgad SET palk="+t.getPalk()+" WHERE kuu="+t.getKuuNumber()+" AND aasta="+t.getAasta()+" AND kasutaja_ID = "+k.getKasutajaID();
+						String query2 = "UPDATE palgad SET palk="+palk+", päev="+päev+" WHERE kuu="+kuu+" AND aasta="+aasta+" AND kasutaja_ID = "+k.getKasutajaID();
 						stmt2.executeUpdate(query2);
 						try{stmt2.close();}catch(Exception x){}
 					}
 					else{ // kui palka polnud lisatud, siis lisame
 						Statement stmt2 = con.createStatement();
-						String query2 = "INSERT INTO palgad (kasutaja_ID,palk,kuu,aasta) VALUES ("+k.getKasutajaID()+","+t.getPalk()+","+t.getKuuNumber()+","+t.getAasta()+")";
+						String query2 = "INSERT INTO palgad (kasutaja_ID,palk,kuu,aasta,päev) VALUES ("+k.getKasutajaID()+","+palk+","+kuu+","+aasta+","+päev+")";
 						stmt2.executeUpdate(query2);
 						try{stmt2.close();}catch(Exception x){}
 					}
@@ -267,11 +271,11 @@ public class Kasutaja {
 		this.projektID = projektID;
 	}
 
-	public List<TabeliData> getTabeliAndmed() {
+	public TabeliData getTabeliAndmed() {
 		return tabeliAndmed;
 	}
 
-	public void setTabeliAndmed(List<TabeliData> tabeliAndmed) {
+	public void setTabeliAndmed(TabeliData tabeliAndmed) {
 		this.tabeliAndmed = tabeliAndmed;
 	}
 	

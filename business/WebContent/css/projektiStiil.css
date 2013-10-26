@@ -63,6 +63,9 @@
 #tootajateTabel{
 	margin-left:10px;
 }
+#tootajateTabel td{
+	padding:5px;
+}
 #tootajateTabel td.tootajaNimi{
 	min-width:150px;
 	max-width:150px;
