@@ -14,6 +14,7 @@ public class Kulu {
 	private Date aeg;
 	private int projektID;
 	private String stringAeg;
+	private String kasutajaNimi = "";
 	
 	  ///////////\\\\\\\\\\\\
 	 ///// constructors \\\\\\
@@ -99,6 +100,14 @@ public class Kulu {
 
 	public void setStringAeg(String stringAeg) {
 		this.stringAeg = stringAeg;
+	}
+
+	public String getKasutajaNimi() {
+		return kasutajaNimi;
+	}
+
+	public void setKasutajaNimi(String kasutajaNimi) {
+		this.kasutajaNimi = kasutajaNimi;
 	}
 
 }

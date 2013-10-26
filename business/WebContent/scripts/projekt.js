@@ -50,6 +50,21 @@ $(document).ready(function(){
 		}
 	});
 	
+	$("#kuluPalk").click(function () {
+		if($(this).is(':checked')){
+			$("#tootajadList").show();
+			$("#kuluKirjeldus").hide();
+		}
+		else{
+			$("#tootajadList").hide();
+			$("#kuluKirjeldus").show();
+		}
+	});
+	
+	$("#tootajaKuluValimine").change(function () {
+		$("#palkKasutajaNimi").val($("#tootajaKuluValimine").val());
+	});
+	
 });
 
 function lisaProjektiKasutaja(pid){

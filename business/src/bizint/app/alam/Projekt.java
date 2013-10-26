@@ -412,9 +412,16 @@ public class Projekt {
 			
 			Timestamp aeg = new Timestamp(kulu.getAeg().getTime());
 		
-			String query = "INSERT INTO kulud (kulu, aeg, kuluNimi, projekt_ID) "
-				+ "VALUES ("+kulu.getSumma()+",'"+aeg+"','"+kulu.getKuluNimi()+"',"+kulu.getProjektID()+")";
-			stmt.executeUpdate(query);
+			if(!kulu.getKasutajaNimi().equals("")){
+				String query = "INSERT INTO kulud (kulu, aeg, kuluNimi, projekt_ID, kaspalk) "
+						+ "VALUES ("+kulu.getSumma()+",'"+aeg+"','palk töötajale: "+kulu.getKasutajaNimi()+"',"+kulu.getProjektID()+",1)";
+				stmt.executeUpdate(query);
+			}
+			else{
+				String query = "INSERT INTO kulud (kulu, aeg, kuluNimi, projekt_ID) "
+					+ "VALUES ("+kulu.getSumma()+",'"+aeg+"','"+kulu.getKuluNimi()+"',"+kulu.getProjektID()+")";
+				stmt.executeUpdate(query);
+			}
 			
 			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {

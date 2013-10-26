@@ -69,11 +69,22 @@ Reiting: ${projekt.reitinguHTML}
 	Kulu:      <form:input class="smallInput" path="summa" value="0.0" />
 	Kuupäev:   <form:input maxlength="10" class="smallInput" path="stringAeg" />
 <br>
-	Kirjeldus: <form:input maxlength="100" class="bigInput" path="kuluNimi" value="" />
-			   <form:input path="projektID" type="hidden" value="${projekt.id}" />
-	           <form:input path="aeg.time" type="hidden" />
-	           <input class="projektDetailNupp" type="submit" value="lisa">
+	<div id="kuluKirjeldus">Kirjeldus: <form:input maxlength="100" class="bigInput" path="kuluNimi" value="" /></div>
+	<div style="display:none;" id="tootajadList">
+	<select id="tootajaKuluValimine">
+		<c:forEach items="${tootajad}" var="tootaja">
+			<option value="${tootaja}">${tootaja}</option>
+		</c:forEach>
+	</select>
+	</div>		
+		<form:input id="palkKasutajaNimi" path="kasutajaNimi" type="hidden"/>
+		<form:input path="projektID" type="hidden" value="${projekt.id}" />
+	    <form:input path="aeg.time" type="hidden" />
+	   	<input class="kuluLisamiseNupp projektDetailNupp" type="submit" value="lisa">
 </form:form>
+<div class="kuluPalkCheck" ><input type="checkbox" name="kuluPalk" id="kuluPalk">Töötaja Palk</div>
+
+<br>
 
 <b>Tulud ja kulud:</b>
 
