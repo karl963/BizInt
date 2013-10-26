@@ -294,7 +294,7 @@ public class TootajadController {
 		cal.setTime(new Date());
 		int hetkeAasta = aasta;
 		
-		int palgaKuupaev1 = 0;int palgaKuupaev2 = 0;int palgaKuupaev3 = 0;
+		int palgaKuupaev1 = 1;int palgaKuupaev2 = 1;int palgaKuupaev3 = 1;
 		
 		List<String> kuupaevad1 = new ArrayList<String>();
 		List<String> kuupaevad2 = new ArrayList<String>();
