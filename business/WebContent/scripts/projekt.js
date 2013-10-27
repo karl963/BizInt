@@ -56,6 +56,7 @@ $(document).ready(function(){
 			$("#kuluKirjeldus").hide();
 		}
 		else{
+			$("#palkKasutajaNimi").val("");
 			$("#tootajadList").hide();
 			$("#kuluKirjeldus").show();
 		}
