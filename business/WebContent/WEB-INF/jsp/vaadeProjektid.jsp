@@ -67,10 +67,10 @@
 		</form:form>
 	</div>
 
-	<div class="scrollwindow" ondragenter="return dragEnter(event,${staatus.id})" ondragover="return dragOver(event)" ondrop="return dragDrop(event)" >
+	<div id="${staatus.id}dropZone" class="scrollwindow" ondragenter="return dragEnter(event,${staatus.id})" ondragover="return dragOver(event)" ondrop="return dragDrop(event)" >
 		<c:forEach items="${staatus.projektid}" var="projekt">
 		<div id="${projekt.id}projektDiv"></div>
-		<div class="projektdiv" draggable="true" ondragstart="return dragStart(event,${projekt.id},${staatus.id},${projekt.projektiJärjekorraNumber})" ondragover="return dragOverProjekt(event,${projekt.id},${projekt.projektiJärjekorraNumber})">
+		<div id="${projekt.id}projektDrag" class="projektdiv" draggable="true" ondragstart="return dragStart(event,${projekt.id},${staatus.id},${projekt.projektiJärjekorraNumber})" ondragover="return dragOverProjekt(event,${projekt.id},${projekt.projektiJärjekorraNumber})">
 			
 			<div class="projektIdDiv" style="display:none;">${projekt.id}</div>
 			
@@ -109,7 +109,7 @@
 			</div>
 		</c:forEach>
 		
-		<div id="${staatus.id}staatusDiv" style="min-height:20px;height: calc( 340px - (${staatus.projektideArv}*75px));" ondragover="return dragOverStaatus(event,${staatus.id},'noJNR')"></div>
+		<div id="${staatus.id}staatusDiv" style="min-height:20px;height: calc( 340px - (${staatus.projektideArv}*78px));" ondragover="return dragOverStaatus(event,${staatus.id},'noJNR')"></div>
 
 	</div>
 	
