@@ -12,7 +12,7 @@
       
       <!-- Seda on vaja muuta, kui andmebaasi vahetad!!!! -->
       
-      <res-ref-name>jdbc/bizint</res-ref-name>
+      <res-ref-name>jdbc/business</res-ref-name>
       <res-type>javax.sql.DataSource</res-type>
       <res-auth>Container</res-auth>
     </resource-ref>
