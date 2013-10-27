@@ -343,9 +343,14 @@ $(document).ready(function(){
 
 var draggableProjektID;
 var draggableStaatusID;
+var draggableProjektiJNR;
+var draggableVanaStaatusID;
+var draggableVanaProjektiJNR;
 
-function dragStart(ev, projektID) {
+function dragStart(ev, projektID,staatusID,projektiJärjekorraNR) {
 	draggableProjektID = projektID;
+	draggableVanaStaatusID = staatusID;
+	draggableVanaProjektiJNR = projektiJärjekorraNR;
 	return true;
 }
 
@@ -358,26 +363,31 @@ function dragEnter(ev,staatusID) {
 var kasTuhiDivOnLoodud = false;
 var kasOnSamalDivil;
 
-function dragOverStaatus(ev,staatusID) {
-	var divID;
-	divID = staatusID;
-	if(!kasTuhiDivOnLoodud){
-		kasOnSamalDivil = divID;
-		var divTag = document.createElement("div"); 
-		divTag.id = "ajutine"; 
-		divTag.className = "ajutineDiv";
-		var divIdNimi = divID+"staatusDiv";
-		document.getElementById(divIdNimi).appendChild(divTag);
-		kasTuhiDivOnLoodud = true;		
-	}
-	if(kasOnSamalDivil != divID){
-		document.getElementById("ajutine").remove();
-		kasTuhiDivOnLoodud = false;
-	}
+
+function dragOverStaatus(ev,staatusID,jNR) {
+	draggableProjektiJNR = jNR;
+		draggableStaatusID = staatusID;
+		var divID;
+		divID = staatusID;
+		if(!kasTuhiDivOnLoodud){
+			kasOnSamalDivil = divID;
+			var divTag = document.createElement("div"); 
+			divTag.id = "ajutine"; 
+			divTag.className = "ajutineDiv";
+			var divIdNimi = divID+"staatusDiv";
+			document.getElementById(divIdNimi).appendChild(divTag);
+			kasTuhiDivOnLoodud = true;		
+		}
+		if(kasOnSamalDivil != divID){
+			document.getElementById("ajutine").remove();
+			kasTuhiDivOnLoodud = false;
+		}
+
 	return false;
 }
 
-function dragOverProjekt(ev,projektID) {
+function dragOverProjekt(ev,projektID,projektiJNR) {
+	draggableProjektiJNR = projektiJNR;
 	var divID;
 	divID = projektID;
 	if(!kasTuhiDivOnLoodud){
@@ -389,15 +399,14 @@ function dragOverProjekt(ev,projektID) {
 			document.getElementById(divIdNimi).appendChild(divTag);
 			kasTuhiDivOnLoodud = true;
 		
-		}
-		if(kasOnSamalDivil != divID){
-			document.getElementById("ajutine").remove();
-			kasTuhiDivOnLoodud = false;
-		}
+	}
+	if(kasOnSamalDivil != divID){
+		document.getElementById("ajutine").remove();
+		kasTuhiDivOnLoodud = false;
+	}
 	
 	return false;
 }
-
 
 function dragOver(ev) {
 	return false;
@@ -409,11 +418,16 @@ function dragDrop(ev) {
 }
 
 function muudaProjektiStaatust(){
+	if(draggableProjektiJNR == "noJNR"){
+		draggableProjektiJNR = -99;
+	}
 
 	$.ajax({
 	    type : "POST",
 	    url : rakenduseNimi+"/vaadeProjektid.htm",
-	    data : {staatusDragId: draggableStaatusID, projektDragId: draggableProjektID},
+	    data : {staatusDragId: draggableStaatusID, projektDragId: draggableProjektID,
+	    	projektiDragJNR: draggableProjektiJNR, staatusVanaDragId: draggableVanaStaatusID, 
+	    	projektiVanaDragJNR: draggableVanaProjektiJNR},
 	    success : function(response) {
 	    	document.location.href = "vaadeProjektid.htm";
 	    },

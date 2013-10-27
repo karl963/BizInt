@@ -424,7 +424,7 @@ h1
 	width:200px;
 }
 
-.ajutineDiv {  
+.ajutineDiv {
 	position:relative;
 	left:10px;
 	width:178px;
@@ -434,5 +434,7 @@ h1
 }
 
 .ribaDiv{
-	height: 10px;
+
+	height:10px;
+
 }

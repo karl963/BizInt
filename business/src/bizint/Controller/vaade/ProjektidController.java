@@ -28,6 +28,7 @@ import bizint.app.alam.rahaline.Tulu;
 public class ProjektidController {
 	
 	private List<Staatus> staatused = new ArrayList<Staatus>();
+	//private List<Projekt> projektid = new ArrayList<Projekt>();
 	private String teade;
 	
 	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.GET)
@@ -62,7 +63,7 @@ public class ProjektidController {
 				staatus.setNimi(staatusNimi);
 				staatus.setId(staatusID);
 				
-				String query2 = "SELECT projektNimi, projektID FROM projektid WHERE staatus_ID="+staatusID;
+				String query2 = "SELECT projektNimi, projektID, projektiJärjekorraNR FROM projektid WHERE staatus_ID="+staatusID;
 				Statement stmt2 = con.createStatement();
 				ResultSet rs2 = stmt2.executeQuery(query2);
 				
@@ -74,6 +75,7 @@ public class ProjektidController {
 					
 					int projektID = rs2.getInt("projektID");
 					String projektNimi = rs2.getString("projektNimi");
+					int projektiJärjekorraNumber = rs2.getInt("projektiJärjekorraNR");
 					
 					String query3 = "SELECT kasutajaNimi, vastutaja FROM projektikasutajad, kasutajad WHERE kasutajaID=kasutaja_ID AND projekt_ID="+projektID;
 					Statement stmt3 = con.createStatement();
@@ -113,6 +115,7 @@ public class ProjektidController {
 					projekt.setTulud(tulud);
 					projekt.setKasutajad(kasutajad);
 					projekt.setId(projektID);
+					projekt.setProjektiJärjekorraNumber(projektiJärjekorraNumber);
 					
 					projektid.add(projekt);
 					
@@ -120,6 +123,7 @@ public class ProjektidController {
 				
 				try{rs2.close();stmt2.close();}catch(Exception x){}
 				
+				projektid = paneProjektidJärjekorda(projektid);
 				staatus.setProjektid(projektid);
 				
 				staatused.add(staatus);
@@ -173,6 +177,34 @@ public class ProjektidController {
 		
 		return uusList;
 	}
+	
+	private List<Projekt> paneProjektidJärjekorda(List<Projekt> projektid){
+		List<Projekt> uusList = new ArrayList<Projekt>();
+		
+		while(projektid.size()>0){
+			
+			int väikseimI = 0;
+			int väikseim = 99;
+			int index = 0;
+			
+			for(Projekt p : projektid){
+				
+				if(p.getProjektiJärjekorraNumber()<väikseim){
+					väikseim = p.getProjektiJärjekorraNumber();
+					väikseimI = index;
+				}
+				
+				index++;
+			}
+			
+			uusList.add(projektid.get(väikseimI));
+			projektid.remove(väikseimI);
+			
+		}
+		
+		return uusList;
+	}
+	
 
 	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"nimi"})
 	public View addStaatus(@ModelAttribute("uusStaatus") Staatus staatus, Model m){
@@ -254,10 +286,12 @@ public class ProjektidController {
 	}
 	
 	
-	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"projektDragId","staatusDragId"})
-	public View muudaProjektiStaatust(@RequestParam(value="staatusDragId", required=true) int staatusID,@RequestParam(value="projektDragId", required=true) int projektID, Model m){
+	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"projektDragId","staatusDragId","projektiDragJNR"})
+	public View muudaProjektiStaatust(@RequestParam(value="staatusDragId", required=true) int staatusID,@RequestParam(value="projektDragId", required=true) int projektID,
+			@RequestParam(value="projektiDragJNR", required=true) int projektiJärjekorraNR,@RequestParam(value="staatusVanaDragId", required=true) int staatusVanaID,
+			@RequestParam(value="projektiVanaDragJNR", required=true) int projektiVanaJärjekorraNR,Model m){
 
-		int vastus = Projekt.muudaProjektiStaatustAndmebaasis(projektID,staatusID);
+		int vastus = Projekt.muudaProjektiStaatustAndmebaasis(projektID,staatusID,projektiJärjekorraNR,staatusVanaID,projektiVanaJärjekorraNR);
 		
 		if(vastus == Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";

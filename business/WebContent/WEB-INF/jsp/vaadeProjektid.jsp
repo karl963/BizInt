@@ -70,7 +70,7 @@
 	<div class="scrollwindow" ondragenter="return dragEnter(event,${staatus.id})" ondragover="return dragOver(event)" ondrop="return dragDrop(event)" >
 		<c:forEach items="${staatus.projektid}" var="projekt">
 		<div id="${projekt.id}projektDiv"></div>
-		<div draggable="true" ondragstart="return dragStart(event,${projekt.id})" ondragover="return dragOverProjekt(event,${projekt.id})">
+		<div draggable="true" ondragstart="return dragStart(event,${projekt.id},${staatus.id},${projekt.projektiJärjekorraNumber})" ondragover="return dragOverProjekt(event,${projekt.id},${projekt.projektiJärjekorraNumber})">
 			<a href="vaadeProjektEsimene.htm?id=${projekt.id}">
 			<table class=project>
 				<tr>
@@ -89,7 +89,8 @@
 			<p></p>
 			</div>
 		</c:forEach>
-		<div id="${staatus.id}staatusDiv" class="ribaDiv" ondragover="return dragOverStaatus(event,${staatus.id})"></div>
+		
+		<div id="${staatus.id}staatusDiv" style="min-height:20px;height: calc( 340px - (${staatus.projektideArv}*75px));" ondragover="return dragOverStaatus(event,${staatus.id},'noJNR')"></div>
 
 	</div>
 	

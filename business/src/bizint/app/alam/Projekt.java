@@ -24,6 +24,7 @@ public class Projekt {
 	private static final String DEFAULT_NIMI = "uus projekt";
 	private static final String DEFAULT_KIRJELDUS = "lahe projekt";
 	private static final int DEFAULT_REITING = 0;
+	private static final int DEFAULT_PROJEKTI_JÄRJEKORRA_NUMBER = 0;
 	public static final int ERROR_JUBA_EKSISTEERIB = 0, VIGA_ANDMEBAASIGA_ÜHENDUMISEL = 1, KÕIK_OKEI = 2;
 	
 	private String nimi,kirjeldus;
@@ -36,6 +37,7 @@ public class Projekt {
 	private int reiting;
 	private int staatusID;
 	private String reitinguHTML;
+	private int projektiJärjekorraNumber;
 	
 	  ///////////\\\\\\\\\\\\
 	 ///// constructors \\\\\\
@@ -50,6 +52,7 @@ public class Projekt {
 		this.kommentaarid = new ArrayList<Kommentaar>(); 
 		this.logi = new ArrayList<Logi>();
 		this.reiting = Projekt.DEFAULT_REITING;
+		this.setProjektiJärjekorraNumber(Projekt.DEFAULT_PROJEKTI_JÄRJEKORRA_NUMBER);
 	}
 	
 	public Projekt(String nimi){
@@ -61,6 +64,19 @@ public class Projekt {
 		this.kommentaarid = new ArrayList<Kommentaar>(); 
 		this.logi = new ArrayList<Logi>();
 		this.reiting = Projekt.DEFAULT_REITING;
+		this.setProjektiJärjekorraNumber(Projekt.DEFAULT_PROJEKTI_JÄRJEKORRA_NUMBER);
+	}
+	
+	public Projekt(String nimi, int projektiJärjekorraNumber){
+		this.nimi = nimi;
+		this.kirjeldus = Projekt.DEFAULT_KIRJELDUS;
+		this.kasutajad = new ArrayList<Kasutaja>();
+		this.tulud = new ArrayList<Tulu>();
+		this.kulud = new ArrayList<Kulu>(); 
+		this.kommentaarid = new ArrayList<Kommentaar>(); 
+		this.logi = new ArrayList<Logi>();
+		this.reiting = Projekt.DEFAULT_REITING;
+		this.setProjektiJärjekorraNumber(projektiJärjekorraNumber);
 	}
 	
 	  ///////////\\\\\\\\\\\\
@@ -99,6 +115,31 @@ public class Projekt {
 		return null;
 	}
 	
+	public static List<Projekt> paneJärjekorda(List<Projekt> projektid){
+		
+		List<Projekt> sorteeritudProjektid = new ArrayList<Projekt>();
+		
+		while(projektid.size() > 0 ){
+			int väikseimNumber = projektid.get(0).getProjektiJärjekorraNumber();
+			int index = 0;
+			int i = 0;
+			
+			for(Projekt p : projektid){
+				if(p.getProjektiJärjekorraNumber() < väikseimNumber){
+					väikseimNumber = p.getProjektiJärjekorraNumber();
+					index = i;
+				}
+				i++;
+			}
+			
+			sorteeritudProjektid.add(projektid.get(index));
+			projektid.remove(index);
+		}
+		
+		return sorteeritudProjektid;
+		
+	}
+	
 	public static int lisaProjektAndmebaasi(Projekt projekt,int staatusID){
 		
 		Connection con = new Mysql().getConnection();
@@ -107,8 +148,19 @@ public class Projekt {
 		}
 		
 		try {
+			
+			int projektiJärjekorraNR = 1;
+			
+			Statement stmt0 = con.createStatement();
+			String query0 = "SELECT MAX(projektiJärjekorraNR) AS max FROM projektid WHERE staatus_ID="+staatusID;
+			ResultSet rs0 = stmt0.executeQuery(query0);
+			
+			if(rs0.next()){
+				projektiJärjekorraNR = rs0.getInt("max") + 1;
+			}
+			
 			Statement stmt = con.createStatement();
-			String query = "INSERT INTO projektid (projektNimi, staatus_ID) VALUES ('"+projekt.getNimi()+"',"+staatusID+")";
+			String query = "INSERT INTO projektid (projektNimi, staatus_ID, projektiJärjekorraNR) VALUES ('"+projekt.getNimi()+"',"+staatusID+","+projektiJärjekorraNR+")";
 			stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
 			
 			ResultSet rs = stmt.getGeneratedKeys();
@@ -134,7 +186,6 @@ public class Projekt {
 					e.printStackTrace();
 				}
 			}
-			
 			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -621,11 +672,29 @@ public class Projekt {
 		
 		try {
 			
+			Statement stmt0 = con.createStatement();
+			String query0 = "SELECT projektiJärjekorraNR AS jNR FROM projektid WHERE projektID="+id;
+			ResultSet rs0 = stmt0.executeQuery(query0);
+			
+			rs0.next();
+			int projektiJärjekorraNR = rs0.getInt("jNR");
+			
+			Statement stmt2 = con.createStatement();
+			String query2 = "SELECT staatus_ID AS idStaatus FROM projektid WHERE projektID="+id;
+			ResultSet rs2 = stmt2.executeQuery(query2);
+			
+			rs2.next();
+			String staatus = rs2.getString("idStaatus");
+			
+			Statement stmt1 = con.createStatement();
+			String query1 = "UPDATE projektid SET projektiJärjekorraNR=projektiJärjekorraNR - 1 WHERE projektiJärjekorraNR>"+projektiJärjekorraNR+" AND staatus_ID="+staatus;
+			stmt1.executeUpdate(query1);
+			
 			Statement stmt = con.createStatement();
 			String query = "DELETE FROM projektid WHERE projektID="+id;
 			stmt.executeUpdate(query);
 			
-			try{stmt.close();}catch(Exception x){}
+			try{stmt2.close();stmt1.close();stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			if (con!=null) try {con.close();}catch (Exception ignore) {}
@@ -741,18 +810,54 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 	}
 	
-	public static int muudaProjektiStaatustAndmebaasis(int projektID, int staatusID) {
+	public static int muudaProjektiStaatustAndmebaasis(int projektID, int staatusID, int projektiJärjekorraNR, int staatusVanaID, int projektiVanaJärjekorraNR) {
 		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		Statement stmt;
 		try {
+			if(projektiJärjekorraNR < 0){
+				projektiJärjekorraNR = 1;
+				Statement stmt3 = con.createStatement();
+				String query3 = "SELECT MAX(projektiJärjekorraNR) AS max FROM projektid WHERE staatus_ID="+staatusID;
+				ResultSet rs = stmt3.executeQuery(query3);
+				rs.next();
+				projektiJärjekorraNR = rs.getInt("max")+1;
+				try{stmt3.close();}catch(Exception x){}
+			}
+			
+			if(staatusID == staatusVanaID){
+				if(projektiJärjekorraNR != 1 && projektiVanaJärjekorraNR-projektiJärjekorraNR<0){
+					projektiJärjekorraNR -= 1;
+					Statement stmt1 = con.createStatement();
+					String query1 = "UPDATE projektid SET projektiJärjekorraNR=projektiJärjekorraNR +1 WHERE staatus_ID=" + staatusID + " AND projektiJärjekorraNR>"+projektiJärjekorraNR;
+					stmt1.executeUpdate(query1);
+					try{stmt1.close();}catch(Exception x){}
+				}
+				else{
+					Statement stmt1 = con.createStatement();
+					String query1 = "UPDATE projektid SET projektiJärjekorraNR=projektiJärjekorraNR +1 WHERE staatus_ID=" + staatusID + " AND projektiJärjekorraNR>="+projektiJärjekorraNR;
+					stmt1.executeUpdate(query1);
+					try{stmt1.close();}catch(Exception x){}
+				}
+			}
+			else{
+				Statement stmt1 = con.createStatement();
+				String query1 = "UPDATE projektid SET projektiJärjekorraNR=projektiJärjekorraNR +1 WHERE staatus_ID=" + staatusID + " AND projektiJärjekorraNR>="+projektiJärjekorraNR;
+				stmt1.executeUpdate(query1);
+				try{stmt1.close();}catch(Exception x){}
+			}
+			
+			Statement stmt2 = con.createStatement();
+			String query2 = "UPDATE projektid SET projektiJärjekorraNR=projektiJärjekorraNR -1 WHERE staatus_ID=" + staatusVanaID + " AND projektiJärjekorraNR>"+projektiVanaJärjekorraNR;
+			stmt2.executeUpdate(query2);
+			
 			stmt = con.createStatement();
-			String query = "UPDATE projektid SET staatus_ID="+ staatusID + " where projektID=" + projektID;
+			String query = "UPDATE projektid SET staatus_ID="+ staatusID + " , projektiJärjekorraNR="+ projektiJärjekorraNR +" WHERE projektID=" + projektID;
 			stmt.executeUpdate(query);
 			
-			try{stmt.close();}catch(Exception x){}
+			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
 			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
@@ -892,7 +997,14 @@ public class Projekt {
 	public void setReitinguHTML(String reitinguHTML) {
 		this.reitinguHTML = reitinguHTML;
 	}
+	
+	public int getProjektiJärjekorraNumber() {
+		return projektiJärjekorraNumber;
+	}
 
+	public void setProjektiJärjekorraNumber(int järjekorraNumber) {
+		this.projektiJärjekorraNumber = järjekorraNumber;
+	}
 
 	
 }
