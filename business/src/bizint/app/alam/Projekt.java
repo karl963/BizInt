@@ -916,11 +916,10 @@ public class Projekt {
 				int kasutajaID = rs.getInt("kasutajaID");
 				
 				Statement stmt2 = con.createStatement();
-				String query2 = "SELECT * FROM projektikasutajad WHERE kasutaja_ID="+kasutajaID;
+				String query2 = "SELECT * FROM projektikasutajad WHERE kasutaja_ID="+kasutajaID+" AND projekt_ID="+projektID;
 				ResultSet rs2 = stmt2.executeQuery(query2);
 				
 				if(rs2.next()){
-					
 					Statement stmt4 = con.createStatement();
 					String query4 = "UPDATE projektikasutajad SET vastutaja=1 WHERE kasutaja_ID="+kasutajaID+" AND projekt_ID="+projektID;
 					stmt4.executeUpdate(query4);
