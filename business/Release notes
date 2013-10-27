@@ -20,11 +20,13 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Saab kustutada t��tajaid
 * Saab muuta staatuse nime
 * Saab vaadata pipeline vaadet
-* Saab vaadata t��tajate vaates kuupalkasid ja projektide pealt tulevaid tulusid ( osakaal x k�ik tulud ) aasta v�ltel, iga kuu eraldi. Saab valida aastat.
+* Saab vaadata t��tajate vaates kuupalkasid ja projektide pealt tulevaid tulusid ( osakaal x k�ik tulud ) ) kvartali jaa aasta välel
 * Saab muuta t��tajate palkasid aastate ja kuude kaupa
 * Saab kustutada staatust
 * Saab muuta t��taja nime
 * Saab projekti tõsta ühest staatusest teise
+* Saab projekti järjekorda muuta staatuse sees
+* Töötajale saab määrata palka projekti siseselt
 
 -- Lisam�rkused
 * S�ntaksiliselt valesti lisatud tulu/kulu asendatakse automaatselt 0 -ga
@@ -44,6 +46,7 @@ Current RELEASED (taged) verison: 2.0 alpha
 -- Teada olevad probleemid
 * Liiga suurte tulude/kulude korral kuvab *10 astmetega (E)
 * Liiga suurte tulude korral muudetakse projektide vaates projekti lahter suuremaks
+* Projekti tõstmisel staatuse sees ei tööta kerimine
 
 ---------- version 2.0 alpha patch notes ----------
 
