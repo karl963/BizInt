@@ -5,6 +5,15 @@ Current RELEASED (taged) verison: 2.0 alpha
 ---------- under development patch notes ----------
 
 -- Uued omadused
+
+-Projektide vaade
+* Saab muuta staatuse nime
+* Saab kustutada staatust
+* Saab projekti tõsta ühest staatusest teise
+* Saab muuta muuta projekti vastutajat
+* Saab projekti järjekorda muuta staatuse sees
+
+-Projekti detaili vaade
 * Saab projektidele lisada tulusid
 * Saab projektidele lisada kulusid
 * Saab projektide tulusid kustutada
@@ -14,19 +23,20 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Logifunktsioon, mis j��dvustab k�ik kasutaja tegevused ning hiljemalt kuvab need logisse
 * Saab eemaldada projektist projektiga seotud t��tajaid
 * Saab lisada t��tajaid projekti
-* Saab eemaldada t��tajaid projektist
 * Saab muuta t��tajatega seotud andmeid projektis (osalus, aktiivsus, vastutaja)
+* Töötajale saab määrata palka projekti siseselt (kulu)
+
+-T��tajate vaade
+* Saab vaadata t��tajate vaates kuupalkasid ja projektide pealt tulevaid tulusid ( osakaal x k�ik tulud ) ) kvartali jaa aasta välel
+
+* Saab muuta t��tajate palkasid kvartalite kuude kaupa
 * Saab lisada t��tajaid
 * Saab kustutada t��tajaid
-* Saab muuta staatuse nime
-* Saab vaadata pipeline vaadet
-* Saab vaadata t��tajate vaates kuupalkasid ja projektide pealt tulevaid tulusid ( osakaal x k�ik tulud ) ) kvartali jaa aasta välel
-* Saab muuta t��tajate palkasid aastate ja kuude kaupa
-* Saab kustutada staatust
 * Saab muuta t��taja nime
-* Saab projekti tõsta ühest staatusest teise
-* Saab projekti järjekorda muuta staatuse sees
-* Töötajale saab määrata palka projekti siseselt
+
+-Pipeline vaade
+* Saab vaadata pipeline vaadet
+
 
 -- Lisam�rkused
 * S�ntaksiliselt valesti lisatud tulu/kulu asendatakse automaatselt 0 -ga

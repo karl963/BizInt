@@ -66,7 +66,47 @@ $(document).ready(function(){
 		$("#palkKasutajaNimi").val($("#tootajaKuluValimine").val());
 	});
 	
+	
+	$(".staatusVastutajaValimine").change(function () {
+		
+		var projektID = $(this).closest(".staatusVastutajaTd").children(".staatusVastutajaDiv").children(".vastutajaProjektID").html();
+		
+		muudaVastutajaProjektid(projektID,$(this).val());
+		
+	});
+	
+	$(".projektLink").click(function (e) {
+		avaProjektiDetiliLeht($(this).closest(".projektdiv").children(".projektIdDiv").html());
+	});
+	
+	$(".staatusVastutajaTd").click(function () {
+		$(".staatusVastutajaDiv").hide();
+		$(".staatusVastutajaText").show();
+
+		$(this).children(".staatusVastutajaDiv").show();
+		$(this).children(".staatusVastutajaText").hide();
+	});
+	
+	
 });
+
+function avaProjektiDetiliLeht(pid){
+	document.location.href = "vaadeProjektEsimene.htm?id="+pid
+}
+
+function muudaVastutajaProjektid(pid,nimi){
+	$.ajax({
+	    type : "POST",
+	    url : rakenduseNimi+"/vaadeProjektid.htm",
+	    data : {vastutajaProjektid : pid, vastutajaNimi: nimi},
+	    success : function(response) {
+	    	document.location.href = "vaadeProjektid.htm";
+	    },
+	    error : function(err) {
+	    	document.location.href = "vaadeProjektid.htm";
+	    }
+	});
+}
 
 function lisaProjektiKasutaja(pid){
 

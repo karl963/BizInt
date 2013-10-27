@@ -40,15 +40,14 @@ public class ProjektidController {
 		}
 		
 		staatused = new ArrayList<Staatus>();
+		List<String> töötajad = new ArrayList<String>();
 		
 		Connection con = new Mysql().getConnection();;
 		
 		try{
 			
 			Statement stmt = con.createStatement();
-			
 			String query = "SELECT staatusNimi,järjekorraNR,staatusID FROM staatused";
-			
 			ResultSet rs = stmt.executeQuery(query);
 		
 			while(rs.next()){
@@ -131,6 +130,16 @@ public class ProjektidController {
 			
 			try{rs.close();stmt.close();}catch(Exception x){}
 			
+			
+			Statement stmt2 = con.createStatement();
+			String query2 = "SELECT kasutajaNimi FROM kasutajad WHERE töötab=1";
+			ResultSet rs2 = stmt2.executeQuery(query2);
+		
+			while(rs2.next()){
+				töötajad.add(rs2.getString("kasutajaNimi"));
+			}
+			try{rs2.close();stmt2.close();}catch(Exception x){}
+			
 		}catch(Exception x){
 			x.printStackTrace();
 		}finally {
@@ -139,6 +148,7 @@ public class ProjektidController {
 		
 		staatused = paneJärjekorda(staatused);
 		
+		m.addAttribute("kasutajad",töötajad);
 		m.addAttribute("kasutajanimi",request.getSession().getAttribute("kasutajaNimi"));
 		m.addAttribute("staatuseKustutamine", new Staatus());
 		m.addAttribute("staatused", staatused);
@@ -298,6 +308,21 @@ public class ProjektidController {
 		}
 		else{
 			teade = "Projekti staatuse muutmine õnnestus";
+		}
+		
+		return new RedirectView("vaadeProjektid.htm");
+	}
+	
+	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"vastutajaProjektid","vastutajaNimi"})
+	public View muudaProjektiStaatust(@RequestParam(value="vastutajaNimi", required=true) String nimi,@RequestParam(value="vastutajaProjektid", required=true) int projektID){
+
+		int vastus = Projekt.muudaProjektiVastutajatAndmebaasis(projektID,nimi);
+		
+		if(vastus == Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
+			teade = "Viga andmebaasiga ühendumisel";
+		}
+		else{
+			teade = "Vastutaja muutmine õnnestus";
 		}
 		
 		return new RedirectView("vaadeProjektid.htm");

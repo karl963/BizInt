@@ -70,22 +70,41 @@
 	<div class="scrollwindow" ondragenter="return dragEnter(event,${staatus.id})" ondragover="return dragOver(event)" ondrop="return dragDrop(event)" >
 		<c:forEach items="${staatus.projektid}" var="projekt">
 		<div id="${projekt.id}projektDiv"></div>
-		<div draggable="true" ondragstart="return dragStart(event,${projekt.id},${staatus.id},${projekt.projektiJärjekorraNumber})" ondragover="return dragOverProjekt(event,${projekt.id},${projekt.projektiJärjekorraNumber})">
-			<a href="vaadeProjektEsimene.htm?id=${projekt.id}">
-			<table class=project>
-				<tr>
+		<div class="projektdiv" draggable="true" ondragstart="return dragStart(event,${projekt.id},${staatus.id},${projekt.projektiJärjekorraNumber})" ondragover="return dragOverProjekt(event,${projekt.id},${projekt.projektiJärjekorraNumber})">
+			
+			<div class="projektIdDiv" style="display:none;">${projekt.id}</div>
+			
+			<table class="project">
+				<tr class="projektLink">
 					<th COLSPAN=2 style="background-color:#74CEFF">${projekt.nimi}</th>
 				</tr>
 				<tr>
-					<td>Vastutaja:</td>
-					<td>${projekt.vastutaja.kasutajaNimi}</td>
+					<td >Vastutaja:</td>
+					<td class="staatusVastutajaTd" >
+						<div class="staatusVastutajaText" >${projekt.vastutaja.kasutajaNimi}</div>
+						<div class="staatusVastutajaDiv" style="display:none;">
+							<div class="vastutajaProjektID" style="display:none;">${projekt.id}</div>
+							<select class="staatusVastutajaValimine">
+								<option selected value="valige töötaja" disabled>valige töötaja</option>
+								<c:forEach items="${kasutajad}" var="kasutaja">
+									<c:choose>
+										<c:when test="${kasutaja == projekt.vastutaja.kasutajaNimi}">
+											<option selected value="${kasutaja}">${kasutaja}</option>
+										</c:when>
+										<c:otherwise>
+											<option value="${kasutaja}">${kasutaja}</option>
+										</c:otherwise>
+									</c:choose>
+								</c:forEach>
+							</select>
+						</div>
+					</td>
 				</tr>
-				<tr>
+				<tr class="projektLink">
 					<td>Tulu:</td>
 					<td>${projekt.kogutulu}</td>
 				</tr>
 			</table>
-			</a>
 			<p></p>
 			</div>
 		</c:forEach>

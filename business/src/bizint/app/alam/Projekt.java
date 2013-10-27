@@ -892,6 +892,76 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 	}
 	
+	public static int muudaProjektiVastutajatAndmebaasis(int projektID,String kasutajaNimi){
+
+		Connection con = new Mysql().getConnection();
+		if(con==null){
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		try {
+			
+			Statement stmt = con.createStatement();
+			String query = "SELECT kasutajaID FROM kasutajad WHERE kasutajaNimi='"+kasutajaNimi+"'";
+			ResultSet rs = stmt.executeQuery(query);
+			
+			if(rs.next()){
+				
+				Statement stmt3 = con.createStatement();
+				String query3 = "UPDATE projektikasutajad SET vastutaja=0 WHERE projekt_ID="+projektID;
+				stmt3.executeUpdate(query3);
+				
+				try{stmt3.close();}catch(Exception x){}
+				
+				int kasutajaID = rs.getInt("kasutajaID");
+				
+				Statement stmt2 = con.createStatement();
+				String query2 = "SELECT * FROM projektikasutajad WHERE kasutaja_ID="+kasutajaID;
+				ResultSet rs2 = stmt2.executeQuery(query2);
+				
+				if(rs2.next()){
+					
+					Statement stmt4 = con.createStatement();
+					String query4 = "UPDATE projektikasutajad SET vastutaja=1 WHERE kasutaja_ID="+kasutajaID+" AND projekt_ID="+projektID;
+					stmt4.executeUpdate(query4);
+					
+					try{stmt4.close();}catch(Exception x){}
+				}
+				else{
+					Statement stmt4 = con.createStatement();
+					String query4 = "INSERT INTO projektikasutajad (kasutaja_ID, projekt_ID,vastutaja) VALUES ('"+kasutajaID+"', "+projektID+",1)";
+					stmt4.executeUpdate(query4);
+					
+					try{stmt4.close();}catch(Exception x){}
+				}
+				
+				try{rs2.close();stmt2.close();}catch(Exception x){}
+			}
+			else{
+				return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+			}
+			
+			try{rs.close();stmt.close();}catch(Exception x){}
+
+			try{stmt.close();}catch(Exception x){}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		try {
+			Statement stmt2 = con.createStatement();
+			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+projektID+","+"'"+"Kasutaja"+" muutis projekti vastutajaks : "+kasutajaNimi+"')";
+			stmt2.executeUpdate(query2);
+			
+			try{stmt2.close();}catch(Exception x){}
+		} catch (SQLException e) {
+		}
+		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
+		return Projekt.KÕIK_OKEI;
+	}
 	
 	  ///////////\\\\\\\\\\\\
 	 // getters and setters \\
