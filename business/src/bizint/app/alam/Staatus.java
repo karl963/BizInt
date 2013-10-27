@@ -97,6 +97,10 @@ public class Staatus {
 		return summa;
 	}
 	
+	public int getProjektideArv(){
+		return projektid.size();
+	}
+	
 	public static int kustutaStaatusAndmebaasist(int staatusID){
 				
 		Connection con = new Mysql().getConnection();
@@ -124,11 +128,22 @@ public class Staatus {
 		
 		try {
 			
+			Statement stmt0 = con.createStatement();
+			String query0 = "SELECT järjekorraNR AS jNR FROM staatused WHERE staatusID="+staatusID;
+			ResultSet rs0 = stmt0.executeQuery(query0);
+			
+			rs0.next();
+			int järjekorraNR = rs0.getInt("jNR");
+			
+			Statement stmt1 = con.createStatement();
+			String query1 = "UPDATE staatused SET järjekorraNR=järjekorraNR - 1 WHERE järjekorraNR>"+järjekorraNR;
+			stmt1.executeUpdate(query1);
+			
 			Statement stmt = con.createStatement();
 			String query = "DELETE FROM staatused WHERE staatusID="+staatusID;
 			stmt.executeUpdate(query);
 			
-			try{stmt.close();}catch(Exception x){}
+			try{stmt0.close();stmt1.close();stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			if (con!=null) try {con.close();}catch (Exception ignore) {}
