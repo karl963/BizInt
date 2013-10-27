@@ -6,8 +6,13 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
+import java.util.TreeMap;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,7 +45,11 @@ import bizint.post.UusProjektiNimi;
 public class TootajadController {
 	
 	private String teade;
+	private int esimeseKuuTulusid = 0,teiseKuuTulusid = 0,kolmandaKuuTulusid = 0;
+	
+	private String[] kvartalid = {"I - esimene kvartal","II - teine kvartal","III - kolmas kvartal","IV - neljas kvartal"};
 
+	
 	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.GET)
 	public String vaadeTootajadTabel(HttpServletRequest request,Model m) {
 		
@@ -49,6 +58,35 @@ public class TootajadController {
 			return "redirect:/vaadeViga.htm";
 		}
 		
+		//// kvartalid 
+		
+		String hetkeKvartalNimi = "";
+		int hetkeKvartalNumber = 0;int algusKvartal = 0; int lõppKvartal = 0;
+		int hetkeKuu = Calendar.getInstance().get(Calendar.MONTH) +1;
+		
+		if(1 <= hetkeKuu && hetkeKuu <= 3){
+			hetkeKvartalNimi = kvartalid[0];
+			hetkeKvartalNumber = 0;
+			algusKvartal = 1; lõppKvartal = 3;
+		}
+		else if(4 <= hetkeKuu && hetkeKuu <= 6){
+			hetkeKvartalNimi = kvartalid[1];
+			hetkeKvartalNumber = 1;
+			algusKvartal = 4;lõppKvartal = 6;
+		}
+		else if(7 <= hetkeKuu && hetkeKuu <= 9){
+			hetkeKvartalNimi = kvartalid[2];
+			hetkeKvartalNumber = 2;
+			algusKvartal = 7;lõppKvartal = 9;
+		}
+		else{
+			hetkeKvartalNimi = kvartalid[3];
+			hetkeKvartalNumber = 3;
+			algusKvartal = 10;lõppKvartal = 12;
+		}
+		
+		//////
+		
 		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
 	
 		Connection con = new Mysql().getConnection();
@@ -57,15 +95,50 @@ public class TootajadController {
 		cal.setTime(new Date());
 		int hetkeAasta = cal.get(Calendar.YEAR);
 		
+		int palgaKuupaev1 = 1;int palgaKuupaev2 = 1;int palgaKuupaev3 = 1;
+		
+		List<String> kuupaevad1 = new ArrayList<String>();
+		List<String> kuupaevad2 = new ArrayList<String>();
+		List<String> kuupaevad3 = new ArrayList<String>();
 		try{
-
+			
+			Map<Long,String> kuupäevadMap = new HashMap<Long,String>();
+			
+			Statement stmt0 = con.createStatement();
+			String query0 = "SELECT aeg FROM tulud, projektikasutajad,kasutajad WHERE töötab=1 AND YEAR(aeg)="+hetkeAasta+" AND projektikasutajad.kasutaja_ID=kasutajad.kasutajaID AND (MONTH(aeg)="+(algusKvartal-1)+" OR MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+")";
+			ResultSet rs0 = stmt0.executeQuery(query0);
+			
+			while(rs0.next()){
+				
+				long aeg = rs0.getTimestamp("aeg").getTime();
+				
+				if(kuupäevadMap.get(aeg) == null){
+					kuupäevadMap.put(aeg, TabeliData.AJAFORMAAT.format(aeg));
+					
+					Calendar cal1 = Calendar.getInstance();
+					cal1.setTime(new Date(aeg));
+					int päev = cal1.get(Calendar.DAY_OF_MONTH);
+					if(cal1.get(Calendar.MONTH)+1 == 1 || cal1.get(Calendar.MONTH)+1 == 4 || cal1.get(Calendar.MONTH)+1 == 7 || cal1.get(Calendar.MONTH)+1 == 10){
+						kuupaevad1.add(päev+"");
+					}
+					else if(cal1.get(Calendar.MONTH)+1 == 2 || cal1.get(Calendar.MONTH)+1 == 5 || cal1.get(Calendar.MONTH)+1 == 8 || cal1.get(Calendar.MONTH)+1 == 11){
+						kuupaevad2.add(päev+"");
+					}
+					else if(cal1.get(Calendar.MONTH)+1 == 3 || cal1.get(Calendar.MONTH)+1 == 6 || cal1.get(Calendar.MONTH)+1 == 9 || cal1.get(Calendar.MONTH)+1 == 12){
+						kuupaevad3.add(päev+"");
+					}
+				}
+			}
+			
 			Statement stmt = con.createStatement();
 			String query = "SELECT kasutajaNimi, kasutajaID FROM kasutajad WHERE töötab=1";
 			ResultSet rs = stmt.executeQuery(query);
 			
 			while(rs.next()){
-				List<TabeliData> tabeliAndmed = new ArrayList<TabeliData>();
 				Kasutaja kasutaja = new Kasutaja();
+				TabeliData data = new TabeliData();
+				
+				data = lisaKuudJärjekorrasMapi(data,kuupäevadMap);
 				
 				String kasutajaNimi = rs.getString("kasutajaNimi");
 				int kasutajaID = rs.getInt("kasutajaID");
@@ -73,49 +146,63 @@ public class TootajadController {
 				kasutaja.setKasutajaID(kasutajaID);
 				kasutaja.setKasutajaNimi(kasutajaNimi);
 				
-				for(int i = 1; i<=12 ;i++){
+				int x = 0;
+				
+				for(int i = algusKvartal; i <= lõppKvartal ;i++){
 					Statement stmt2 = con.createStatement();
-					String query2 = "SELECT palk FROM palgad WHERE kasutaja_ID="+kasutajaID+" AND kuu="+i+" AND aasta="+hetkeAasta;
+					String query2 = "SELECT palk, päev FROM palgad WHERE kasutaja_ID="+kasutajaID+" AND kuu="+i+" AND aasta="+hetkeAasta;
 					ResultSet rs2 = stmt2.executeQuery(query2);
 					
-					int kuuNumber = i;
 					Double palk = 0.0;
 					
 					if(rs2.next()){
 						palk = rs2.getDouble("palk");
+						
+						if(i == algusKvartal){
+							palgaKuupaev1 = rs2.getInt("päev");
+						}
+						else if(i == lõppKvartal){
+							palgaKuupaev3 = rs2.getInt("päev");
+						}
+						else{
+							palgaKuupaev2 = rs2.getInt("päev");
+						}
 					}
 					
-					TabeliData data = new TabeliData();
-					data.setPalk(palk);
-					data.setKuuNumber(kuuNumber);
+					data.getPalgad()[x] = palk;
 					
-					tabeliAndmed.add(data);
+					try{rs2.close();stmt2.close();}catch(Exception ex){}
 					
-					try{rs2.close();stmt2.close();}catch(Exception x){}
-					
+					x++;
 				}
 
 				Statement stmt3 = con.createStatement();
-				String query3 = "SELECT tulu, osalus, aeg FROM tulud, projektikasutajad WHERE projektikasutajad.kasutaja_ID="+kasutajaID+" AND tulud.projekt_ID=projektikasutajad.projekt_ID";
+				String query3 = "SELECT tulu, osalus, aeg FROM tulud, projektikasutajad WHERE projektikasutajad.kasutaja_ID="+kasutajaID+" AND tulud.projekt_ID=projektikasutajad.projekt_ID AND YEAR(aeg)="+hetkeAasta+" AND (MONTH(aeg)="+(algusKvartal-1)+" OR MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+")";
 				ResultSet rs3 = stmt3.executeQuery(query3);
 				
 				while(rs3.next()){
-					
 					cal.setTime(new Date(rs3.getTimestamp("aeg").getTime()));
-					
-					if(cal.get(Calendar.YEAR) == hetkeAasta){
 
-						int kuu = cal.get(Calendar.MONTH)+1; // +1 sest date-s algavad kuud 0-st
-						
+					int kuu = cal.get(Calendar.MONTH)+1; // +1 sest date-s algavad kuud 0-st
+					String päev = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
+					
+					if(algusKvartal <= kuu && kuu <= lõppKvartal){
 						Double tulu = rs3.getDouble("tulu")*rs3.getDouble("osalus");
-						
-						tabeliAndmed = lisaTuluTabeliAndmetesse(kuu, tulu,tabeliAndmed);
+
+						data = lisaTuluTabeliAndmetesse(kuu,päev, tulu,data);
+					}
+					else{
+
+						data = lisaTuluTabeliAndmetesse(kuu,päev, 0.0,data);
 					}
 				}
 				
-				try{rs3.close();stmt3.close();}catch(Exception x){}
+				try{rs3.close();stmt3.close();}catch(Exception ex){}
 				
-				kasutaja.setTabeliAndmed(paneTabelJärjekorda(tabeliAndmed));
+				data.lisaTuludMapistListi();
+				
+				data.setPalgaKuupäevad(new int[]{palgaKuupaev1,palgaKuupaev2,palgaKuupaev3});
+				kasutaja.setTabeliAndmed(data);
 				
 				kasutajad.add(kasutaja);
 			}
@@ -131,11 +218,34 @@ public class TootajadController {
 		
 		int[] aastad = {hetkeAasta-3,hetkeAasta-2,hetkeAasta-1,hetkeAasta,hetkeAasta+1,hetkeAasta+2,hetkeAasta+3};
 		
+		////
+		
 		m.addAttribute("hetkeAasta", Calendar.getInstance().get(Calendar.YEAR));
+		m.addAttribute("hetkeKvartal",hetkeKvartalNimi);
 		m.addAttribute("aastad", aastad);
-		m.addAttribute("kuupaevad",Kuud.KUUD_LYHEND);
+		m.addAttribute("kvartalid", kvartalid);
+		
 		m.addAttribute("kasutajad",kasutajad);
+		
+		m.addAttribute("kuupaevad1",kuupaevad1);
+		m.addAttribute("kuupaevad2",kuupaevad2);
+		m.addAttribute("kuupaevad3",kuupaevad3);
+		
+		m.addAttribute("palgaKuupaev1",palgaKuupaev1);
+		m.addAttribute("palgaKuupaev2",palgaKuupaev2);
+		m.addAttribute("palgaKuupaev3",palgaKuupaev3);
+
+		m.addAttribute("esimeneKuu",Kuud.getKuudKvartalis(hetkeKvartalNumber).get(0));
+		m.addAttribute("teineKuu",Kuud.getKuudKvartalis(hetkeKvartalNumber).get(1));
+		m.addAttribute("kolmasKuu",Kuud.getKuudKvartalis(hetkeKvartalNumber).get(2));
+		
+		m.addAttribute("esimeneKuuNumber",esimeseKuuTulusid+1);
+		m.addAttribute("teineKuuNumber",teiseKuuTulusid+1);
+		m.addAttribute("kolmasKuuNumber",kolmandaKuuTulusid+1);
+		m.addAttribute("kogupikkus",esimeseKuuTulusid+teiseKuuTulusid+kolmandaKuuTulusid+3);
+		
 		m.addAttribute("teade", teade);
+		
 		m.addAttribute("uusTootaja",new Kasutaja());
 		m.addAttribute("kustutaTootaja",new Kasutaja());
 
@@ -144,31 +254,90 @@ public class TootajadController {
 		return "vaadeTootajadTabel"; 
 	}
 	
-	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.GET, params = {"aasta"})
-	public String vaadeTootajadTabelValitudAasta(HttpServletRequest request,@RequestParam("aasta") int aasta, Model m) {
+	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.GET, params = {"aasta","kvartal"})
+	public String vaadeTootajadTabelValitudAasta(HttpServletRequest request,@RequestParam(value = "aasta", required = true) int aasta,@RequestParam(value= "kvartal", required = true) String hetkeKvartal, Model m) {
 
 		if(request.getSession().getAttribute("kasutajaNimi") == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
 			return "redirect:/vaadeViga.htm";
 		}
 		
-		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
+		//// kvartalid 
 		
+		String hetkeKvartalNimi = hetkeKvartal;
+		int hetkeKvartalNumber = 1;int algusKvartal = 1; int lõppKvartal = 1;
+		
+		if(hetkeKvartal.equals(kvartalid[0])){
+			hetkeKvartalNumber = 0;
+			algusKvartal = 1; lõppKvartal = 3;
+		}
+		else if(hetkeKvartal.equals(kvartalid[1])){
+			hetkeKvartalNumber = 1;
+			algusKvartal = 4;lõppKvartal = 6;
+		}
+		else if(hetkeKvartal.equals(kvartalid[2])){
+			hetkeKvartalNumber = 2;
+			algusKvartal = 7;lõppKvartal = 9;
+		}
+		else{
+			hetkeKvartalNumber = 3;
+			algusKvartal = 10;lõppKvartal = 12;
+		}
+		
+		//////
+		
+		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
+	
 		Connection con = new Mysql().getConnection();
 		
 		Calendar cal = Calendar.getInstance();
 		cal.setTime(new Date());
-		int hetkeAasta = cal.get(Calendar.YEAR);
+		int hetkeAasta = aasta;
 		
+		int palgaKuupaev1 = 1;int palgaKuupaev2 = 1;int palgaKuupaev3 = 1;
+		
+		List<String> kuupaevad1 = new ArrayList<String>();
+		List<String> kuupaevad2 = new ArrayList<String>();
+		List<String> kuupaevad3 = new ArrayList<String>();
 		try{
+			
+			Map<Long,String> kuupäevadMap = new HashMap<Long,String>();
+			
+			Statement stmt0 = con.createStatement();
+			String query0 = "SELECT aeg FROM tulud, projektikasutajad,kasutajad WHERE töötab=1 AND YEAR(aeg)="+hetkeAasta+" AND projektikasutajad.kasutaja_ID=kasutajad.kasutajaID AND (MONTH(aeg)="+(algusKvartal-1)+" OR MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+")";
+			ResultSet rs0 = stmt0.executeQuery(query0);
+			
+			while(rs0.next()){
+				
+				long aeg = rs0.getTimestamp("aeg").getTime();
 
+				if(kuupäevadMap.get(aeg) == null){
+					kuupäevadMap.put(aeg, TabeliData.AJAFORMAAT.format(aeg));
+
+					Calendar cal1 = Calendar.getInstance();
+					cal1.setTime(new Date(aeg));
+					int päev = cal1.get(Calendar.DAY_OF_MONTH);
+					if(cal1.get(Calendar.MONTH)+1 == 1 || cal1.get(Calendar.MONTH)+1 == 4 || cal1.get(Calendar.MONTH)+1 == 7 || cal1.get(Calendar.MONTH)+1 == 10){
+						kuupaevad1.add(päev+"");
+					}
+					else if(cal1.get(Calendar.MONTH)+1 == 2 || cal1.get(Calendar.MONTH)+1 == 5 || cal1.get(Calendar.MONTH)+1 == 8 || cal1.get(Calendar.MONTH)+1 == 11){
+						kuupaevad2.add(päev+"");
+					}
+					else if(cal1.get(Calendar.MONTH)+1 == 3 || cal1.get(Calendar.MONTH)+1 == 6 || cal1.get(Calendar.MONTH)+1 == 9 || cal1.get(Calendar.MONTH)+1 == 12){
+						kuupaevad3.add(päev+"");
+					}
+				}
+			}
+			
 			Statement stmt = con.createStatement();
 			String query = "SELECT kasutajaNimi, kasutajaID FROM kasutajad WHERE töötab=1";
 			ResultSet rs = stmt.executeQuery(query);
 			
 			while(rs.next()){
-				List<TabeliData> tabeliAndmed = new ArrayList<TabeliData>();
 				Kasutaja kasutaja = new Kasutaja();
+				TabeliData data = new TabeliData();
+				
+				data = lisaKuudJärjekorrasMapi(data,kuupäevadMap);
 				
 				String kasutajaNimi = rs.getString("kasutajaNimi");
 				int kasutajaID = rs.getInt("kasutajaID");
@@ -176,49 +345,65 @@ public class TootajadController {
 				kasutaja.setKasutajaID(kasutajaID);
 				kasutaja.setKasutajaNimi(kasutajaNimi);
 				
-				for(int i = 1; i<=12 ;i++){
+				int x = 0;
+				
+				for(int i = algusKvartal; i <= lõppKvartal ;i++){
 					Statement stmt2 = con.createStatement();
-					String query2 = "SELECT palk FROM palgad WHERE kasutaja_ID="+kasutajaID+" AND palgad.kuu="+i+" AND aasta="+aasta;
+					String query2 = "SELECT palk,päev FROM palgad WHERE kasutaja_ID="+kasutajaID+" AND kuu="+i+" AND aasta="+hetkeAasta;
 					ResultSet rs2 = stmt2.executeQuery(query2);
 					
-					int kuuNumber = i;
 					Double palk = 0.0;
 					
 					if(rs2.next()){
 						palk = rs2.getDouble("palk");
+						
+						if(i == algusKvartal){
+							palgaKuupaev1 = rs2.getInt("päev");
+						}
+						else if(i == lõppKvartal){
+							palgaKuupaev3 = rs2.getInt("päev");
+						}
+						else{
+							palgaKuupaev2 = rs2.getInt("päev");
+						}
 					}
 					
-					TabeliData data = new TabeliData();
-					data.setPalk(palk);
-					data.setKuuNumber(kuuNumber);
+					data.getPalgad()[x] = palk;
 					
-					tabeliAndmed.add(data);
+					try{rs2.close();stmt2.close();}catch(Exception ex){}
 					
-					try{rs2.close();stmt2.close();}catch(Exception x){}
-					
+					x++;
 				}
 
 				Statement stmt3 = con.createStatement();
-				String query3 = "SELECT tulu, osalus, aeg FROM tulud, projektikasutajad WHERE projektikasutajad.kasutaja_ID="+kasutajaID+" AND tulud.projekt_ID=projektikasutajad.projekt_ID";
+				String query3 = "SELECT tulu, osalus, aeg FROM tulud, projektikasutajad WHERE projektikasutajad.kasutaja_ID="+kasutajaID+" AND tulud.projekt_ID=projektikasutajad.projekt_ID AND YEAR(aeg)="+hetkeAasta+" AND (MONTH(aeg)="+(algusKvartal-1)+" OR MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+")";
 				ResultSet rs3 = stmt3.executeQuery(query3);
 				
 				while(rs3.next()){
 					
 					cal.setTime(new Date(rs3.getTimestamp("aeg").getTime()));
+
+					int kuu = cal.get(Calendar.MONTH)+1; // +1 sest date-s algavad kuud 0-st
+					String päev = String.valueOf(cal.get(Calendar.DAY_OF_MONTH));
 					
-					if(cal.get(Calendar.YEAR) == aasta){
-						int kuu = cal.get(Calendar.MONTH)+1; // +1 sest date-s algavad kuud 0-st
-						
+					if(algusKvartal <= kuu && kuu <= lõppKvartal){
 						Double tulu = rs3.getDouble("tulu")*rs3.getDouble("osalus");
-						
-						tabeliAndmed = lisaTuluTabeliAndmetesse(kuu, tulu,tabeliAndmed);
+
+						data = lisaTuluTabeliAndmetesse(kuu,päev, tulu,data);
 					}
+					else{
+						data = lisaTuluTabeliAndmetesse(kuu,päev, 0.0,data);
+					}
+
 				}
 				
-				try{rs3.close();stmt3.close();}catch(Exception x){}
+				try{rs3.close();stmt3.close();}catch(Exception ex){}
 				
-				kasutaja.setTabeliAndmed(paneTabelJärjekorda(tabeliAndmed));
+				data.lisaTuludMapistListi();
+				data.setPalgaKuupäevad(new int[]{palgaKuupaev1,palgaKuupaev2,palgaKuupaev3});
 				
+				kasutaja.setTabeliAndmed(data);
+
 				kasutajad.add(kasutaja);
 			}
 			
@@ -233,32 +418,115 @@ public class TootajadController {
 		
 		int[] aastad = {hetkeAasta-3,hetkeAasta-2,hetkeAasta-1,hetkeAasta,hetkeAasta+1,hetkeAasta+2,hetkeAasta+3};
 		
-		m.addAttribute("hetkeAasta", aasta);
+		////
+
+		m.addAttribute("hetkeAasta", hetkeAasta);
+		m.addAttribute("hetkeKvartal",hetkeKvartalNimi);
 		m.addAttribute("aastad", aastad);
-		m.addAttribute("kuupaevad",Kuud.KUUD_LYHEND);
+		m.addAttribute("kvartalid", kvartalid);
+		
 		m.addAttribute("kasutajad",kasutajad);
+		
+		m.addAttribute("kuupaevad1",kuupaevad1);
+		m.addAttribute("kuupaevad2",kuupaevad2);
+		m.addAttribute("kuupaevad3",kuupaevad3);
+		
+		m.addAttribute("palgaKuupaev1",palgaKuupaev1);
+		m.addAttribute("palgaKuupaev2",palgaKuupaev2);
+		m.addAttribute("palgaKuupaev3",palgaKuupaev3);
+		
+		m.addAttribute("esimeneKuu",Kuud.getKuudKvartalis(hetkeKvartalNumber).get(0));
+		m.addAttribute("teineKuu",Kuud.getKuudKvartalis(hetkeKvartalNumber).get(1));
+		m.addAttribute("kolmasKuu",Kuud.getKuudKvartalis(hetkeKvartalNumber).get(2));
+		
+		m.addAttribute("esimeneKuuNumber",esimeseKuuTulusid+1);
+		m.addAttribute("teineKuuNumber",teiseKuuTulusid+1);
+		m.addAttribute("kolmasKuuNumber",kolmandaKuuTulusid+1);
+		m.addAttribute("kogupikkus",esimeseKuuTulusid+teiseKuuTulusid+kolmandaKuuTulusid+3);
+		
 		m.addAttribute("teade", teade);
+		
 		m.addAttribute("uusTootaja",new Kasutaja());
 		m.addAttribute("kustutaTootaja",new Kasutaja());
 
 		teade = null;
-
-		return "vaadeTootajadTabel";
-
+		
+		return "vaadeTootajadTabel"; 
 	}
 	
-	private List<TabeliData> lisaTuluTabeliAndmetesse(int kuu, Double tulu, List<TabeliData> tabeliAndmed){
+	private TabeliData lisaKuudJärjekorrasMapi(TabeliData data, Map<Long,String> ajad){
+		
+		esimeseKuuTulusid = 0;teiseKuuTulusid = 0;kolmandaKuuTulusid = 0;
+			
+		ajad = new TreeMap<Long, String>(ajad); // sortib aja (key) järgi
 
+		Iterator<Entry<Long, String>> it = ajad.entrySet().iterator();
+	    while (it.hasNext()) {
+	        Map.Entry<Long,String> pairs = (Map.Entry<Long,String>)it.next();
+	        
+	        Calendar cal = Calendar.getInstance();
+	        cal.setTime(new Date(pairs.getKey()));
+	        int kuu = cal.get(Calendar.MONTH)+1;
+
+	        if((kuu==1 || kuu==4 || kuu==7 || kuu==10) && data.getTuludMap1().get(cal.get(Calendar.DAY_OF_MONTH)) == null){
+	        	data.getTuludMap1().put((cal.get(Calendar.DAY_OF_MONTH))+"",0.0);
+	        	esimeseKuuTulusid++;
+	        }
+	        else if((kuu==2 || kuu==5 || kuu==8 || kuu==11) && data.getTuludMap2().get(cal.get(Calendar.DAY_OF_MONTH)) == null){
+	        	data.getTuludMap2().put((cal.get(Calendar.DAY_OF_MONTH))+"",0.0);
+	        	teiseKuuTulusid++;
+	        }
+	        else if((kuu==3 || kuu==6 || kuu==9 || kuu==12) && data.getTuludMap3().get(cal.get(Calendar.DAY_OF_MONTH)) == null){
+	        	data.getTuludMap3().put((cal.get(Calendar.DAY_OF_MONTH))+"",0.0);
+	        	kolmandaKuuTulusid++;
+	        }
+	    }
+
+	    
+		return data;
+	}
+	
+	private TabeliData lisaTuluTabeliAndmetesse(int kuu, String päev, Double tulu, TabeliData tabeliAndmed){
+		
+        if(kuu==1 || kuu==4 || kuu==7 || kuu==10){
+        	Double summa = 0.0;
+        	try{
+        		summa = tabeliAndmed.getTuludMap1().get(päev)+tulu;
+        	}catch(Exception x){
+        		summa = tulu;
+        	}
+        	tabeliAndmed.getTuludMap1().put(päev, summa);
+        }
+        else if(kuu==2 || kuu==5 || kuu==8 || kuu==11){
+        	Double summa = 0.0;
+        	try{
+        		summa = tabeliAndmed.getTuludMap2().get(päev)+tulu;
+        	}catch(Exception x){
+        		summa = tulu;
+        	}
+        	tabeliAndmed.getTuludMap2().put(päev, summa);
+        }
+        else if(kuu==3 || kuu==6 || kuu==9 || kuu==12){
+        	Double summa = 0.0;
+        	try{
+        		summa = tabeliAndmed.getTuludMap3().get(päev)+tulu;
+        	}catch(Exception x){
+        		summa = tulu;
+        	}
+        	tabeliAndmed.getTuludMap3().put(päev,  summa);
+        }
+        /*
 		for(TabeliData d : tabeliAndmed){
 			if(d.getKuuNumber() == kuu){
 				d.setTulu(d.getTulu()+tulu);
 				break;
 			}
 		}
-
+         */
 		return tabeliAndmed;
 	}
 	
+	/*
 	private List<TabeliData> paneTabelJärjekorda(List<TabeliData> tabeliAndmed){
 		List<TabeliData> uuedAndmed = new ArrayList<TabeliData>();
 
@@ -279,7 +547,7 @@ public class TootajadController {
 
 		return uuedAndmed;
 	}
-
+*/
 	@RequestMapping(value = "/vaadeTootajadGraaf.htm", method = RequestMethod.GET)
 	public String vaadeTootajadGraaf(HttpServletRequest request,Model m) {
 		
@@ -354,35 +622,94 @@ public class TootajadController {
 		return new RedirectView("vaadeTootajadTabel.htm");
 	}
 	
-	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.POST, params = {"tootajad","aastaNumber"})
-	public void salvestaTootajatePalgad(HttpServletRequest request, HttpServletResponse response,@RequestParam("tootajad") String tootajad,@RequestParam("aastaNumber") int aasta){
+	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.POST, params = {"tootajad","aastaNumber","kvartal"})
+	public void salvestaTootajatePalgad(HttpServletRequest request, HttpServletResponse response,@RequestParam("tootajad") String tootajad,@RequestParam("aastaNumber") int aasta, @RequestParam("kvartal") String kvartalS){
+		
+		int kvartal = 0;
+		
+		if(kvartalS.equals(kvartalid[0])){
+			kvartal = 1;
+		}
+		else if(kvartalS.equals(kvartalid[1])){
+			kvartal = 2;
+		}
+		else if(kvartalS.equals(kvartalid[2])){
+			kvartal = 3;
+		}
+		else{
+			kvartal = 4;
+		}
 		
 		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
 		
 		for(String rida : tootajad.split("/")){
-			
-			List<TabeliData> tabeliAndmed = new ArrayList<TabeliData>();
+
+			TabeliData tabeliAndmed = new TabeliData();
 			Kasutaja k = new Kasutaja();
-			k.setKasutajaNimi(rida.split("#")[0].split(";")[0]);
+			k.setKasutajaNimi(rida.split("#")[0]);
 			
-			for(String tootaja : rida.split("#")){
-				
-				TabeliData tabeliData = new TabeliData();
-				
-				tabeliData.setKuuNumber(Integer.parseInt(tootaja.split(";")[1]));
-				tabeliData.setPalk(Double.parseDouble(tootaja.split(";")[2]));
-				tabeliData.setAasta(aasta);
-				
-				tabeliAndmed.add(tabeliData);
-				
+			
+			try{
+				tabeliAndmed.getPalgad()[0] = Double.parseDouble(rida.split("#")[1].split(";")[1]);
+			}catch(Exception x){
+				tabeliAndmed.getPalgad()[0] = 0.0;
 			}
+			
+			try{
+				tabeliAndmed.getPalgad()[1] = Double.parseDouble(rida.split("#")[2].split(";")[1]);
+			}catch(Exception x){
+				tabeliAndmed.getPalgad()[1] = 0.0;
+			}
+			
+			try{
+				tabeliAndmed.getPalgad()[2] = Double.parseDouble(rida.split("#")[3].split(";")[1]);
+			}catch(Exception x){
+				tabeliAndmed.getPalgad()[2] = 0.0;
+			}
+
+			try{
+				tabeliAndmed.getPalgaKuupäevad()[0] = Integer.parseInt(rida.split("#")[1].split(";")[0]);
+			}catch(Exception x){
+				tabeliAndmed.getPalgaKuupäevad()[0] = 1;
+			}
+			
+			try{
+				tabeliAndmed.getPalgaKuupäevad()[1] = Integer.parseInt(rida.split("#")[2].split(";")[0]);
+			}catch(Exception x){
+				tabeliAndmed.getPalgaKuupäevad()[1] = 1;
+			}
+			
+			try{
+				tabeliAndmed.getPalgaKuupäevad()[2] = Integer.parseInt(rida.split("#")[3].split(";")[0]);
+			}catch(Exception x){
+				tabeliAndmed.getPalgaKuupäevad()[2] = 1;
+			}
+			
+			int kuu1 = 0, kuu2 = 0, kuu3 = 0;
+			
+			if(kvartal==1){
+				kuu1 = 1; kuu2 = 2; kuu3 = 3;
+			}
+			else if(kvartal==2){
+				kuu1 = 4; kuu2 = 5; kuu3 = 6;
+			}
+			else if(kvartal==3){
+				kuu1 = 7; kuu2 = 8; kuu3 = 9;
+			}
+			else{
+				kuu1 = 10; kuu2 = 11; kuu3 = 12;
+			}
+			
+			tabeliAndmed.getKuud()[0] = kuu1;
+			tabeliAndmed.getKuud()[1] = kuu2;
+			tabeliAndmed.getKuud()[2] = kuu3;
 			
 			k.setTabeliAndmed(tabeliAndmed);
 			kasutajad.add(k);
 			
 		}
 
-		int vastus = Kasutaja.muudaKasutajatePalkasidAndmebaasis(kasutajad);
+		int vastus = Kasutaja.muudaKasutajatePalkasidAndmebaasis(kasutajad,aasta);
 		
 		if(vastus == Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";

@@ -252,6 +252,7 @@ public class ProjektController {
 		
 		List<Kulu> kulud = new ArrayList<Kulu>();
 		List<Tulu> tulud = new ArrayList<Tulu>();
+		List<String> tootajad = new ArrayList<String>();
 		List<Kommentaar> kommentaarid = new ArrayList<Kommentaar>();
 		
 		String nimi = null;
@@ -335,6 +336,18 @@ public class ProjektController {
 			}
 			
 			try{rs4.close();stmt4.close();}catch(Exception x){}
+			
+			Statement stmt5 = con.createStatement();
+			String query5 = "SELECT kasutajaNimi FROM kasutajad WHERE töötab=1";
+			ResultSet rs5 = stmt5.executeQuery(query5);
+
+			while(rs5.next()){
+
+				tootajad.add(rs5.getString("kasutajaNimi"));
+
+			}
+			
+			try{rs5.close();stmt5.close();}catch(Exception x){}
 		}catch(Exception x){
 			x.printStackTrace();
 		}finally {
@@ -361,6 +374,7 @@ public class ProjektController {
 		projekt.setTulud(tulud);
 		projekt.setKommentaarid(kommentaarid);
 		
+		m.addAttribute("tootajad", tootajad);
 		m.addAttribute("projekt", projekt);
 		m.addAttribute("teade", teade);
 		m.addAttribute("uusKommentaar", new UusKommentaar());
@@ -459,7 +473,7 @@ public class ProjektController {
 		return new RedirectView("vaadeProjektTeine.htm?id="+tulu.getProjektID());
 	}
 	
-	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"aeg.time","kuluNimi","summa","stringAeg","projektID"})
+	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"aeg.time","kuluNimi","summa","stringAeg","projektID","kasutajaNimi"})
 	public View addKulu(@ModelAttribute("uusKulu") Kulu kulu, Model m){
 
 		Date uusAeg = Kulu.muudaStringAjaks(kulu.getStringAeg());

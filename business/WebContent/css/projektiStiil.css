@@ -63,6 +63,9 @@
 #tootajateTabel{
 	margin-left:10px;
 }
+#tootajateTabel td{
+	padding:5px;
+}
 #tootajateTabel td.tootajaNimi{
 	min-width:150px;
 	max-width:150px;
@@ -84,6 +87,16 @@
 .tootajaPalgaMuutmiseLahter{
 	min-width:50px;
 	max-width:50px;
+}
+.kuluLisamiseNupp{
+	position: absolute;
+	top: 115px;
+	left: 275px;
+}
+.kuluPalkCheck{
+		position: absolute;
+	top: 120px;
+	left: 325px;
 }
 
 

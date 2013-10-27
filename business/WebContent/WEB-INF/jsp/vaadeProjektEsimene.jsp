@@ -132,14 +132,15 @@ Reiting: ${projekt.reitinguHTML}
 
 </form:form>
 
-<table class="logiTabel">
+<button class="projektDetailNupp" id="logiAvamine">Ava logi</button>
+<table class="logiTabel" id="logiTabel" style="display:none;">
 	<tr>
 		<td>Logi</td>
 	</tr>
 	<c:forEach items="${projekt.logi}" var="logi">
-	<tr>
-		<td>${logi.sonum} <i><small>( ${logi.formaaditudAeg} )</small></i></td>
-	</tr>
+		<tr>
+			<td>${logi.sonum} <i><small>( ${logi.formaaditudAeg} )</small></i></td>
+		</tr>
 	</c:forEach>
 </table>
 

@@ -13,9 +13,13 @@
 			</form:form>
   		</c:when>
   		<c:otherwise>
+  		  
   			<p>Te olete juba sisse loginud kasutajaga: ${sessionScope.kasutajaNimi}</p>
   			<br>
-  			<a href="vaadeProjektid.htm" >projektide vaatesse</a>
+  			Teid suunatakse kohe <a href="vaadeProjektid.htm" >projektide vaatesse</a>
+  			
+  			<head><meta http-equiv="refresh" content="0; url=vaadeProjektid.htm"></head> <!-- auto-suunamine -->
+  			
   		</c:otherwise>
 	</c:choose>
 	<br>

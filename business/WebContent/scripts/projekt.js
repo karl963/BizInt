@@ -39,6 +39,33 @@ $(document).ready(function(){
 		$(this).closest(".staatuseNimi").children(".kustutaStaatusConfirmationDiv").hide();
 	});
 	
+	$("#logiAvamine").click(function () {
+		if($(this).html()=="Ava logi"){
+			$("#logiTabel").show();
+			$(this).html("Sulge logi");
+		}
+		else{
+			$("#logiTabel").hide();
+			$(this).html("Ava logi");
+		}
+	});
+	
+	$("#kuluPalk").click(function () {
+		if($(this).is(':checked')){
+			$("#tootajadList").show();
+			$("#kuluKirjeldus").hide();
+		}
+		else{
+			$("#palkKasutajaNimi").val("");
+			$("#tootajadList").hide();
+			$("#kuluKirjeldus").show();
+		}
+	});
+	
+	$("#tootajaKuluValimine").change(function () {
+		$("#palkKasutajaNimi").val($("#tootajaKuluValimine").val());
+	});
+	
 });
 
 function lisaProjektiKasutaja(pid){
@@ -204,7 +231,7 @@ $(document).ready(function() {
     	$(this).closest(".tootajaPalk").children(".tootajaPalkText").html($(this).val());
     });
     
-    $('.tootajaNimi').children(".tootajaNimiAlam").children(".staatuseNimeKiri").click(function() {
+    $('.tootajaNimi').children(".tootajaNimiAlam").children(".kasutajaVanaNimeDiv").click(function() {
     	// kõik ülejäänud muudame tagasi
     	$(".kasutajaVanaNimeDiv").show();
     	$(".kasutajaUueNimeDiv").hide();
@@ -214,7 +241,7 @@ $(document).ready(function() {
         $(this).closest(".tootajaNimi").children(".tootajaNimiAlam").children(".kasutajaUueNimeDiv").show();
         
         // fokuseerib lahtri peale
-        $(this).find("input.uueKasutajaNimeLahter").focus().val($(this).find("input.uueKasutajaNimeLahter").val());
+        $(this).closest(".tootajaNimi").find("input.uueKasutajaNimeLahter").focus().val($(this).closest(".tootajaNimi").find("input.uueKasutajaNimeLahter").val());
     });
 });
 
@@ -224,8 +251,14 @@ $(document).ready(function() {
     	
     	var table = document.getElementById("tootajateTabel");
     	var list = "";
-
-    	for (var i = 2, row; row = table.rows[i]; i++) {
+    	
+    	var päevad = new Array();
+    	
+    	päevad[0] = table.rows[2].getElementsByClassName("tootajaPalk")[0].getElementsByClassName("tootajaPalkText")[0].innerHTML;
+    	päevad[1] = table.rows[2].getElementsByClassName("tootajaPalk")[1].getElementsByClassName("tootajaPalkText")[0].innerHTML;
+    	päevad[2] = table.rows[2].getElementsByClassName("tootajaPalk")[2].getElementsByClassName("tootajaPalkText")[0].innerHTML;
+    	
+    	for (var i = 3, row; row = table.rows[i]; i++) {
     		
     		if(i==table.rows.length-1){ // viimast rida me ei taha
     			break;
@@ -235,11 +268,13 @@ $(document).ready(function() {
     		var nimi = row.getElementsByClassName("tootajaNimi")[0].getElementsByClassName("tootajaNimiAlam")[0].getElementsByClassName("kasutajaVanaNimeDiv")[0].innerHTML;
     		
     		var cells = row.getElementsByClassName("tootajaPalk");
-
+    		
+    		sisemineList += nimi+="#";
+    		
     		for (var j = 0; j<cells.length ; j++) {
 
     			var palk = cells[j].getElementsByClassName("tootajaPalkText")[0].innerHTML;
-    		   	sisemineList += nimi + ";"+ (j+1) +";" + palk + "#";
+    		   	sisemineList += (päevad[j] +";" + palk + "#");
     		   	
     		}
     		
@@ -247,23 +282,27 @@ $(document).ready(function() {
     	}
 
     	var aasta = $('#aastateValikud').val();
+    	var kvartal = $('#kvartaliteValikud').val();
     	
     	$.ajax({
     	    type : "POST",
     	    url : rakenduseNimi+"/vaadeTootajadTabel.htm",
-    	    data : {tootajad: list, aastaNumber: aasta},
+    	    data : {tootajad: list, aastaNumber: aasta,kvartal : kvartal},
     	    success : function(response) {
-    	    	document.location.href = "vaadeTootajadTabel.htm?aasta="+aasta;
+    	    	document.location.href = "vaadeTootajadTabel.htm?aasta="+aasta+"&kvartal="+kvartal;
     	    },
     	    error : function(e) {
-    	    	document.location.href = "vaadeTootajadTabel.htm?aasta="+aasta;
+    	    	document.location.href = "vaadeTootajadTabel.htm?aasta="+aasta+"&kvartal="+kvartal;
     	    }
     	});
     	
     });
     
     $('#aastateValikud').change(function() {
-    	document.location.href = "vaadeTootajadTabel.htm?aasta="+$(this).val();
+    	document.location.href = "vaadeTootajadTabel.htm?aasta="+$(this).val()+"&kvartal="+$("#kvartaliteValikud").val();
+    });
+    $('#kvartaliteValikud').change(function() {
+    	document.location.href = "vaadeTootajadTabel.htm?aasta="+$("#aastateValikud").val()+"&kvartal="+$(this).val();
     });
 
 });
