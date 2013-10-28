@@ -211,7 +211,7 @@ public class Staatus {
 		return Staatus.KÕIK_OKEI;
 	}
 	
-	public static int muudaStaatuseJärjekordaAndmebaasis(int staatusID, int staatuseJärjekorraNR, int staatusVanaID, int staatuseVanaJärjekorraNR){
+	public static int muudaStaatuseJärjekordaAndmebaasis(int staatusID, int staatuseJärjekorraNR, int staatusVanaID, int staatuseVanaJärjekorraNR, int juhtID){
 		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -222,7 +222,7 @@ public class Staatus {
 			if(staatuseJärjekorraNR < 0){
 				staatuseJärjekorraNR = 1;
 				Statement stmt3 = con.createStatement();
-				String query3 = "SELECT MAX(järjekorraNR) AS max FROM staatused";
+				String query3 = "SELECT MAX(järjekorraNR) AS max FROM staatused WHERE juhtID="+juhtID;
 				ResultSet rs = stmt3.executeQuery(query3);
 				rs.next();
 				staatuseJärjekorraNR = rs.getInt("max")+1;
@@ -233,38 +233,38 @@ public class Staatus {
 				if(staatuseJärjekorraNR != 1 && staatuseVanaJärjekorraNR-staatuseJärjekorraNR<0){
 					staatuseJärjekorraNR -= 1;
 					Statement stmt1 = con.createStatement();
-					String query1 = "UPDATE staatused SET järjekorraNR=staatuseJärjekorraNR +1 WHERE järjekorraNR>"+staatuseJärjekorraNR;
+					String query1 = "UPDATE staatused SET järjekorraNR=staatuseJärjekorraNR +1 WHERE järjekorraNR>"+staatuseJärjekorraNR+" AND juhtID="+juhtID;
 					stmt1.executeUpdate(query1);
 					try{stmt1.close();}catch(Exception x){}
 				}
 				else{
 					Statement stmt1 = con.createStatement();
-					String query1 = "UPDATE staatused SET järjekorraNR=staatuseJärjekorraNR +1 WHERE järjekorraNR>="+staatuseJärjekorraNR;
+					String query1 = "UPDATE staatused SET järjekorraNR=staatuseJärjekorraNR +1 WHERE järjekorraNR>="+staatuseJärjekorraNR+" AND juhtID="+juhtID;
 					stmt1.executeUpdate(query1);
 					try{stmt1.close();}catch(Exception x){}
 				}
 			}
 			else{
 				Statement stmt1 = con.createStatement();
-				String query1 = "UPDATE staatused SET järjekorraNR=järjekorraNR +1 WHERE järjekorraNR>="+staatuseJärjekorraNR;
+				String query1 = "UPDATE staatused SET järjekorraNR=järjekorraNR +1 WHERE järjekorraNR>="+staatuseJärjekorraNR+" AND juhtID="+juhtID;
 				stmt1.executeUpdate(query1);
 				try{stmt1.close();}catch(Exception x){}
 			}
 			
 			Statement stmt2 = con.createStatement();
-			String query2 = "UPDATE staatused SET järjekorraNR=järjekorraNR -1 WHERE järjekorraNR>"+staatuseVanaJärjekorraNR;
+			String query2 = "UPDATE staatused SET järjekorraNR=järjekorraNR -1 WHERE järjekorraNR>"+staatuseVanaJärjekorraNR+" AND juhtID="+juhtID;
 			stmt2.executeUpdate(query2);
 			
 			if(staatuseVanaJärjekorraNR-staatuseJärjekorraNR<0){
 				staatuseJärjekorraNR -= 1;
 				stmt = con.createStatement();
-				String query = "UPDATE staatused SET järjekorraNR="+ staatuseJärjekorraNR +" WHERE staatusID=" + staatusVanaID;
+				String query = "UPDATE staatused SET järjekorraNR="+ staatuseJärjekorraNR +" WHERE staatusID=" + staatusVanaID+" AND juhtID="+juhtID;
 				stmt.executeUpdate(query);
 				try{stmt.close();}catch(Exception x){}
 			}
 			else{
 				stmt = con.createStatement();
-				String query = "UPDATE staatused SET järjekorraNR="+ staatuseJärjekorraNR +" WHERE staatusID=" + staatusVanaID;
+				String query = "UPDATE staatused SET järjekorraNR="+ staatuseJärjekorraNR +" WHERE staatusID=" + staatusVanaID+" AND juhtID="+juhtID;
 				stmt.executeUpdate(query);
 				try{stmt.close();}catch(Exception x){}
 			}
@@ -276,8 +276,14 @@ public class Staatus {
 		}
 		
 		try {
+			Statement stmt9 = con.createStatement();
+			String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
+			ResultSet rs9 = stmt9.executeQuery(query9);
+			rs9.next();
+			String kasutajanimi = rs9.getString("kasutajaNimi");
+			
 			Statement stmt1 = con.createStatement();
-			String query1 = "SELECT staatusNimi FROM staatused WHERE staatusID="+staatusVanaID;
+			String query1 = "SELECT staatusNimi FROM staatused WHERE staatusID="+staatusVanaID+" AND juhtID="+juhtID;
 			ResultSet rs = stmt1.executeQuery(query1);
 			
 			rs.next();
@@ -285,7 +291,7 @@ public class Staatus {
 			String staatusnimi = rs.getString("staatusNimi");
 			
 			Statement stmt2 = con.createStatement();
-			String query2 = "INSERT INTO logid (staatusID, sonum) VALUES ("+staatuseVanaJärjekorraNR+","+"'"+"Kasutaja"+" muutis staatuse järjekorda : "+staatusnimi+"')";
+			String query2 = "INSERT INTO logid (staatusVanaID, sonum,juhtID) VALUES ("+staatusVanaID+","+"'"+kasutajanimi+" muutis staatuse järjekorda : "+staatusnimi+"',"+juhtID+")";
 			stmt2.executeUpdate(query2);
 			
 			try{rs.close();stmt.close();}catch(Exception x){}

@@ -336,7 +336,7 @@ public class ProjektidController {
 			@RequestParam(value="staatuseSJNR", required=true) int staatuseJärjekorraNR,@RequestParam(value="staatuseSVanaDragId", required=true) int staatusVanaID,
 			@RequestParam(value="staatuseSVanaJNR", required=true) int staatuseVanaJärjekorraNR){
 
-		int vastus = Staatus.muudaStaatuseJärjekordaAndmebaasis(staatusID,staatuseJärjekorraNR,staatusVanaID,staatuseVanaJärjekorraNR);
+		int vastus = Staatus.muudaStaatuseJärjekordaAndmebaasis(staatusID,staatuseJärjekorraNR,staatusVanaID,staatuseVanaJärjekorraNR,juhtID);
 		
 		if(vastus == Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
