@@ -46,6 +46,7 @@ public class TootajadController {
 	
 	private String teade;
 	private int esimeseKuuTulusid = 0,teiseKuuTulusid = 0,kolmandaKuuTulusid = 0;
+	private int juhtID = 0;
 	
 	private String[] kvartalid = {"I - esimene kvartal","II - teine kvartal","III - kolmas kvartal","IV - neljas kvartal"};
 
@@ -57,6 +58,8 @@ public class TootajadController {
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
 			return "redirect:/vaadeViga.htm";
 		}
+		
+		juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
 		
 		//// kvartalid 
 		
@@ -105,7 +108,7 @@ public class TootajadController {
 			Map<Long,String> kuupäevadMap = new HashMap<Long,String>();
 			
 			Statement stmt0 = con.createStatement();
-			String query0 = "SELECT aeg FROM tulud, projektikasutajad,kasutajad WHERE töötab=1 AND YEAR(aeg)="+hetkeAasta+" AND projektikasutajad.kasutaja_ID=kasutajad.kasutajaID AND (MONTH(aeg)="+(algusKvartal-1)+" OR MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+")";
+			String query0 = "SELECT aeg FROM tulud, projektikasutajad,kasutajad WHERE töötab=1 AND YEAR(aeg)="+hetkeAasta+" AND projektikasutajad.kasutaja_ID=kasutajad.kasutajaID AND (MONTH(aeg)="+(algusKvartal-1)+" OR MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+")"+" AND tulud.juhtID="+juhtID+" AND projektikasutajad.juhtID="+juhtID+" AND kasutajad.juhtID="+juhtID;
 			ResultSet rs0 = stmt0.executeQuery(query0);
 			
 			while(rs0.next()){
@@ -131,7 +134,7 @@ public class TootajadController {
 			}
 			
 			Statement stmt = con.createStatement();
-			String query = "SELECT kasutajaNimi, kasutajaID FROM kasutajad WHERE töötab=1";
+			String query = "SELECT kasutajaNimi, kasutajaID FROM kasutajad WHERE töötab=1"+" AND juhtID="+juhtID;
 			ResultSet rs = stmt.executeQuery(query);
 			
 			while(rs.next()){
@@ -150,7 +153,7 @@ public class TootajadController {
 				
 				for(int i = algusKvartal; i <= lõppKvartal ;i++){
 					Statement stmt2 = con.createStatement();
-					String query2 = "SELECT palk, päev FROM palgad WHERE kasutaja_ID="+kasutajaID+" AND kuu="+i+" AND aasta="+hetkeAasta;
+					String query2 = "SELECT palk, päev FROM palgad WHERE kasutaja_ID="+kasutajaID+" AND kuu="+i+" AND aasta="+hetkeAasta+" AND juhtID="+juhtID;
 					ResultSet rs2 = stmt2.executeQuery(query2);
 					
 					Double palk = 0.0;
@@ -177,7 +180,7 @@ public class TootajadController {
 				}
 
 				Statement stmt3 = con.createStatement();
-				String query3 = "SELECT tulu, osalus, aeg FROM tulud, projektikasutajad WHERE projektikasutajad.kasutaja_ID="+kasutajaID+" AND tulud.projekt_ID=projektikasutajad.projekt_ID AND YEAR(aeg)="+hetkeAasta+" AND (MONTH(aeg)="+(algusKvartal-1)+" OR MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+")";
+				String query3 = "SELECT tulu, osalus, aeg FROM tulud, projektikasutajad WHERE projektikasutajad.kasutaja_ID="+kasutajaID+" AND tulud.projekt_ID=projektikasutajad.projekt_ID AND YEAR(aeg)="+hetkeAasta+" AND (MONTH(aeg)="+(algusKvartal-1)+" OR MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+")"+" AND tulud.juhtID="+juhtID+" AND projektikasutajad.juhtID="+juhtID;
 				ResultSet rs3 = stmt3.executeQuery(query3);
 				
 				while(rs3.next()){
@@ -262,6 +265,8 @@ public class TootajadController {
 			return "redirect:/vaadeViga.htm";
 		}
 		
+		juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+		
 		//// kvartalid 
 		
 		String hetkeKvartalNimi = hetkeKvartal;
@@ -304,7 +309,7 @@ public class TootajadController {
 			Map<Long,String> kuupäevadMap = new HashMap<Long,String>();
 			
 			Statement stmt0 = con.createStatement();
-			String query0 = "SELECT aeg FROM tulud, projektikasutajad,kasutajad WHERE töötab=1 AND YEAR(aeg)="+hetkeAasta+" AND projektikasutajad.kasutaja_ID=kasutajad.kasutajaID AND (MONTH(aeg)="+(algusKvartal-1)+" OR MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+")";
+			String query0 = "SELECT aeg FROM tulud, projektikasutajad,kasutajad WHERE töötab=1 AND YEAR(aeg)="+hetkeAasta+" AND projektikasutajad.kasutaja_ID=kasutajad.kasutajaID AND (MONTH(aeg)="+(algusKvartal-1)+" OR MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+")"+" AND tulud.juhtID="+juhtID+" AND projektikasutajad.juhtID="+juhtID+" AND kasutajad.juhtID="+juhtID;
 			ResultSet rs0 = stmt0.executeQuery(query0);
 			
 			while(rs0.next()){
@@ -330,7 +335,7 @@ public class TootajadController {
 			}
 			
 			Statement stmt = con.createStatement();
-			String query = "SELECT kasutajaNimi, kasutajaID FROM kasutajad WHERE töötab=1";
+			String query = "SELECT kasutajaNimi, kasutajaID FROM kasutajad WHERE töötab=1"+" AND juhtID="+juhtID;
 			ResultSet rs = stmt.executeQuery(query);
 			
 			while(rs.next()){
@@ -349,7 +354,7 @@ public class TootajadController {
 				
 				for(int i = algusKvartal; i <= lõppKvartal ;i++){
 					Statement stmt2 = con.createStatement();
-					String query2 = "SELECT palk,päev FROM palgad WHERE kasutaja_ID="+kasutajaID+" AND kuu="+i+" AND aasta="+hetkeAasta;
+					String query2 = "SELECT palk,päev FROM palgad WHERE kasutaja_ID="+kasutajaID+" AND kuu="+i+" AND aasta="+hetkeAasta+" AND juhtID="+juhtID;
 					ResultSet rs2 = stmt2.executeQuery(query2);
 					
 					Double palk = 0.0;
@@ -376,7 +381,7 @@ public class TootajadController {
 				}
 
 				Statement stmt3 = con.createStatement();
-				String query3 = "SELECT tulu, osalus, aeg FROM tulud, projektikasutajad WHERE projektikasutajad.kasutaja_ID="+kasutajaID+" AND tulud.projekt_ID=projektikasutajad.projekt_ID AND YEAR(aeg)="+hetkeAasta+" AND (MONTH(aeg)="+(algusKvartal-1)+" OR MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+")";
+				String query3 = "SELECT tulu, osalus, aeg FROM tulud, projektikasutajad WHERE projektikasutajad.kasutaja_ID="+kasutajaID+" AND tulud.projekt_ID=projektikasutajad.projekt_ID AND YEAR(aeg)="+hetkeAasta+" AND (MONTH(aeg)="+(algusKvartal-1)+" OR MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+")"+" AND projektikasutajad.juhtID="+juhtID+" AND tulud.juhtID="+juhtID;
 				ResultSet rs3 = stmt3.executeQuery(query3);
 				
 				while(rs3.next()){
@@ -515,39 +520,10 @@ public class TootajadController {
         	}
         	tabeliAndmed.getTuludMap3().put(päev,  summa);
         }
-        /*
-		for(TabeliData d : tabeliAndmed){
-			if(d.getKuuNumber() == kuu){
-				d.setTulu(d.getTulu()+tulu);
-				break;
-			}
-		}
-         */
+
 		return tabeliAndmed;
 	}
 	
-	/*
-	private List<TabeliData> paneTabelJärjekorda(List<TabeliData> tabeliAndmed){
-		List<TabeliData> uuedAndmed = new ArrayList<TabeliData>();
-
-		int k = 1;
-		
-		while(tabeliAndmed.size()>0){
-			
-			for(int i = 0; i<tabeliAndmed.size() ;i++){
-				
-				if(tabeliAndmed.get(i).getKuuNumber() == k){
-					uuedAndmed.add(tabeliAndmed.get(i));
-					tabeliAndmed.remove(i);
-					break;
-				}
-			}
-			k++;
-		}
-
-		return uuedAndmed;
-	}
-*/
 	@RequestMapping(value = "/vaadeTootajadGraaf.htm", method = RequestMethod.GET)
 	public String vaadeTootajadGraaf(HttpServletRequest request,Model m) {
 		
@@ -556,6 +532,8 @@ public class TootajadController {
 			return "redirect:/vaadeViga.htm";
 		}
 		
+		juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+		
 		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
 		
 		Connection con = new Mysql().getConnection();
@@ -563,7 +541,7 @@ public class TootajadController {
 		try{
 
 			Statement stmt = con.createStatement();
-			String query = "SELECT kasutajaNimi FROM kasutajad WHERE töötab=1";
+			String query = "SELECT kasutajaNimi FROM kasutajad WHERE töötab=1"+" AND juhtID="+juhtID;
 			ResultSet rs = stmt.executeQuery(query);
 			
 			while(rs.next()){
@@ -592,7 +570,7 @@ public class TootajadController {
 	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.POST, params = {"kasutajaNimi"})
 	public View lisaUusTöötaja(@ModelAttribute("uusTootaja") Kasutaja kasutaja, Model m){
 
-		int vastus = Kasutaja.lisaKasutajaAndmebaasi(kasutaja);
+		int vastus = Kasutaja.lisaKasutajaAndmebaasi(kasutaja,juhtID);
 		
 		if(vastus == Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
@@ -610,7 +588,7 @@ public class TootajadController {
 	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.POST, params = {"kasutajaID"})
 	public View kustutaTöötaja(@ModelAttribute("kustutaTootaja") Kasutaja kasutaja, Model m){
 
-		int vastus = Kasutaja.muudaKasutajaTöötuksAndmebaasis(kasutaja);
+		int vastus = Kasutaja.muudaKasutajaTöötuksAndmebaasis(kasutaja,juhtID);
 		
 		if(vastus == Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
@@ -709,7 +687,7 @@ public class TootajadController {
 			
 		}
 
-		int vastus = Kasutaja.muudaKasutajatePalkasidAndmebaasis(kasutajad,aasta);
+		int vastus = Kasutaja.muudaKasutajatePalkasidAndmebaasis(kasutajad,aasta,juhtID);
 		
 		if(vastus == Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
@@ -723,7 +701,7 @@ public class TootajadController {
 	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.POST, params = {"kid","uusNimi"})
 	public void muudaTöötajaNime(HttpServletRequest request, HttpServletResponse response,@RequestParam("kid") int kasutajaID,@RequestParam("uusNimi") String uusNimi){
 
-		int vastus = Kasutaja.muudaKasutajaNimeAndmebaasis(kasutajaID,uusNimi);
+		int vastus = Kasutaja.muudaKasutajaNimeAndmebaasis(kasutajaID,uusNimi,juhtID);
 		
 		if(vastus == Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";

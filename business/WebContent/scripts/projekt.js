@@ -91,7 +91,7 @@ $(document).ready(function(){
 });
 
 function avaProjektiDetiliLeht(pid){
-	document.location.href = "vaadeProjektEsimene.htm?id="+pid
+	document.location.href = "vaadeProjektEsimene.htm?id="+pid;
 }
 
 function muudaVastutajaProjektid(pid,nimi){

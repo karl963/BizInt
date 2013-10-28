@@ -140,7 +140,7 @@ public class Projekt {
 		
 	}
 	
-	public static int lisaProjektAndmebaasi(Projekt projekt,int staatusID){
+	public static int lisaProjektAndmebaasi(Projekt projekt,int staatusID, int juhtID){
 		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -152,7 +152,7 @@ public class Projekt {
 			int projektiJärjekorraNR = 1;
 			
 			Statement stmt0 = con.createStatement();
-			String query0 = "SELECT MAX(projektiJärjekorraNR) AS max FROM projektid WHERE staatus_ID="+staatusID;
+			String query0 = "SELECT MAX(projektiJärjekorraNR) AS max FROM projektid WHERE staatus_ID="+staatusID+" AND juhtID="+juhtID;
 			ResultSet rs0 = stmt0.executeQuery(query0);
 			
 			if(rs0.next()){
@@ -160,7 +160,7 @@ public class Projekt {
 			}
 			
 			Statement stmt = con.createStatement();
-			String query = "INSERT INTO projektid (projektNimi, staatus_ID, projektiJärjekorraNR) VALUES ('"+projekt.getNimi()+"',"+staatusID+","+projektiJärjekorraNR+")";
+			String query = "INSERT INTO projektid (projektNimi, staatus_ID, projektiJärjekorraNR,juhtID) VALUES ('"+projekt.getNimi()+"',"+staatusID+","+projektiJärjekorraNR+","+juhtID+")";
 			stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
 			
 			ResultSet rs = stmt.getGeneratedKeys();
@@ -169,15 +169,21 @@ public class Projekt {
 				try {
 					
 					Statement stmt2 = con.createStatement();
-					String query2 = "SELECT staatusNimi FROM staatused WHERE staatusID="+staatusID;
+					String query2 = "SELECT staatusNimi FROM staatused WHERE staatusID="+staatusID+" AND juhtID="+juhtID;
 					ResultSet rs2 = stmt2.executeQuery(query2);
 					
 					rs2.next();
 					
 					String staatusnimi = rs2.getString("staatusNimi");
 					
+					Statement stmt9 = con.createStatement();
+					String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
+					ResultSet rs9 = stmt9.executeQuery(query9);
+					rs9.next();
+					String kasutajanimi = rs9.getString("kasutajaNimi");
+					
 					Statement stmt3 = con.createStatement();
-					String query3 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+rs.getInt(1)+",'Kasutaja kasutaja tekitas projekti staatusesse : "+staatusnimi+"')";
+					String query3 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+rs.getInt(1)+",'"+kasutajanimi+" tekitas projekti staatusesse : "+staatusnimi+"',"+juhtID+")";
 					stmt3.executeUpdate(query3);
 				
 					try{rs2.close();stmt2.close();}catch(Exception x){}
@@ -197,7 +203,7 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 	}
 	
-	public static int muudaProjektiKirjeldusAndmebaasis(UusKirjeldus uusKirjeldus){
+	public static int muudaProjektiKirjeldusAndmebaasis(UusKirjeldus uusKirjeldus, int juhtID){
 		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -206,7 +212,7 @@ public class Projekt {
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
-			String query = "UPDATE projektid SET kirjeldus = '"+uusKirjeldus.getKirjeldus()+"' WHERE projektID="+uusKirjeldus.getProjektID();
+			String query = "UPDATE projektid SET kirjeldus = '"+uusKirjeldus.getKirjeldus()+"' WHERE projektID="+uusKirjeldus.getProjektID()+" AND juhtID="+juhtID;
 			stmt.executeUpdate(query);
 			
 			try{stmt.close();}catch(Exception x){}
@@ -218,8 +224,15 @@ public class Projekt {
 		}
 		
 		try {
+			
+			Statement stmt9 = con.createStatement();
+			String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
+			ResultSet rs9 = stmt9.executeQuery(query9);
+			rs9.next();
+			String kasutajanimi = rs9.getString("kasutajaNimi");
+			
 			Statement stmt2 = con.createStatement();
-			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+uusKirjeldus.getProjektID()+","+"'"+"Kasutaja"+" muutis projekti kirjeldust')";
+			String query2 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+uusKirjeldus.getProjektID()+","+"'"+kasutajanimi+" muutis projekti kirjeldust',"+juhtID+")";
 			stmt2.executeUpdate(query2);
 			
 			try{stmt2.close();}catch(Exception x){}
@@ -230,7 +243,7 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 	}
 	
-	public static int lisaUusKasutajaAndmebaasi(UusKasutaja uusKasutaja){
+	public static int lisaUusKasutajaAndmebaasi(UusKasutaja uusKasutaja, int juhtID){
 		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -239,7 +252,7 @@ public class Projekt {
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
-			String query = "INSERT INTO projektikasutajad (kasutaja_ID, projekt_ID) VALUES ((SELECT kasutajaID FROM kasutajad WHERE kasutajaNimi='"+uusKasutaja.getKasutajaNimi()+"'),"+uusKasutaja.getProjektID()+")";
+			String query = "INSERT INTO projektikasutajad (kasutaja_ID, projekt_ID,juhtID) VALUES ((SELECT kasutajaID FROM kasutajad WHERE kasutajaNimi='"+uusKasutaja.getKasutajaNimi()+"' AND juhtID="+juhtID+"),"+uusKasutaja.getProjektID()+","+juhtID+")";
 			stmt.executeUpdate(query);
 			
 			try{stmt.close();}catch(Exception x){}
@@ -250,8 +263,15 @@ public class Projekt {
 		}
 		
 		try {
+			
+			Statement stmt9 = con.createStatement();
+			String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
+			ResultSet rs9 = stmt9.executeQuery(query9);
+			rs9.next();
+			String kasutajanimi = rs9.getString("kasutajaNimi");
+			
 			Statement stmt2 = con.createStatement();
-			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+uusKasutaja.getProjektID()+","+"'"+"Kasutaja"+" määras "+uusKasutaja.getKasutajaNimi()+" projekti töötajaks')";
+			String query2 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+uusKasutaja.getProjektID()+","+"'"+kasutajanimi+" määras "+uusKasutaja.getKasutajaNimi()+" projekti töötajaks',"+juhtID+")";
 			stmt2.executeUpdate(query2);
 			
 			try{stmt.close();}catch(Exception x){}
@@ -262,7 +282,7 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 	}
 	
-	public static int muudaKasutajateAndmeidProjektigaAndmebaasis(String kasutajad, int projektID){
+	public static int muudaKasutajateAndmeidProjektigaAndmebaasis(String kasutajad, int projektID, int juhtID){
 		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -316,7 +336,7 @@ public class Projekt {
 			Statement stmt;
 			try {
 				stmt = con.createStatement();
-				String query = "UPDATE projektikasutajad SET aktiivne="+aktiivne+", osalus="+osalus+",vastutaja="+vastutaja+" WHERE projekt_ID="+projektID+" AND kasutaja_ID="+kasutajaID;
+				String query = "UPDATE projektikasutajad SET aktiivne="+aktiivne+", osalus="+osalus+",vastutaja="+vastutaja+" WHERE projekt_ID="+projektID+" AND kasutaja_ID="+kasutajaID+" AND juhtID="+juhtID;
 				stmt.executeUpdate(query);
 				
 				try{stmt.close();}catch(Exception x){}
@@ -329,8 +349,15 @@ public class Projekt {
 		}
 		
 		try {
+			
+			Statement stmt9 = con.createStatement();
+			String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
+			ResultSet rs9 = stmt9.executeQuery(query9);
+			rs9.next();
+			String kasutajanimi = rs9.getString("kasutajaNimi");
+			
 			Statement stmt2 = con.createStatement();
-			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+projektID+","+"'"+"Kasutaja"+" muutis töötajate andmeid projektis";
+			String query2 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+projektID+","+"'"+kasutajanimi+" muutis töötajate andmeid projektis',"+juhtID+")";
 			stmt2.executeUpdate(query2);
 			
 			try{stmt2.close();}catch(Exception x){}
@@ -341,19 +368,7 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 	}
 	
-	public static boolean muudaProjektiStaatustAndmebaasis(Projekt projekt, Staatus vanaStaatus, Staatus uusStaatus){
-		
-		/******************************************************************
-		 ******************************************************************
-		 ***************************** ANDMEBAAS **************************
-		 ******************************************************************
-		 ******************************************************************
-		 */
-		
-		return false;
-	}
-	
-	public static int muudaProjektiNimeAndmebaasis(UusProjektiNimi nimi){
+	public static int muudaProjektiNimeAndmebaasis(UusProjektiNimi nimi, int juhtID){
 		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -362,7 +377,7 @@ public class Projekt {
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
-			String query = "UPDATE projektid SET projektNimi = '"+nimi.getUusNimi()+"' WHERE projektID="+nimi.getProjektID();
+			String query = "UPDATE projektid SET projektNimi = '"+nimi.getUusNimi()+"' WHERE projektID="+nimi.getProjektID()+" AND juhtID="+juhtID;
 			stmt.executeUpdate(query);
 			
 			try{stmt.close();}catch(Exception x){}
@@ -373,8 +388,15 @@ public class Projekt {
 		}
 		
 		try {
+			
+			Statement stmt9 = con.createStatement();
+			String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
+			ResultSet rs9 = stmt9.executeQuery(query9);
+			rs9.next();
+			String kasutajanimi = rs9.getString("kasutajaNimi");
+			
 			Statement stmt2 = con.createStatement();
-			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+nimi.getProjektID()+","+"'"+"Kasutaja"+" määras projektile uue nime : "+nimi.getUusNimi()+"')";
+			String query2 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+nimi.getProjektID()+","+"'"+kasutajanimi+" määras projektile uue nime : "+nimi.getUusNimi()+"',"+juhtID+")";
 			stmt2.executeUpdate(query2);
 			
 			try{stmt2.close();}catch(Exception x){}
@@ -385,7 +407,7 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 	}
 	
-	public static int muudaProjektiReitingutAndmebaasis(int projektID, int reiting){
+	public static int muudaProjektiReitingutAndmebaasis(int projektID, int reiting, int juhtID){
 		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -394,7 +416,7 @@ public class Projekt {
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
-			String query = "UPDATE projektid SET reiting = "+reiting+" WHERE projektID="+projektID;
+			String query = "UPDATE projektid SET reiting = "+reiting+" WHERE projektID="+projektID+" AND juhtID="+juhtID;
 			stmt.executeUpdate(query);
 			
 			try{stmt.close();}catch(Exception x){}
@@ -405,8 +427,15 @@ public class Projekt {
 		}
 		
 		try {
+			
+			Statement stmt9 = con.createStatement();
+			String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
+			ResultSet rs9 = stmt9.executeQuery(query9);
+			rs9.next();
+			String kasutajanimi = rs9.getString("kasutajaNimi");
+			
 			Statement stmt2 = con.createStatement();
-			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+projektID+","+"'"+"Kasutaja"+" muutis projekti reitingut : "+reiting+"')";
+			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+projektID+","+"'"+kasutajanimi+" muutis projekti reitingut : "+reiting+"',"+juhtID+")";
 			stmt2.executeUpdate(query2);
 			
 			try{stmt2.close();}catch(Exception x){}
@@ -417,19 +446,7 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 	}
 	
-	public static boolean lisaLogiAndmebaasi(Projekt projekt, Logi logi){
-		
-		/******************************************************************
-		 ******************************************************************
-		 ***************************** ANDMEBAAS **************************
-		 ******************************************************************
-		 ******************************************************************
-		 */
-		
-		return false;
-	}
-	
-	public static int lisaKommentaarAndmebaasi(UusKommentaar uusKommentaar){
+	public static int lisaKommentaarAndmebaasi(UusKommentaar uusKommentaar, int juhtID){
 		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -438,7 +455,7 @@ public class Projekt {
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
-			String query = "INSERT INTO kommentaarid (sonum, projekt_ID, kasutaja_ID) VALUES ('"+uusKommentaar.getSonum()+"',"+uusKommentaar.getProjektID()+",1)";
+			String query = "INSERT INTO kommentaarid (sonum, projekt_ID, kasutaja_ID,juhtID) VALUES ('"+uusKommentaar.getSonum()+"',"+uusKommentaar.getProjektID()+",1,"+juhtID+")";
 			stmt.executeUpdate(query);
 			
 			try{stmt.close();}catch(Exception x){}
@@ -451,7 +468,7 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 	}
 
-	public static int lisaKuluAndmebaasi(Kulu kulu){
+	public static int lisaKuluAndmebaasi(Kulu kulu, int juhtID){
 		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -464,13 +481,13 @@ public class Projekt {
 			Timestamp aeg = new Timestamp(kulu.getAeg().getTime());
 		
 			if(!kulu.getKasutajaNimi().equals("")){
-				String query = "INSERT INTO kulud (kulu, aeg, kuluNimi, projekt_ID, kaspalk) "
-						+ "VALUES ("+kulu.getSumma()+",'"+aeg+"','palk töötajale: "+kulu.getKasutajaNimi()+"',"+kulu.getProjektID()+",1)";
+				String query = "INSERT INTO kulud (kulu, aeg, kuluNimi, projekt_ID, kaspalk,juhtID) "
+						+ "VALUES ("+kulu.getSumma()+",'"+aeg+"','palk töötajale: "+kulu.getKasutajaNimi()+"',"+kulu.getProjektID()+",1,"+juhtID+")";
 				stmt.executeUpdate(query);
 			}
 			else{
-				String query = "INSERT INTO kulud (kulu, aeg, kuluNimi, projekt_ID) "
-					+ "VALUES ("+kulu.getSumma()+",'"+aeg+"','"+kulu.getKuluNimi()+"',"+kulu.getProjektID()+")";
+				String query = "INSERT INTO kulud (kulu, aeg, kuluNimi, projekt_ID,juhtID) "
+					+ "VALUES ("+kulu.getSumma()+",'"+aeg+"','"+kulu.getKuluNimi()+"',"+kulu.getProjektID()+","+juhtID+")";
 				stmt.executeUpdate(query);
 			}
 			
@@ -481,14 +498,21 @@ public class Projekt {
 		}
 		
 		try {
+			
+			Statement stmt9 = con.createStatement();
+			String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
+			ResultSet rs9 = stmt9.executeQuery(query9);
+			rs9.next();
+			String kasutajanimi = rs9.getString("kasutajaNimi");
+			
 			Statement stmt2 = con.createStatement();
 			String query2;
 			if(kulu.getKuluNimi().equals(" ") || kulu.getKuluNimi().equals("")){
-				query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+kulu.getProjektID()+","+"'"+"Kasutaja"+" lisas projektile uue kulu : "+kulu.getSumma()+"')";
+				query2 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+kulu.getProjektID()+","+"'"+kasutajanimi+" lisas projektile uue kulu : "+kulu.getSumma()+"',"+juhtID+")";
 
 			}
 			else{
-				query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+kulu.getProjektID()+","+"'"+"Kasutaja"+" lisas projektile uue kulu : "+kulu.getKuluNimi()+" ("+kulu.getSumma()+")')";
+				query2 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+kulu.getProjektID()+","+"'"+kasutajanimi+" lisas projektile uue kulu : "+kulu.getKuluNimi()+" ("+kulu.getSumma()+")',"+juhtID+")";
 
 			}
 			stmt2.executeUpdate(query2);
@@ -501,7 +525,7 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 		
 	}
-	public static int lisaTuluAndmebaasi(Tulu tulu){
+	public static int lisaTuluAndmebaasi(Tulu tulu, int juhtID){
 		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -512,8 +536,8 @@ public class Projekt {
 			stmt = con.createStatement();
 			
 			Timestamp aeg = new Timestamp(tulu.getAeg().getTime());
-			String query = "INSERT INTO tulud (tulu, aeg, tuluNimi, projekt_ID) "
-				+ "VALUES ("+tulu.getSumma()+",'"+aeg+"','"+tulu.getTuluNimi()+"',"+tulu.getProjektID()+")";
+			String query = "INSERT INTO tulud (tulu, aeg, tuluNimi, projekt_ID,juhtID) "
+				+ "VALUES ("+tulu.getSumma()+",'"+aeg+"','"+tulu.getTuluNimi()+"',"+tulu.getProjektID()+","+juhtID+")";
 
 			stmt.executeUpdate(query);
 			
@@ -525,14 +549,21 @@ public class Projekt {
 		}
 		
 		try {
+			
+			Statement stmt9 = con.createStatement();
+			String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
+			ResultSet rs9 = stmt9.executeQuery(query9);
+			rs9.next();
+			String kasutajanimi = rs9.getString("kasutajaNimi");
+			
 			Statement stmt2 = con.createStatement();
 			String query2;
 			if(tulu.getTuluNimi().equals(" ") || tulu.getTuluNimi().equals("")){
-				query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+tulu.getProjektID()+","+"'"+"Kasutaja"+" lisas projektile uue tulu : "+tulu.getSumma()+"')";
+				query2 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+tulu.getProjektID()+","+"'"+kasutajanimi+" lisas projektile uue tulu : "+tulu.getSumma()+"',"+juhtID+")";
 
 			}
 			else{
-				query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+tulu.getProjektID()+","+"'"+"Kasutaja"+" lisas projektile uue tulu : "+tulu.getTuluNimi()+" ("+tulu.getSumma()+")')";
+				query2 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+tulu.getProjektID()+","+"'"+kasutajanimi+" lisas projektile uue tulu : "+tulu.getTuluNimi()+" ("+tulu.getSumma()+")',"+juhtID+")";
 
 			}
 			stmt2.executeUpdate(query2);
@@ -545,7 +576,7 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 	}
 	
-	public static int kustutaTuluAndmebaasist(Tulu tulu){
+	public static int kustutaTuluAndmebaasist(Tulu tulu, int juhtID){
 		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -566,6 +597,7 @@ public class Projekt {
 					+ " AND aeg='"+aeg
 					+ "' AND tuluNimi='"+tulu.getTuluNimi()
 					+ "' AND projekt_ID="+tulu.getProjektID()
+					+ " AND juhtID="+juhtID
 					+" LIMIT 1";
 
 		} catch (ParseException e1) {
@@ -573,6 +605,7 @@ public class Projekt {
 			query = "DELETE FROM tulud WHERE tulu="+tulu.getSumma()
 					+ " AND tuluNimi='"+tulu.getTuluNimi()
 					+ "' AND projekt_ID="+tulu.getProjektID()
+					+ " AND juhtID="+juhtID
 					+" LIMIT 1";
 		}
 		
@@ -586,14 +619,21 @@ public class Projekt {
 		}
 		
 		try {
+			
+			Statement stmt9 = con.createStatement();
+			String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
+			ResultSet rs9 = stmt9.executeQuery(query9);
+			rs9.next();
+			String kasutajanimi = rs9.getString("kasutajaNimi");
+			
 			Statement stmt2 = con.createStatement();
 			String query2;
 			if(tulu.getTuluNimi().equals(" ") || tulu.getTuluNimi().equals("")){
-				query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+tulu.getProjektID()+","+"'"+"Kasutaja"+" eemaldas projektist tulu : "+tulu.getSumma()+"')";
+				query2 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+tulu.getProjektID()+","+"'"+kasutajanimi+" eemaldas projektist tulu : "+tulu.getSumma()+"',"+juhtID+")";
 
 			}
 			else{
-				query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+tulu.getProjektID()+","+"'"+"Kasutaja"+" eemaldas projektist tulu : "+tulu.getTuluNimi()+" ("+tulu.getSumma()+")')";
+				query2 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+tulu.getProjektID()+","+"'"+kasutajanimi+" eemaldas projektist tulu : "+tulu.getTuluNimi()+" ("+tulu.getSumma()+")'"+juhtID+")";
 
 			}
 			stmt2.executeUpdate(query2);
@@ -606,7 +646,7 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 	}
 	
-	public static int kustutaKuluAndmebaasist(Kulu kulu){
+	public static int kustutaKuluAndmebaasist(Kulu kulu, int juhtID){
 		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -630,6 +670,7 @@ public class Projekt {
 					+ " AND aeg='"+aeg
 					+ "' AND kuluNimi='"+kulu.getKuluNimi()
 					+ "' AND projekt_ID="+kulu.getProjektID()
+					+ " AND juhtID="+juhtID
 					+" LIMIT 1";
 			
 		} catch (ParseException e1) {
@@ -637,6 +678,7 @@ public class Projekt {
 			query = "DELETE FROM kulud WHERE kulu="+kulu.getSumma()
 					+ " AND kuluNimi='"+kulu.getKuluNimi()
 					+ "' AND projekt_ID="+kulu.getProjektID()
+					+ " AND juhtID="+juhtID
 					+" LIMIT 1";
 		}
 		
@@ -650,14 +692,21 @@ public class Projekt {
 		}
 		
 		try {
+			
+			Statement stmt9 = con.createStatement();
+			String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
+			ResultSet rs9 = stmt9.executeQuery(query9);
+			rs9.next();
+			String kasutajanimi = rs9.getString("kasutajaNimi");
+			
 			Statement stmt2 = con.createStatement();
 			String query2;
 			if(kulu.getKuluNimi().equals(" ") || kulu.getKuluNimi().equals("")){
-				query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+kulu.getProjektID()+","+"'"+"Kasutaja"+" eemaldas projektist kulu : "+kulu.getSumma()+"')";
+				query2 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+kulu.getProjektID()+","+"'"+kasutajanimi+" eemaldas projektist kulu : "+kulu.getSumma()+"',"+juhtID+")";
 
 			}
 			else{
-				query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+kulu.getProjektID()+","+"'"+"Kasutaja"+" eemaldas projektist kulu : "+kulu.getKuluNimi()+" ("+kulu.getSumma()+")')";
+				query2 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+kulu.getProjektID()+","+"'"+kasutajanimi+" eemaldas projektist kulu : "+kulu.getKuluNimi()+" ("+kulu.getSumma()+")',"+juhtID+")";
 
 			}
 			stmt2.executeUpdate(query2);
@@ -670,7 +719,7 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 	}
 	
-	public static int kustutaProjektAndmebaasist(int id){
+	public static int kustutaProjektAndmebaasist(int id, int juhtID){
 		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -680,25 +729,25 @@ public class Projekt {
 		try {
 			
 			Statement stmt0 = con.createStatement();
-			String query0 = "SELECT projektiJärjekorraNR AS jNR FROM projektid WHERE projektID="+id;
+			String query0 = "SELECT projektiJärjekorraNR AS jNR FROM projektid WHERE projektID="+id+" AND juhtID="+juhtID;
 			ResultSet rs0 = stmt0.executeQuery(query0);
 			
 			rs0.next();
 			int projektiJärjekorraNR = rs0.getInt("jNR");
 			
 			Statement stmt2 = con.createStatement();
-			String query2 = "SELECT staatus_ID AS idStaatus FROM projektid WHERE projektID="+id;
+			String query2 = "SELECT staatus_ID AS idStaatus FROM projektid WHERE projektID="+id+" AND juhtID="+juhtID;
 			ResultSet rs2 = stmt2.executeQuery(query2);
 			
 			rs2.next();
 			String staatus = rs2.getString("idStaatus");
 			
 			Statement stmt1 = con.createStatement();
-			String query1 = "UPDATE projektid SET projektiJärjekorraNR=projektiJärjekorraNR - 1 WHERE projektiJärjekorraNR>"+projektiJärjekorraNR+" AND staatus_ID="+staatus;
+			String query1 = "UPDATE projektid SET projektiJärjekorraNR=projektiJärjekorraNR - 1 WHERE projektiJärjekorraNR>"+projektiJärjekorraNR+" AND staatus_ID="+staatus+" AND juhtID="+juhtID;
 			stmt1.executeUpdate(query1);
 			
 			Statement stmt = con.createStatement();
-			String query = "DELETE FROM projektid WHERE projektID="+id;
+			String query = "DELETE FROM projektid WHERE projektID="+id+" AND juhtID="+juhtID;
 			stmt.executeUpdate(query);
 			
 			try{stmt2.close();stmt1.close();stmt.close();}catch(Exception x){}
@@ -711,23 +760,23 @@ public class Projekt {
 		try {
 			
 			Statement stmt = con.createStatement();
-			String query = "DELETE FROM projektikasutajad WHERE projekt_ID="+id;
+			String query = "DELETE FROM projektikasutajad WHERE projekt_ID="+id+" AND juhtID="+juhtID;
 			stmt.executeUpdate(query);
 			
 			Statement stmt2 = con.createStatement();
-			String query2 = "DELETE FROM tulud WHERE projekt_ID="+id;
+			String query2 = "DELETE FROM tulud WHERE projekt_ID="+id+" AND juhtID="+juhtID;
 			stmt2.executeUpdate(query2);
 			
 			Statement stmt3 = con.createStatement();
-			String query3 = "DELETE FROM logid WHERE projekt_ID="+id;
+			String query3 = "DELETE FROM logid WHERE projekt_ID="+id+" AND juhtID="+juhtID;
 			stmt3.executeUpdate(query3);
 			
 			Statement stmt4 = con.createStatement();
-			String query4 = "DELETE FROM kulud WHERE projekt_ID="+id;
+			String query4 = "DELETE FROM kulud WHERE projekt_ID="+id+" AND juhtID="+juhtID;
 			stmt4.executeUpdate(query4);
 			
 			Statement stmt5 = con.createStatement();
-			String query5 = "DELETE FROM kommentaarid WHERE projekt_ID="+id;
+			String query5 = "DELETE FROM kommentaarid WHERE projekt_ID="+id+" AND juhtID="+juhtID;
 			stmt5.executeUpdate(query5);
 			
 			try{stmt.close();}catch(Exception x){}
@@ -743,7 +792,7 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 	}
 	
-	public static int eemaldaKasutajaProjektistAndmebaasis(int kasutajaID, int projektID){
+	public static int eemaldaKasutajaProjektistAndmebaasis(int kasutajaID, int projektID, int juhtID){
 		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -752,7 +801,7 @@ public class Projekt {
 		
 		try {
 			Statement stmt = con.createStatement();
-			String query = "DELETE FROM projektikasutajad WHERE projekt_ID="+projektID+" AND kasutaja_ID="+kasutajaID+" LIMIT 1";
+			String query = "DELETE FROM projektikasutajad WHERE projekt_ID="+projektID+" AND kasutaja_ID="+kasutajaID+" AND juhtID="+juhtID+" LIMIT 1";
 			stmt.executeUpdate(query);
 			
 			try{stmt.close();}catch(Exception x){}
@@ -763,8 +812,15 @@ public class Projekt {
 		}
 		
 		try {
+			
+			Statement stmt9 = con.createStatement();
+			String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
+			ResultSet rs9 = stmt9.executeQuery(query9);
+			rs9.next();
+			String kasutajanimi = rs9.getString("kasutajaNimi");
+			
 			Statement stmt = con.createStatement();
-			String query = "SELECT kasutajaNimi FROM kasutajad WHERE kasutajaID="+kasutajaID;
+			String query = "SELECT kasutajaNimi FROM kasutajad WHERE kasutajaID="+kasutajaID+" AND juhtID="+juhtID;
 			ResultSet rs = stmt.executeQuery(query);
 			
 			rs.next();
@@ -772,7 +828,7 @@ public class Projekt {
 			String nimi = rs.getString("kasutajaNimi");
 			
 			Statement stmt3 = con.createStatement();
-			String query3 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+projektID+","+"'"+"Kasutaja"+" eemaldas projektist töötaja : "+nimi+"')";
+			String query3 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+projektID+","+"'"+kasutajanimi+" eemaldas projektist töötaja : "+nimi+"',"+juhtID+")";
 			stmt3.executeUpdate(query3);
 			
 			try{stmt.close();}catch(Exception x){}
@@ -785,7 +841,7 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 	}
 	
-	public static int lisaKasutajaProjektiAndmebaasis(String kasutajaNimi, int projektID){
+	public static int lisaKasutajaProjektiAndmebaasis(String kasutajaNimi, int projektID, int juhtID){
 
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -794,7 +850,7 @@ public class Projekt {
 		
 		try {
 			Statement stmt = con.createStatement();
-			String query = "INSERT INTO projektikasutajad (kasutaja_ID, projekt_ID) VALUES ((SELECT kasutajaID FROM kasutajad WHERE kasutajaNimi='"+kasutajaNimi+"'), "+projektID+")";
+			String query = "INSERT INTO projektikasutajad (kasutaja_ID, projekt_ID,juhtID) VALUES ((SELECT kasutajaID FROM kasutajad WHERE kasutajaNimi='"+kasutajaNimi+"' AND juhtID="+juhtID+"), "+projektID+","+juhtID+")";
 			stmt.executeUpdate(query);
 			
 			try{stmt.close();}catch(Exception x){}
@@ -805,8 +861,15 @@ public class Projekt {
 		}
 		
 		try {
+			
+			Statement stmt9 = con.createStatement();
+			String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
+			ResultSet rs9 = stmt9.executeQuery(query9);
+			rs9.next();
+			String kasutajanimi = rs9.getString("kasutajaNimi");
+			
 			Statement stmt2 = con.createStatement();
-			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+projektID+","+"'"+"Kasutaja"+" lisas projekti töötaja : "+kasutajaNimi+"')";
+			String query2 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+projektID+","+"'"+kasutajanimi+" lisas projekti töötaja : "+kasutajaNimi+"',"+juhtID+")";
 			stmt2.executeUpdate(query2);
 			
 			try{stmt2.close();}catch(Exception x){}
@@ -817,7 +880,7 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 	}
 	
-	public static int muudaProjektiStaatustAndmebaasis(int projektID, int staatusID, int projektiJärjekorraNR, int staatusVanaID, int projektiVanaJärjekorraNR) {
+	public static int muudaProjektiStaatustAndmebaasis(int projektID, int staatusID, int projektiJärjekorraNR, int staatusVanaID, int projektiVanaJärjekorraNR, int juhtID) {
 		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
@@ -827,7 +890,7 @@ public class Projekt {
 			if(projektiJärjekorraNR < 0){
 				projektiJärjekorraNR = 1;
 				Statement stmt3 = con.createStatement();
-				String query3 = "SELECT MAX(projektiJärjekorraNR) AS max FROM projektid WHERE staatus_ID="+staatusID;
+				String query3 = "SELECT MAX(projektiJärjekorraNR) AS max FROM projektid WHERE staatus_ID="+staatusID+" AND juhtID="+juhtID;
 				ResultSet rs = stmt3.executeQuery(query3);
 				rs.next();
 				projektiJärjekorraNR = rs.getInt("max")+1;
@@ -838,30 +901,30 @@ public class Projekt {
 				if(projektiJärjekorraNR != 1 && projektiVanaJärjekorraNR-projektiJärjekorraNR<0){
 					projektiJärjekorraNR -= 1;
 					Statement stmt1 = con.createStatement();
-					String query1 = "UPDATE projektid SET projektiJärjekorraNR=projektiJärjekorraNR +1 WHERE staatus_ID=" + staatusID + " AND projektiJärjekorraNR>"+projektiJärjekorraNR;
+					String query1 = "UPDATE projektid SET projektiJärjekorraNR=projektiJärjekorraNR +1 WHERE staatus_ID=" + staatusID + " AND projektiJärjekorraNR>"+projektiJärjekorraNR+" AND juhtID="+juhtID;
 					stmt1.executeUpdate(query1);
 					try{stmt1.close();}catch(Exception x){}
 				}
 				else{
 					Statement stmt1 = con.createStatement();
-					String query1 = "UPDATE projektid SET projektiJärjekorraNR=projektiJärjekorraNR +1 WHERE staatus_ID=" + staatusID + " AND projektiJärjekorraNR>="+projektiJärjekorraNR;
+					String query1 = "UPDATE projektid SET projektiJärjekorraNR=projektiJärjekorraNR +1 WHERE staatus_ID=" + staatusID + " AND projektiJärjekorraNR>="+projektiJärjekorraNR+" AND juhtID="+juhtID;
 					stmt1.executeUpdate(query1);
 					try{stmt1.close();}catch(Exception x){}
 				}
 			}
 			else{
 				Statement stmt1 = con.createStatement();
-				String query1 = "UPDATE projektid SET projektiJärjekorraNR=projektiJärjekorraNR +1 WHERE staatus_ID=" + staatusID + " AND projektiJärjekorraNR>="+projektiJärjekorraNR;
+				String query1 = "UPDATE projektid SET projektiJärjekorraNR=projektiJärjekorraNR +1 WHERE staatus_ID=" + staatusID + " AND projektiJärjekorraNR>="+projektiJärjekorraNR+" AND juhtID="+juhtID;
 				stmt1.executeUpdate(query1);
 				try{stmt1.close();}catch(Exception x){}
 			}
 			
 			Statement stmt2 = con.createStatement();
-			String query2 = "UPDATE projektid SET projektiJärjekorraNR=projektiJärjekorraNR -1 WHERE staatus_ID=" + staatusVanaID + " AND projektiJärjekorraNR>"+projektiVanaJärjekorraNR;
+			String query2 = "UPDATE projektid SET projektiJärjekorraNR=projektiJärjekorraNR -1 WHERE staatus_ID=" + staatusVanaID + " AND projektiJärjekorraNR>"+projektiVanaJärjekorraNR+" AND juhtID="+juhtID;
 			stmt2.executeUpdate(query2);
 			
 			stmt = con.createStatement();
-			String query = "UPDATE projektid SET staatus_ID="+ staatusID + " , projektiJärjekorraNR="+ projektiJärjekorraNR +" WHERE projektID=" + projektID;
+			String query = "UPDATE projektid SET staatus_ID="+ staatusID + " , projektiJärjekorraNR="+ projektiJärjekorraNR +" WHERE projektID=" + projektID+" AND juhtID="+juhtID;
 			stmt.executeUpdate(query);
 			
 			try{stmt2.close();}catch(Exception x){}
@@ -871,8 +934,15 @@ public class Projekt {
 		}
 		
 		try {
+			
+			Statement stmt9 = con.createStatement();
+			String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
+			ResultSet rs9 = stmt9.executeQuery(query9);
+			rs9.next();
+			String kasutajanimi = rs9.getString("kasutajaNimi");
+			
 			Statement stmt1 = con.createStatement();
-			String query1 = "SELECT staatusNimi FROM staatused WHERE staatusID="+staatusID;
+			String query1 = "SELECT staatusNimi FROM staatused WHERE staatusID="+staatusID+" AND juhtID="+juhtID;
 			ResultSet rs = stmt1.executeQuery(query1);
 			
 			rs.next();
@@ -880,7 +950,7 @@ public class Projekt {
 			String staatusnimi = rs.getString("staatusNimi");
 			
 			Statement stmt2 = con.createStatement();
-			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+projektID+","+"'"+"Kasutaja"+" muutis projekti staatust : "+staatusnimi+"')";
+			String query2 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+projektID+","+"'"+kasutajanimi+" muutis projekti staatust : "+staatusnimi+"',"+juhtID+")";
 			stmt2.executeUpdate(query2);
 			
 			try{rs.close();stmt.close();}catch(Exception x){}
@@ -892,7 +962,7 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 	}
 	
-	public static int muudaProjektiVastutajatAndmebaasis(int projektID,String kasutajaNimi){
+	public static int muudaProjektiVastutajatAndmebaasis(int projektID,String kasutajaNimi, int juhtID){
 
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -902,13 +972,13 @@ public class Projekt {
 		try {
 			
 			Statement stmt = con.createStatement();
-			String query = "SELECT kasutajaID FROM kasutajad WHERE kasutajaNimi='"+kasutajaNimi+"'";
+			String query = "SELECT kasutajaID FROM kasutajad WHERE kasutajaNimi='"+kasutajaNimi+"'"+" AND juhtID="+juhtID;
 			ResultSet rs = stmt.executeQuery(query);
 			
 			if(rs.next()){
 				
 				Statement stmt3 = con.createStatement();
-				String query3 = "UPDATE projektikasutajad SET vastutaja=0 WHERE projekt_ID="+projektID;
+				String query3 = "UPDATE projektikasutajad SET vastutaja=0 WHERE projekt_ID="+projektID+" AND juhtID="+juhtID;
 				stmt3.executeUpdate(query3);
 				
 				try{stmt3.close();}catch(Exception x){}
@@ -916,19 +986,19 @@ public class Projekt {
 				int kasutajaID = rs.getInt("kasutajaID");
 				
 				Statement stmt2 = con.createStatement();
-				String query2 = "SELECT * FROM projektikasutajad WHERE kasutaja_ID="+kasutajaID+" AND projekt_ID="+projektID;
+				String query2 = "SELECT * FROM projektikasutajad WHERE kasutaja_ID="+kasutajaID+" AND projekt_ID="+projektID+" AND juhtID="+juhtID;
 				ResultSet rs2 = stmt2.executeQuery(query2);
 				
 				if(rs2.next()){
 					Statement stmt4 = con.createStatement();
-					String query4 = "UPDATE projektikasutajad SET vastutaja=1 WHERE kasutaja_ID="+kasutajaID+" AND projekt_ID="+projektID;
+					String query4 = "UPDATE projektikasutajad SET vastutaja=1 WHERE kasutaja_ID="+kasutajaID+" AND projekt_ID="+projektID+" AND juhtID="+juhtID;
 					stmt4.executeUpdate(query4);
 					
 					try{stmt4.close();}catch(Exception x){}
 				}
 				else{
 					Statement stmt4 = con.createStatement();
-					String query4 = "INSERT INTO projektikasutajad (kasutaja_ID, projekt_ID,vastutaja) VALUES ('"+kasutajaID+"', "+projektID+",1)";
+					String query4 = "INSERT INTO projektikasutajad (kasutaja_ID, projekt_ID,vastutaja,juhtID) VALUES ('"+kasutajaID+"', "+projektID+",1,"+juhtID+")";
 					stmt4.executeUpdate(query4);
 					
 					try{stmt4.close();}catch(Exception x){}
@@ -950,8 +1020,15 @@ public class Projekt {
 		}
 		
 		try {
+			
+			Statement stmt9 = con.createStatement();
+			String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
+			ResultSet rs9 = stmt9.executeQuery(query9);
+			rs9.next();
+			String kasutajanimi = rs9.getString("kasutajaNimi");
+			
 			Statement stmt2 = con.createStatement();
-			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+projektID+","+"'"+"Kasutaja"+" muutis projekti vastutajaks : "+kasutajaNimi+"')";
+			String query2 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+projektID+","+"'"+kasutajanimi+" muutis projekti vastutajaks : "+kasutajaNimi+"',"+juhtID+")";
 			stmt2.executeUpdate(query2);
 			
 			try{stmt2.close();}catch(Exception x){}

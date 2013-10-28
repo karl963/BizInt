@@ -54,7 +54,7 @@ public class Kasutaja {
 	 ///////// methods \\\\\\\
 	/////////////\\\\\\\\\\\\\\
 	
-	public static int muudaKasutajaNimeAndmebaasis(int kasutajaID, String uusNimi){
+	public static int muudaKasutajaNimeAndmebaasis(int kasutajaID, String uusNimi, int juhtID){
 
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -64,7 +64,7 @@ public class Kasutaja {
 		try{
 			
 			Statement stmt = con.createStatement();
-			String query = "UPDATE kasutajad SET kasutajaNimi='"+uusNimi+"' WHERE kasutajaID="+kasutajaID;
+			String query = "UPDATE kasutajad SET kasutajaNimi='"+uusNimi+"' WHERE kasutajaID="+kasutajaID+" AND juhtID="+juhtID;
 			stmt.executeUpdate(query);
 
 			try{stmt.close();}catch(Exception x){}
@@ -78,7 +78,7 @@ public class Kasutaja {
 		return Kasutaja.KÕIK_OKEI;
 	}
 	
-	public static int lisaKasutajaAndmebaasi(Kasutaja kasutaja){
+	public static int lisaKasutajaAndmebaasi(Kasutaja kasutaja, int juhtID){
 		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -88,7 +88,7 @@ public class Kasutaja {
 		try{
 
 			Statement stmt = con.createStatement();
-			String query = "SELECT töötab FROM kasutajad WHERE kasutajaNimi='"+kasutaja.getKasutajaNimi()+"'";
+			String query = "SELECT töötab FROM kasutajad WHERE kasutajaNimi='"+kasutaja.getKasutajaNimi()+"'"+" AND juhtID="+juhtID;
 			ResultSet rs = stmt.executeQuery(query);
 			
 			// kui kasutaja selle nimega on olemas, aga ta on kustutatud vahepeal töölisete seast, siis paneme ta sinna tagasi
@@ -99,7 +99,7 @@ public class Kasutaja {
 					return Kasutaja.VIGA_JUBA_EKSISTEERIB;
 				}
 				else{
-					String query2 = "UPDATE kasutajad SET töötab=1 WHERE  kasutajaNimi = '"+kasutaja.getKasutajaNimi()+"'";
+					String query2 = "UPDATE kasutajad SET töötab=1 WHERE  kasutajaNimi = '"+kasutaja.getKasutajaNimi()+"'"+" AND juhtID="+juhtID;
 					
 					try {
 						Statement stmt2 = con.createStatement();
@@ -112,7 +112,7 @@ public class Kasutaja {
 				}
 			}
 			else{
-				String query2 = "INSERT INTO kasutajad (kasutajaNimi) VALUES ('"+kasutaja.getKasutajaNimi()+"')";
+				String query2 = "INSERT INTO kasutajad (kasutajaNimi,juhtID) VALUES ('"+kasutaja.getKasutajaNimi()+"',"+juhtID+")";
 				
 				try {
 					Statement stmt2 = con.createStatement();
@@ -134,7 +134,7 @@ public class Kasutaja {
 		return Kasutaja.KÕIK_OKEI;
 	}
 	
-	public static int muudaKasutajaTöötuksAndmebaasis(Kasutaja kasutaja){
+	public static int muudaKasutajaTöötuksAndmebaasis(Kasutaja kasutaja, int juhtID){
 		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -143,7 +143,7 @@ public class Kasutaja {
 		
 		try {
 			Statement stmt = con.createStatement();
-			String query = "UPDATE kasutajad SET töötab=0 WHERE kasutajaID = "+kasutaja.getKasutajaID();
+			String query = "UPDATE kasutajad SET töötab=0 WHERE kasutajaID = "+kasutaja.getKasutajaID()+" AND juhtID="+juhtID;
 			stmt.executeUpdate(query);
 			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
@@ -156,7 +156,7 @@ public class Kasutaja {
 		return Kasutaja.KÕIK_OKEI;
 	}
 	
-	public static int muudaKasutajatePalkasidAndmebaasis(List<Kasutaja> kasutajad,int aasta){
+	public static int muudaKasutajatePalkasidAndmebaasis(List<Kasutaja> kasutajad,int aasta, int juhtID){
 		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -168,7 +168,7 @@ public class Kasutaja {
 			for(Kasutaja k : kasutajad){
 				
 				Statement stmt0 = con.createStatement();
-				String query0 = "SELECT kasutajaID FROM kasutajad WHERE kasutajaNimi = '"+k.getKasutajaNimi()+"'";
+				String query0 = "SELECT kasutajaID FROM kasutajad WHERE kasutajaNimi = '"+k.getKasutajaNimi()+"'"+" AND juhtID="+juhtID;
 				ResultSet rs0 = stmt0.executeQuery(query0);
 				
 				rs0.next();
@@ -184,18 +184,18 @@ public class Kasutaja {
 					int päev = k.getTabeliAndmed().getPalgaKuupäevad()[i];
 					
 					Statement stmt = con.createStatement();
-					String query = "SELECT palk FROM palgad WHERE kasutaja_ID = "+k.getKasutajaID()+" AND kuu="+kuu+" AND aasta="+aasta;
+					String query = "SELECT palk FROM palgad WHERE kasutaja_ID = "+k.getKasutajaID()+" AND kuu="+kuu+" AND aasta="+aasta+" AND juhtID="+juhtID;
 					ResultSet rs = stmt.executeQuery(query);
 					
 					if(rs.next()){ // kui meil oli juba sissekanne, siis uuendame
 						Statement stmt2 = con.createStatement();
-						String query2 = "UPDATE palgad SET palk="+palk+", päev="+päev+" WHERE kuu="+kuu+" AND aasta="+aasta+" AND kasutaja_ID = "+k.getKasutajaID();
+						String query2 = "UPDATE palgad SET palk="+palk+", päev="+päev+" WHERE kuu="+kuu+" AND aasta="+aasta+" AND kasutaja_ID = "+k.getKasutajaID()+" AND juhtID="+juhtID;
 						stmt2.executeUpdate(query2);
 						try{stmt2.close();}catch(Exception x){}
 					}
 					else{ // kui palka polnud lisatud, siis lisame
 						Statement stmt2 = con.createStatement();
-						String query2 = "INSERT INTO palgad (kasutaja_ID,palk,kuu,aasta,päev) VALUES ("+k.getKasutajaID()+","+palk+","+kuu+","+aasta+","+päev+")";
+						String query2 = "INSERT INTO palgad (kasutaja_ID,palk,kuu,aasta,päev,juhtID) VALUES ("+k.getKasutajaID()+","+palk+","+kuu+","+aasta+","+päev+","+juhtID+")";
 						stmt2.executeUpdate(query2);
 						try{stmt2.close();}catch(Exception x){}
 					}

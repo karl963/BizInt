@@ -30,6 +30,7 @@ public class PipelineController {
 	
 	private List<Staatus> staatused = new ArrayList<Staatus>();
 	private String teade;
+	private int juhtID = 0;
 
 	@RequestMapping(value = "/vaadePipeline.htm", method = RequestMethod.GET)
 	public String vaadePipeline(HttpServletRequest request,Model m) {
@@ -41,14 +42,14 @@ public class PipelineController {
 		
 		staatused = new ArrayList<Staatus>();
 		
-		Connection con = new Mysql().getConnection();;
+		Connection con = new Mysql().getConnection();
+		
+		juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
 		
 		try{
 			
 			Statement stmt = con.createStatement();
-			
-			String query = "SELECT staatusNimi,järjekorraNR,staatusID FROM staatused";
-			
+			String query = "SELECT staatusNimi,järjekorraNR,staatusID FROM staatused WHERE juhtID="+juhtID;
 			ResultSet rs = stmt.executeQuery(query);
 		
 			while(rs.next()){
@@ -63,7 +64,7 @@ public class PipelineController {
 				staatus.setNimi(staatusNimi);
 				staatus.setId(staatusID);
 				
-				String query2 = "SELECT projektID FROM projektid WHERE staatus_ID="+staatusID;
+				String query2 = "SELECT projektID FROM projektid WHERE staatus_ID="+staatusID+" AND juhtID="+juhtID;
 				Statement stmt2 = con.createStatement();
 				ResultSet rs2 = stmt2.executeQuery(query2);
 				
@@ -75,7 +76,7 @@ public class PipelineController {
 					
 					int projektID = rs2.getInt("projektID");
 					
-					String query4 = "SELECT tulu FROM tulud WHERE projekt_ID="+projektID;
+					String query4 = "SELECT tulu FROM tulud WHERE projekt_ID="+projektID+" AND juhtID="+juhtID;;
 					Statement stmt4 = con.createStatement();
 					ResultSet rs4 = stmt4.executeQuery(query4);
 					
@@ -93,7 +94,7 @@ public class PipelineController {
 					
 					List<Kulu> kulud = new ArrayList<Kulu>();
 					
-					String query5 = "SELECT kulu FROM kulud WHERE projekt_ID="+projektID;
+					String query5 = "SELECT kulu FROM kulud WHERE projekt_ID="+projektID+" AND juhtID="+juhtID;;
 					Statement stmt5 = con.createStatement();
 					ResultSet rs5 = stmt5.executeQuery(query5);
 					

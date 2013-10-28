@@ -16,8 +16,8 @@
   		  
   			<p>Te olete juba sisse loginud kasutajaga: ${sessionScope.kasutajaNimi}</p>
   			<br>
-  			Teid suunatakse kohe <a href="vaadeProjektid.htm" >projektide vaatesse</a>
-  			
+  			Kui teid 5 sekundi jooksul automaatselt edasi ei suunata, siis vajutage <a href="vaadeProjektid.htm" >siia (projektide vaatesse)</a>
+  			<br>
   			<head><meta http-equiv="refresh" content="0; url=vaadeProjektid.htm"></head> <!-- auto-suunamine -->
   			
   		</c:otherwise>
