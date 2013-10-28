@@ -44,7 +44,7 @@ import bizint.post.UusProjektiNimi;
 @Controller
 public class TootajadController {
 	
-	private String teade;
+	private String teade = null;
 	private int esimeseKuuTulusid = 0,teiseKuuTulusid = 0,kolmandaKuuTulusid = 0;
 	private int juhtID = 0;
 	

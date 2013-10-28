@@ -9,6 +9,12 @@ $(document).ready(function(){
 });
 
 $(document).ready(function(){
+	
+	$(".teadeHajuvKadumine").ready(function() {
+		  $(".teadeHajuvKadumine").animate({
+		    opacity: 0.0,
+		  }, 3000 );
+	});
 
 	$(".kustutaProjektNupp").click(function(){
 		$(".muudaKustutaEsimene").hide();

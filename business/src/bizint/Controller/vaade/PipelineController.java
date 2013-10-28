@@ -29,7 +29,7 @@ import bizint.app.alam.rahaline.Tulu;
 public class PipelineController {
 	
 	private List<Staatus> staatused = new ArrayList<Staatus>();
-	private String teade;
+	private String teade = null;
 	private int juhtID = 0;
 
 	@RequestMapping(value = "/vaadePipeline.htm", method = RequestMethod.GET)
@@ -142,6 +142,7 @@ public class PipelineController {
 		m.addAttribute("staatused",staatusteArray);
 		m.addAttribute("teade", teade);
 		
+		teade = null;
 		return "vaadePipeline";
 	}
 	
