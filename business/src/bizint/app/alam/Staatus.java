@@ -202,6 +202,7 @@ public class Staatus {
 			
 			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			e.printStackTrace();
 			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}

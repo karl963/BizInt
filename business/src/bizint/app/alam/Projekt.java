@@ -237,6 +237,7 @@ public class Projekt {
 			
 			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		if (con!=null) try {con.close();}catch (Exception ignore) {}
@@ -276,6 +277,7 @@ public class Projekt {
 			
 			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		if (con!=null) try {con.close();}catch (Exception ignore) {}
@@ -362,6 +364,7 @@ public class Projekt {
 			
 			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		if (con!=null) try {con.close();}catch (Exception ignore) {}
@@ -401,6 +404,7 @@ public class Projekt {
 			
 			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		if (con!=null) try {con.close();}catch (Exception ignore) {}
@@ -440,6 +444,7 @@ public class Projekt {
 			
 			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		if (con!=null) try {con.close();}catch (Exception ignore) {}
@@ -463,6 +468,7 @@ public class Projekt {
 			
 			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			e.printStackTrace();
 			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -496,6 +502,7 @@ public class Projekt {
 			
 			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			e.printStackTrace();
 			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -522,6 +529,7 @@ public class Projekt {
 			
 			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		if (con!=null) try {con.close();}catch (Exception ignore) {}
@@ -573,6 +581,7 @@ public class Projekt {
 			
 			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		if (con!=null) try {con.close();}catch (Exception ignore) {}
@@ -617,6 +626,7 @@ public class Projekt {
 			
 			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			e.printStackTrace();
 			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -643,6 +653,7 @@ public class Projekt {
 			
 			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		if (con!=null) try {con.close();}catch (Exception ignore) {}
@@ -659,6 +670,7 @@ public class Projekt {
 		try {
 			stmt = con.createStatement();
 		} catch (SQLException e) {
+			e.printStackTrace();
 			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -690,6 +702,7 @@ public class Projekt {
 			
 			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			e.printStackTrace();
 			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -716,6 +729,7 @@ public class Projekt {
 			
 			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		if (con!=null) try {con.close();}catch (Exception ignore) {}
@@ -877,6 +891,7 @@ public class Projekt {
 			
 			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		if (con!=null) try {con.close();}catch (Exception ignore) {}
@@ -932,6 +947,7 @@ public class Projekt {
 			
 			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			e.printStackTrace();
 			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
@@ -959,6 +975,7 @@ public class Projekt {
 			try{rs.close();stmt.close();}catch(Exception x){}
 			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		if (con!=null) try {con.close();}catch (Exception ignore) {}
@@ -1036,6 +1053,7 @@ public class Projekt {
 			
 			try{stmt2.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 		
 		if (con!=null) try {con.close();}catch (Exception ignore) {}

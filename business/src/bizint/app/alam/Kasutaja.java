@@ -106,6 +106,7 @@ public class Kasutaja {
 						stmt2.executeUpdate(query2);
 						try{stmt2.close();}catch(Exception x){}
 					} catch (SQLException e) {
+						e.printStackTrace();
 						if (con!=null) try {con.close();}catch (Exception ignore) {}
 						return Kasutaja.VIGA_JUBA_EKSISTEERIB;
 					}
@@ -119,6 +120,7 @@ public class Kasutaja {
 					stmt2.executeUpdate(query2);
 					try{stmt2.close();}catch(Exception x){}
 				} catch (SQLException e) {
+					
 					return Kasutaja.VIGA_JUBA_EKSISTEERIB;
 				}
 			}
