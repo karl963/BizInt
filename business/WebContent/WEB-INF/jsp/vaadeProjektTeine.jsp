@@ -72,6 +72,7 @@ Reiting: ${projekt.reitinguHTML}
 	<div id="kuluKirjeldus">Kirjeldus: <form:input maxlength="100" class="bigInput" path="kuluNimi" value="" /></div>
 	<div style="display:none;" id="tootajadList">
 	<select id="tootajaKuluValimine">
+		<option selected disabled value="Valige töötaja">Valige töötaja</option>
 		<c:forEach items="${tootajad}" var="tootaja">
 			<option value="${tootaja}">${tootaja}</option>
 		</c:forEach>
