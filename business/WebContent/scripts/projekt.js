@@ -427,6 +427,7 @@ var draggableVanaStaatusID;
 var draggableVanaProjektiJNR;
 
 function dragStart(ev, projektID,staatusID,projektiJärjekorraNR) {
+	ev.dataTransfer.setData("Text",ev.target.id);
 	draggableProjektID = projektID;
 	draggableVanaStaatusID = staatusID;
 	draggableVanaProjektiJNR = projektiJärjekorraNR;
@@ -492,6 +493,8 @@ function dragOver(ev) {
 }
 
 function dragDrop(ev) {
+	var data=ev.dataTransfer.getData("Text");
+	ev.target.appendChild(document.getElementById(data));
 	muudaProjektiStaatust();
 	return false;
 }
