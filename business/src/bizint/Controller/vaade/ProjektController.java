@@ -39,6 +39,7 @@ import bizint.post.UusProjektiNimi;
 public class ProjektController {
 
 	private String teade = null;
+	private int juhtID = 0;
 	
 	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.GET, params={"id"})
 	public String vaadeProjektEsimene(HttpServletRequest request,@RequestParam("id") int projektID, Model m) {
@@ -47,6 +48,8 @@ public class ProjektController {
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
 			return "redirect:/vaadeViga.htm";
 		}
+		
+		juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
 		
 		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
 		List<Logi> logi = new ArrayList<Logi>();
@@ -64,7 +67,7 @@ public class ProjektController {
 		try{
 			
 			Statement stmt = con.createStatement();
-			String query = "SELECT kirjeldus, projektNimi, reiting FROM projektid WHERE projektID="+projektID;
+			String query = "SELECT kirjeldus, projektNimi, reiting FROM projektid WHERE projektID="+projektID+" AND juhtID="+juhtID;
 			ResultSet rs = stmt.executeQuery(query);
 			
 			rs.next();
@@ -76,7 +79,7 @@ public class ProjektController {
 			try{rs.close();stmt.close();}catch(Exception x){}
 			
 			Statement stmt2 = con.createStatement();
-			String query2 = "SELECT kasutajaNimi,aktiivne,vastutaja,osalus,kasutajaID FROM projektikasutajad, kasutajad WHERE projektikasutajad.projekt_ID="+projektID+" AND kasutajad.kasutajaID=projektikasutajad.kasutaja_ID";
+			String query2 = "SELECT kasutajaNimi,aktiivne,vastutaja,osalus,kasutajaID FROM projektikasutajad, kasutajad WHERE projektikasutajad.projekt_ID="+projektID+" AND kasutajad.kasutajaID=projektikasutajad.kasutaja_ID AND kasutajad.juhtID="+juhtID+" AND projektikasutajad.juhtID="+juhtID;
 			ResultSet rs2 = stmt2.executeQuery(query2);
 			
 			while(rs2.next()){
@@ -100,7 +103,7 @@ public class ProjektController {
 			try{rs2.close();stmt2.close();}catch(Exception x){}
 			
 			Statement stmt3 = con.createStatement();
-			String query3 = "SELECT sonum,aeg FROM logid WHERE projekt_ID="+projektID;
+			String query3 = "SELECT sonum,aeg FROM logid WHERE projekt_ID="+projektID+" AND juhtID="+juhtID;;
 			ResultSet rs3 = stmt3.executeQuery(query3);
 			
 			while(rs3.next()){
@@ -118,7 +121,7 @@ public class ProjektController {
 			try{rs3.close();stmt3.close();}catch(Exception x){}
 
 			Statement stmt4 = con.createStatement();
-			String query4 = "SELECT sonum, aeg, kasutajaNimi FROM kommentaarid, kasutajad WHERE kommentaarid.projekt_ID="+projektID+" AND kommentaarid.kasutaja_ID=kasutajad.kasutajaID";
+			String query4 = "SELECT sonum, aeg, kasutajaNimi FROM juhid, kommentaarid WHERE kommentaarid.projekt_ID="+projektID+" AND kommentaarid.juhtID="+juhtID+" AND juhid.juhtID="+juhtID;
 			ResultSet rs4 = stmt4.executeQuery(query4);
 
 			while(rs4.next()){
@@ -141,7 +144,7 @@ public class ProjektController {
 			try{rs4.close();stmt4.close();}catch(Exception x){}
 			
 			Statement stmt5 = con.createStatement();
-			String query5 = "SELECT kasutajaNimi, kasutajaID FROM kasutajad WHERE töötab=1";
+			String query5 = "SELECT kasutajaNimi, kasutajaID FROM kasutajad WHERE töötab=1 AND juhtID="+juhtID;
 			ResultSet rs5 = stmt5.executeQuery(query5);
 			
 			while(rs5.next()){
@@ -159,7 +162,7 @@ public class ProjektController {
 			try{rs5.close();stmt5.close();}catch(Exception x){}
 			
 			Statement stmt7 = con.createStatement();
-			String query7 = "SELECT tulu FROM tulud WHERE projekt_ID="+projektID;
+			String query7 = "SELECT tulu FROM tulud WHERE projekt_ID="+projektID+" AND juhtID="+juhtID;
 			ResultSet rs7 = stmt7.executeQuery(query7);
 			
 			while(rs7.next()){
@@ -175,7 +178,7 @@ public class ProjektController {
 			try{rs7.close();stmt7.close();}catch(Exception x){}
 			
 			Statement stmt6 = con.createStatement();
-			String query6 = "SELECT kulu FROM kulud WHERE projekt_ID="+projektID;
+			String query6 = "SELECT kulu FROM kulud WHERE projekt_ID="+projektID+" AND juhtID="+juhtID;
 			ResultSet rs6 = stmt6.executeQuery(query6);
 			
 			while(rs6.next()){
@@ -250,6 +253,8 @@ public class ProjektController {
 			return "redirect:/vaadeViga.htm";
 		}
 		
+		juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+		
 		List<Kulu> kulud = new ArrayList<Kulu>();
 		List<Tulu> tulud = new ArrayList<Tulu>();
 		List<String> tootajad = new ArrayList<String>();
@@ -263,7 +268,7 @@ public class ProjektController {
 		try{
 			
 			Statement stmt = con.createStatement();
-			String query = "SELECT projektNimi, reiting FROM projektid WHERE projektID="+projektID;
+			String query = "SELECT projektNimi, reiting FROM projektid WHERE projektID="+projektID+" AND juhtID="+juhtID;
 			ResultSet rs = stmt.executeQuery(query);
 			
 			rs.next();
@@ -274,7 +279,7 @@ public class ProjektController {
 			try{rs.close();stmt.close();}catch(Exception x){}
 			
 			Statement stmt2 = con.createStatement();
-			String query2 = "SELECT tulu, tuluNimi, aeg FROM tulud WHERE projekt_ID="+projektID;
+			String query2 = "SELECT tulu, tuluNimi, aeg FROM tulud WHERE projekt_ID="+projektID+" AND juhtID="+juhtID;
 			ResultSet rs2 = stmt2.executeQuery(query2);
 			
 			while(rs2.next()){
@@ -295,7 +300,7 @@ public class ProjektController {
 			try{rs2.close();stmt2.close();}catch(Exception x){}
 			
 			Statement stmt3 = con.createStatement();
-			String query3 = "SELECT kulu, kuluNimi, aeg FROM kulud WHERE projekt_ID="+projektID;
+			String query3 = "SELECT kulu, kuluNimi, aeg FROM kulud WHERE projekt_ID="+projektID+" AND juhtID="+juhtID;
 			ResultSet rs3 = stmt3.executeQuery(query3);
 			
 			while(rs3.next()){
@@ -315,7 +320,7 @@ public class ProjektController {
 			try{rs3.close();stmt3.close();}catch(Exception x){}
 			
 			Statement stmt4 = con.createStatement();
-			String query4 = "SELECT sonum, aeg, kasutajaNimi FROM kommentaarid, kasutajad WHERE kommentaarid.projekt_ID="+projektID+" AND kommentaarid.kasutaja_ID=kasutajad.kasutajaID";
+			String query4 = "SELECT sonum, aeg, kasutajaNimi FROM juhid, kommentaarid WHERE kommentaarid.projekt_ID="+projektID+" AND kommentaarid.juhtID="+juhtID+" AND juhid.juhtID="+juhtID;
 			ResultSet rs4 = stmt4.executeQuery(query4);
 
 			while(rs4.next()){
@@ -338,7 +343,7 @@ public class ProjektController {
 			try{rs4.close();stmt4.close();}catch(Exception x){}
 			
 			Statement stmt5 = con.createStatement();
-			String query5 = "SELECT kasutajaNimi FROM kasutajad WHERE töötab=1";
+			String query5 = "SELECT kasutajaNimi FROM kasutajad WHERE töötab=1 AND juhtID="+juhtID;
 			ResultSet rs5 = stmt5.executeQuery(query5);
 
 			while(rs5.next()){
@@ -392,7 +397,7 @@ public class ProjektController {
 	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"sonum","projektID"})
 	public View addKommentaar1(@ModelAttribute("uusKommentaar") UusKommentaar uusKommentaar, Model m){
 
-		int vastus = Projekt.lisaKommentaarAndmebaasi(uusKommentaar);
+		int vastus = Projekt.lisaKommentaarAndmebaasi(uusKommentaar,juhtID);
 		
 		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
@@ -406,7 +411,7 @@ public class ProjektController {
 	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"sonum","projektID"})
 	public View addKommentaar2(@ModelAttribute("uusKommentaar") UusKommentaar uusKommentaar, Model m){
 
-		int vastus = Projekt.lisaKommentaarAndmebaasi(uusKommentaar);
+		int vastus = Projekt.lisaKommentaarAndmebaasi(uusKommentaar,juhtID);
 		
 		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
@@ -420,8 +425,8 @@ public class ProjektController {
 	
 	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"kirjeldus","projektID"})
 	public View muudaKirjeldus(@ModelAttribute("uusKirjeldus") UusKirjeldus uusKirjeldus, Model m){
-
-		int vastus = Projekt.muudaProjektiKirjeldusAndmebaasis(uusKirjeldus);
+		
+		int vastus = Projekt.muudaProjektiKirjeldusAndmebaasis(uusKirjeldus,juhtID);
 		
 		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
@@ -435,8 +440,8 @@ public class ProjektController {
 	
 	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"kasutajaNimi","projektID"})
 	public View addKasutaja(@ModelAttribute("uusKasutaja") UusKasutaja uusKasutaja, Model m){
-
-		int vastus = Projekt.lisaUusKasutajaAndmebaasi(uusKasutaja);
+		
+		int vastus = Projekt.lisaUusKasutajaAndmebaasi(uusKasutaja,juhtID);
 		
 		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
@@ -460,7 +465,7 @@ public class ProjektController {
 			
 			tulu.setAeg(uusAeg);
 			
-			int vastus = Projekt.lisaTuluAndmebaasi(tulu);
+			int vastus = Projekt.lisaTuluAndmebaasi(tulu,juhtID);
 			
 			if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 				teade = "Viga andmebaasiga ühendumisel";
@@ -485,7 +490,7 @@ public class ProjektController {
 			
 			kulu.setAeg(uusAeg);
 			
-			int vastus = Projekt.lisaKuluAndmebaasi(kulu);
+			int vastus = Projekt.lisaKuluAndmebaasi(kulu,juhtID);
 			
 			if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 				teade = "Viga andmebaasiga ühendumisel";
@@ -500,7 +505,7 @@ public class ProjektController {
 	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"kuluNimi","summa","stringAeg","projektID"})
 	public View kustutaKulu(@ModelAttribute("kustutaKulu") Kulu kulu, Model m){
 		
-		int vastus = Projekt.kustutaKuluAndmebaasist(kulu);
+		int vastus = Projekt.kustutaKuluAndmebaasist(kulu,juhtID);
 		
 		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
@@ -515,7 +520,7 @@ public class ProjektController {
 	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"tuluNimi","summa","stringAeg","projektID"})
 	public View kustutaTulu(@ModelAttribute("kustutaTulu") Tulu tulu, Model m){
 
-		int vastus = Projekt.kustutaTuluAndmebaasist(tulu);
+		int vastus = Projekt.kustutaTuluAndmebaasist(tulu,juhtID);
 		
 		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
@@ -532,7 +537,7 @@ public class ProjektController {
 
 		if(käsk.equals("jah")){
 			
-			int vastus = Projekt.kustutaProjektAndmebaasist(id);
+			int vastus = Projekt.kustutaProjektAndmebaasist(id,juhtID);
 			
 			if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 				teade = "Viga andmebaasiga ühendumisel";
@@ -554,7 +559,7 @@ public class ProjektController {
 
 		if(käsk.equals("jah")){
 			
-			int vastus = Projekt.kustutaProjektAndmebaasist(id);
+			int vastus = Projekt.kustutaProjektAndmebaasist(id,juhtID);
 			
 			if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 				teade = "Viga andmebaasiga ühendumisel";
@@ -574,7 +579,7 @@ public class ProjektController {
 	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"uusNimi","projektID"})
 	public View muudaProjektiNime1(@ModelAttribute("uusProjektiNimi") UusProjektiNimi nimi, Model m){
 		
-		int vastus = Projekt.muudaProjektiNimeAndmebaasis(nimi);
+		int vastus = Projekt.muudaProjektiNimeAndmebaasis(nimi,juhtID);
 		
 		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
@@ -589,7 +594,7 @@ public class ProjektController {
 	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"uusNimi","projektID"})
 	public View muudaProjektiNime2(@ModelAttribute("uusProjektiNimi") UusProjektiNimi nimi, Model m){
 
-		int vastus = Projekt.muudaProjektiNimeAndmebaasis(nimi);
+		int vastus = Projekt.muudaProjektiNimeAndmebaasis(nimi,juhtID);
 		
 		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
@@ -605,7 +610,7 @@ public class ProjektController {
 	public View eemaldaKasutaja(@RequestParam("kasutajaID") int kasutajaID,@RequestParam("projektID") int projektID, Model m){
 		
 		
-		int vastus = Projekt.eemaldaKasutajaProjektistAndmebaasis(kasutajaID,projektID);
+		int vastus = Projekt.eemaldaKasutajaProjektistAndmebaasis(kasutajaID,projektID,juhtID);
 		
 		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
@@ -620,7 +625,7 @@ public class ProjektController {
 	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"projektID","kasutajaNimi"})
 	public void lisaKasutajaProjekti(HttpServletRequest request, HttpServletResponse response,@RequestParam("projektID") int projektID,@RequestParam("kasutajaNimi") String nimi, Model m){
 		
-		int vastus = Projekt.lisaKasutajaProjektiAndmebaasis(nimi, projektID);
+		int vastus = Projekt.lisaKasutajaProjektiAndmebaasis(nimi, projektID,juhtID);
 		
 		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
@@ -634,7 +639,7 @@ public class ProjektController {
 	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"projektID","kasutajad"})
 	public void muudaKasutajateAndmeid(HttpServletRequest request, HttpServletResponse response,@RequestParam("kasutajad") String kasutajad, @RequestParam("projektID") int projektID, Model m){
 		
-		int vastus = Projekt.muudaKasutajateAndmeidProjektigaAndmebaasis(kasutajad, projektID);
+		int vastus = Projekt.muudaKasutajateAndmeidProjektigaAndmebaasis(kasutajad, projektID,juhtID);
 		
 		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
@@ -649,7 +654,7 @@ public class ProjektController {
 	public View muudaReitingut1(@RequestParam("reiting") int reiting,@RequestParam("projektID") int projektID, Model m){
 		
 		
-		int vastus = Projekt.muudaProjektiReitingutAndmebaasis(projektID, reiting);
+		int vastus = Projekt.muudaProjektiReitingutAndmebaasis(projektID, reiting,juhtID);
 		
 		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
@@ -665,7 +670,7 @@ public class ProjektController {
 	public View muudaReitingut2(@RequestParam("reiting") int reiting,@RequestParam("projektID") int projektID, Model m){
 		
 		
-		int vastus = Projekt.muudaProjektiReitingutAndmebaasis(projektID, reiting);
+		int vastus = Projekt.muudaProjektiReitingutAndmebaasis(projektID, reiting,juhtID);
 		
 		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";

@@ -11,10 +11,6 @@
 
 <div class=textontop>
 
-<div class=message>
-	<c:if test="${not empty teade}"><div class="message green">${teade}</div></c:if>
-</div>
-
 <div class=staatusteKonteiner>
 
 <c:forEach items="${staatused}" var="staatus">

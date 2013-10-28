@@ -28,8 +28,8 @@ import bizint.app.alam.rahaline.Tulu;
 public class ProjektidController {
 	
 	private List<Staatus> staatused = new ArrayList<Staatus>();
-	//private List<Projekt> projektid = new ArrayList<Projekt>();
 	private String teade;
+	private int juhtID = 0;
 	
 	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.GET)
 	public String vaadeProjektid(HttpServletRequest request,Model m){
@@ -39,6 +39,8 @@ public class ProjektidController {
 			return "redirect:/vaadeViga.htm";
 		}
 		
+		juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+		
 		staatused = new ArrayList<Staatus>();
 		List<String> töötajad = new ArrayList<String>();
 		
@@ -47,7 +49,7 @@ public class ProjektidController {
 		try{
 			
 			Statement stmt = con.createStatement();
-			String query = "SELECT staatusNimi,järjekorraNR,staatusID FROM staatused";
+			String query = "SELECT staatusNimi,järjekorraNR,staatusID FROM staatused WHERE juhtID="+juhtID;
 			ResultSet rs = stmt.executeQuery(query);
 		
 			while(rs.next()){
@@ -62,7 +64,7 @@ public class ProjektidController {
 				staatus.setNimi(staatusNimi);
 				staatus.setId(staatusID);
 				
-				String query2 = "SELECT projektNimi, projektID, projektiJärjekorraNR FROM projektid WHERE staatus_ID="+staatusID;
+				String query2 = "SELECT projektNimi, projektID, projektiJärjekorraNR FROM projektid WHERE staatus_ID="+staatusID+" AND juhtID="+juhtID;
 				Statement stmt2 = con.createStatement();
 				ResultSet rs2 = stmt2.executeQuery(query2);
 				
@@ -76,7 +78,7 @@ public class ProjektidController {
 					String projektNimi = rs2.getString("projektNimi");
 					int projektiJärjekorraNumber = rs2.getInt("projektiJärjekorraNR");
 					
-					String query3 = "SELECT kasutajaNimi, vastutaja FROM projektikasutajad, kasutajad WHERE kasutajaID=kasutaja_ID AND projekt_ID="+projektID;
+					String query3 = "SELECT kasutajaNimi, vastutaja FROM projektikasutajad, kasutajad WHERE kasutajaID=kasutaja_ID AND projekt_ID="+projektID+" AND projektikasutajad.juhtID="+juhtID+" AND kasutajad.juhtID="+juhtID;
 					Statement stmt3 = con.createStatement();
 					ResultSet rs3 = stmt3.executeQuery(query3);
 					
@@ -94,7 +96,7 @@ public class ProjektidController {
 					
 					try{rs3.close();stmt3.close();}catch(Exception x){}
 					
-					String query4 = "SELECT tulu FROM tulud WHERE projekt_ID="+projektID;
+					String query4 = "SELECT tulu FROM tulud WHERE projekt_ID="+projektID+" AND juhtID="+juhtID;
 					Statement stmt4 = con.createStatement();
 					ResultSet rs4 = stmt4.executeQuery(query4);
 					
@@ -132,7 +134,7 @@ public class ProjektidController {
 			
 			
 			Statement stmt2 = con.createStatement();
-			String query2 = "SELECT kasutajaNimi FROM kasutajad WHERE töötab=1";
+			String query2 = "SELECT kasutajaNimi FROM kasutajad WHERE töötab=1 AND juhtID="+juhtID;
 			ResultSet rs2 = stmt2.executeQuery(query2);
 		
 			while(rs2.next()){
@@ -219,7 +221,7 @@ public class ProjektidController {
 	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"nimi"})
 	public View addStaatus(@ModelAttribute("uusStaatus") Staatus staatus, Model m){
 		
-		int vastus = Staatus.lisaStaatusAndmebaasi(staatus);
+		int vastus = Staatus.lisaStaatusAndmebaasi(staatus,juhtID);
 		
 		if(vastus == Staatus.ERROR_JUBA_EKSISTEERIB){
 			teade = "Selle nimega staatus juba eksisteerib";
@@ -237,7 +239,7 @@ public class ProjektidController {
 	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"nimi","staatusID"})
 	public View addProjekt(@ModelAttribute("uusProjekt") Projekt projekt,@RequestParam(value="staatusID", required=true) int staatusID, Model m){
 
-		int vastus = Projekt.lisaProjektAndmebaasi(projekt,staatusID);
+		int vastus = Projekt.lisaProjektAndmebaasi(projekt,staatusID,juhtID);
 		
 		if(vastus == Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
@@ -252,7 +254,7 @@ public class ProjektidController {
 	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"id","kustuta"})
 	public View kustutaStaatus(@RequestParam("id") int staatusID, Model m){
 		
-		int vastus = Staatus.kustutaStaatusAndmebaasist(staatusID);
+		int vastus = Staatus.kustutaStaatusAndmebaasist(staatusID,juhtID);
 		
 		if(vastus == Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
@@ -270,7 +272,7 @@ public class ProjektidController {
 	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"nimi","id"})
 	public View muudaStaatuseNime(@ModelAttribute("staatuseNimeMuutmine") Staatus staatus, Model m){
 		
-		int vastus = Staatus.muudaStaatuseNimeAndmebaasis(staatus);
+		int vastus = Staatus.muudaStaatuseNimeAndmebaasis(staatus,juhtID);
 		
 		if(vastus == Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
@@ -287,6 +289,7 @@ public class ProjektidController {
 
 		if(välja.equals("1")){
 			request.getSession().removeAttribute("kasutajaNimi");
+			request.getSession().removeAttribute("juhtID");
 			request.getSession().invalidate();
 			return new RedirectView("vaadeLogin.htm");
 		}
@@ -301,7 +304,7 @@ public class ProjektidController {
 			@RequestParam(value="projektiDragJNR", required=true) int projektiJärjekorraNR,@RequestParam(value="staatusVanaDragId", required=true) int staatusVanaID,
 			@RequestParam(value="projektiVanaDragJNR", required=true) int projektiVanaJärjekorraNR,Model m){
 
-		int vastus = Projekt.muudaProjektiStaatustAndmebaasis(projektID,staatusID,projektiJärjekorraNR,staatusVanaID,projektiVanaJärjekorraNR);
+		int vastus = Projekt.muudaProjektiStaatustAndmebaasis(projektID,staatusID,projektiJärjekorraNR,staatusVanaID,projektiVanaJärjekorraNR,juhtID);
 		
 		if(vastus == Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
@@ -316,7 +319,7 @@ public class ProjektidController {
 	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"vastutajaProjektid","vastutajaNimi"})
 	public View muudaProjektiStaatust(@RequestParam(value="vastutajaNimi", required=true) String nimi,@RequestParam(value="vastutajaProjektid", required=true) int projektID){
 
-		int vastus = Projekt.muudaProjektiVastutajatAndmebaasis(projektID,nimi);
+		int vastus = Projekt.muudaProjektiVastutajatAndmebaasis(projektID,nimi,juhtID);
 		
 		if(vastus == Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";

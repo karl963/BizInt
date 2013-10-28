@@ -101,7 +101,7 @@ public class Staatus {
 		return projektid.size();
 	}
 	
-	public static int kustutaStaatusAndmebaasist(int staatusID){
+	public static int kustutaStaatusAndmebaasist(int staatusID, int juhtID){
 				
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -111,7 +111,7 @@ public class Staatus {
 		try {
 			
 			Statement stmt = con.createStatement();
-			String query = "SELECT projektID FROM projektid WHERE staatus_ID="+staatusID+" LIMIT 1";
+			String query = "SELECT projektID FROM projektid WHERE staatus_ID="+staatusID+" AND juhtID="+juhtID+" LIMIT 1";
 			ResultSet rs = stmt.executeQuery(query);
 
 			if(rs.next()){
@@ -129,18 +129,18 @@ public class Staatus {
 		try {
 			
 			Statement stmt0 = con.createStatement();
-			String query0 = "SELECT järjekorraNR AS jNR FROM staatused WHERE staatusID="+staatusID;
+			String query0 = "SELECT järjekorraNR AS jNR FROM staatused WHERE staatusID="+staatusID+" AND juhtID="+juhtID;
 			ResultSet rs0 = stmt0.executeQuery(query0);
 			
 			rs0.next();
 			int järjekorraNR = rs0.getInt("jNR");
 			
 			Statement stmt1 = con.createStatement();
-			String query1 = "UPDATE staatused SET järjekorraNR=järjekorraNR - 1 WHERE järjekorraNR>"+järjekorraNR;
+			String query1 = "UPDATE staatused SET järjekorraNR=järjekorraNR - 1 WHERE järjekorraNR>"+järjekorraNR+" AND juhtID="+juhtID;
 			stmt1.executeUpdate(query1);
 			
 			Statement stmt = con.createStatement();
-			String query = "DELETE FROM staatused WHERE staatusID="+staatusID;
+			String query = "DELETE FROM staatused WHERE staatusID="+staatusID+" AND juhtID="+juhtID;
 			stmt.executeUpdate(query);
 			
 			try{stmt0.close();stmt1.close();stmt.close();}catch(Exception x){}
@@ -154,7 +154,7 @@ public class Staatus {
 		return Projekt.KÕIK_OKEI;
 	}
 	
-	public static int lisaStaatusAndmebaasi(Staatus staatus){
+	public static int lisaStaatusAndmebaasi(Staatus staatus, int juhtID){
 		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -166,7 +166,7 @@ public class Staatus {
 			int järjekorraNR = 1;
 			
 			Statement stmt0 = con.createStatement();
-			String query0 = "SELECT MAX(järjekorraNR) AS max FROM staatused";
+			String query0 = "SELECT MAX(järjekorraNR) AS max FROM staatused WHERE juhtID="+juhtID;
 			ResultSet rs = stmt0.executeQuery(query0);
 			
 			if(rs.next()){
@@ -174,7 +174,7 @@ public class Staatus {
 			}
 			
 			Statement stmt = con.createStatement();
-			String query = "INSERT INTO staatused (staatusNimi, järjekorraNR) VALUES ('"+staatus.getNimi()+"',"+järjekorraNR+")";
+			String query = "INSERT INTO staatused (staatusNimi, järjekorraNR,juhtID) VALUES ('"+staatus.getNimi()+"',"+järjekorraNR+","+juhtID+")";
 			stmt.executeUpdate(query);
 			
 			try{stmt.close();}catch(Exception x){}
@@ -188,7 +188,7 @@ public class Staatus {
 		return Staatus.KÕIK_OKEI;
 	}
 	
-	public static int muudaStaatuseNimeAndmebaasis(Staatus staatus){
+	public static int muudaStaatuseNimeAndmebaasis(Staatus staatus, int juhtID){
 		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -197,11 +197,12 @@ public class Staatus {
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
-			String query = "UPDATE staatused SET staatusNimi = '"+staatus.getNimi()+"' WHERE staatusID="+staatus.getId();
+			String query = "UPDATE staatused SET staatusNimi = '"+staatus.getNimi()+"' WHERE staatusID="+staatus.getId()+" AND juhtID="+juhtID;
 			stmt.executeUpdate(query);
 			
 			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
+			e.printStackTrace();
 			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}

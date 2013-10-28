@@ -1,5 +1,9 @@
 package bizint.Controller.vaade;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,12 +15,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
 
+import bizint.andmebaas.Mysql;
 import bizint.post.SisseLogija;
 
 @Controller
 public class LoginController {
 	
-	private String teade = "parool ja kasutajanimi peavad olema samad";
+	private String teade = "";
 	
 	@RequestMapping(value = "/vaadeLogin.htm", method = RequestMethod.GET)
 	public String vaadeLgin(Model m) {
@@ -24,7 +29,7 @@ public class LoginController {
 		m.addAttribute("login",new bizint.post.SisseLogija());
 		m.addAttribute("teade",teade);
 		
-		teade = "parool ja kasutajanimi peavad olema samad";
+		teade = "";
 		
 		return "vaadeLogin";
 	}
@@ -32,14 +37,33 @@ public class LoginController {
 	@RequestMapping(value = "/vaadeLogin.htm", method = RequestMethod.POST)
 	public View logiSisse(HttpServletRequest request, HttpServletResponse response,@ModelAttribute("login") SisseLogija logija, Model m) {
 		
-		if(logija.getKasutajaNimi().equals(logija.getParool())){
-			request.getSession().setAttribute("kasutajaNimi", logija.getKasutajaNimi());
-			return new RedirectView("vaadeProjektid.htm");
+		Connection con = (new Mysql()).getConnection();
+		if(con==null){
+			teade = "Viga andmebaasige ühendusmisel";
 		}
 		else{
-			teade = "Parool või kasutajanimi on vale!";
-			return new RedirectView("vaadeLogin.htm");
+			try{
+				
+				Statement stmt = con.createStatement();
+				String query = "SELECT juhtID FROM juhid WHERE kasutajaNimi='"+logija.getKasutajaNimi()+"' AND parool='"+logija.getParool()+"'";
+				ResultSet rs = stmt.executeQuery(query);
+				
+				if(rs.next()){
+					request.getSession().setAttribute("kasutajaNimi", logija.getKasutajaNimi());
+					request.getSession().setAttribute("juhtID", rs.getInt("juhtID"));
+					teade = "";
+				}
+				else{
+					teade = "Viga kasutajanime või parooliga";
+				}
+				
+			}
+			catch(Exception x){
+				teade = "Viga andmebaasige ühendusmisel";
+			}
 		}
+		
+		return new RedirectView("vaadeLogin.htm");
 	}
 
 }

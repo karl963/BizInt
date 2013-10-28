@@ -1,8 +1,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
 
-<p class="teade">${teade}</p>
 <body class=darkBack>
+
+<c:choose>
+      <c:when test="${teade != null}">
+      	<div class="teadeÜlevalProjektDetail teadeHajuvKadumine">${teade}</div>
+      </c:when>
+</c:choose>
+
 <div class=detailViewDiv>
 <div class=detailViewHeader>
 
@@ -72,6 +78,7 @@ Reiting: ${projekt.reitinguHTML}
 	<div id="kuluKirjeldus">Kirjeldus: <form:input maxlength="100" class="bigInput" path="kuluNimi" value="" /></div>
 	<div style="display:none;" id="tootajadList">
 	<select id="tootajaKuluValimine">
+		<option selected disabled value="Valige töötaja">Valige töötaja</option>
 		<c:forEach items="${tootajad}" var="tootaja">
 			<option value="${tootaja}">${tootaja}</option>
 		</c:forEach>

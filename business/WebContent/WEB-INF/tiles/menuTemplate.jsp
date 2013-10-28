@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@include file="/WEB-INF/jsp/include.jsp" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"  
 "http://www.w3.org/TR/html4/loose.dtd">
@@ -16,6 +17,11 @@
 
 </head>  
 <body>
+<c:choose>
+      <c:when test="${teade != null}">
+      	<div class="teadeÜlevalProjektid teadeHajuvKadumine">${teade}</div>
+      </c:when>
+</c:choose>
 	<tiles:insertAttribute name="header"/>
 	<tiles:insertAttribute name="menu" />
 	<tiles:insertAttribute name="body" />
