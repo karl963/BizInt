@@ -435,7 +435,7 @@ public class Projekt {
 			String kasutajanimi = rs9.getString("kasutajaNimi");
 			
 			Statement stmt2 = con.createStatement();
-			String query2 = "INSERT INTO logid (projekt_ID, sonum) VALUES ("+projektID+","+"'"+kasutajanimi+" muutis projekti reitingut : "+reiting+"',"+juhtID+")";
+			String query2 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+projektID+","+"'"+kasutajanimi+" muutis projekti reitingut : "+reiting+"',"+juhtID+")";
 			stmt2.executeUpdate(query2);
 			
 			try{stmt2.close();}catch(Exception x){}
