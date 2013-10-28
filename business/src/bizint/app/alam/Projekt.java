@@ -454,8 +454,11 @@ public class Projekt {
 		}
 		Statement stmt;
 		try {
+			
+			
+			
 			stmt = con.createStatement();
-			String query = "INSERT INTO kommentaarid (sonum, projekt_ID, kasutaja_ID,juhtID) VALUES ('"+uusKommentaar.getSonum()+"',"+uusKommentaar.getProjektID()+",1,"+juhtID+")";
+			String query = "INSERT INTO kommentaarid (sonum, projekt_ID, juhtID) VALUES ('"+uusKommentaar.getSonum()+"',"+uusKommentaar.getProjektID()+","+juhtID+")";
 			stmt.executeUpdate(query);
 			
 			try{stmt.close();}catch(Exception x){}

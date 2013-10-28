@@ -121,7 +121,7 @@ public class ProjektController {
 			try{rs3.close();stmt3.close();}catch(Exception x){}
 
 			Statement stmt4 = con.createStatement();
-			String query4 = "SELECT sonum, aeg, kasutajaNimi FROM kommentaarid, kasutajad WHERE kommentaarid.projekt_ID="+projektID+" AND kommentaarid.kasutaja_ID=kasutajad.kasutajaID AND kommentaarid.juhtID="+juhtID+" AND kasutajad.juhtID="+juhtID;
+			String query4 = "SELECT sonum, aeg, kasutajaNimi FROM juhid, kommentaarid WHERE kommentaarid.projekt_ID="+projektID+" AND kommentaarid.juhtID="+juhtID+" AND juhid.juhtID="+juhtID;
 			ResultSet rs4 = stmt4.executeQuery(query4);
 
 			while(rs4.next()){
@@ -320,7 +320,7 @@ public class ProjektController {
 			try{rs3.close();stmt3.close();}catch(Exception x){}
 			
 			Statement stmt4 = con.createStatement();
-			String query4 = "SELECT sonum, aeg, kasutajaNimi FROM kommentaarid, kasutajad WHERE kommentaarid.projekt_ID="+projektID+" AND kommentaarid.kasutaja_ID=kasutajad.kasutajaID AND kommentaarid.juhtID="+juhtID+" AND kasutajad.juhtID="+juhtID;
+			String query4 = "SELECT sonum, aeg, kasutajaNimi FROM kommentaarid, juhid WHERE kommentaarid.projekt_ID="+projektID+" AND kommentaarid.kasutaja_ID=juhid.juhtID AND kommentaarid.juhtID="+juhtID+" AND juhid.juhtID="+juhtID;
 			ResultSet rs4 = stmt4.executeQuery(query4);
 
 			while(rs4.next()){
