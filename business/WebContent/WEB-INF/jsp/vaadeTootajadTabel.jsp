@@ -13,7 +13,6 @@
 
 <div id="tootajadTabelDiv">
 <br>
-<div class="teade">${teade}</div>
 
 <div>
 	<table>

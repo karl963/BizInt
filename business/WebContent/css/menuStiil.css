@@ -435,13 +435,19 @@ h1
 	position:relative;
 	left:10px;
 	width:178px;
-	height: 50px;  
-	border: solid 1px #c0c0c0;  
-	background-color: #e1e1e1;
+	height:50px;  
+	border:solid 1px #c0c0c0;  
+	background-color:#e1e1e1;
 }
 
-.ribaDiv{
+.ajutineStaatusDiv {
+	position:relative;
+	width:200px;
+	height:470px;  
+	border:solid 1px #c0c0c0;  
+	background-color:#e1e1e1;
+}
 
-	height:10px;
-
+.UueStaatuseDiv{
+	height:470px;
 }
