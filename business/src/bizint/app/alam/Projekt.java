@@ -411,6 +411,46 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 	}
 	
+	public static int paneProjektArhiiviAndmebaasis(int projektID, int juhtID){
+		
+		Connection con = new Mysql().getConnection();
+		if(con==null){
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+			String query = "UPDATE projektid SET arhiivis = '1' WHERE projektID="+projektID+" AND juhtID="+juhtID;
+			stmt.executeUpdate(query);
+			
+			try{stmt.close();}catch(Exception x){}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		try {
+			
+			Statement stmt9 = con.createStatement();
+			String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
+			ResultSet rs9 = stmt9.executeQuery(query9);
+			rs9.next();
+			String kasutajanimi = rs9.getString("kasutajaNimi");
+			
+			Statement stmt2 = con.createStatement();
+			String query2 = "UPDATE projektid SET reiting = 5 WHERE projektID="+projektID+" AND juhtID="+juhtID;
+			stmt2.executeUpdate(query2);
+			
+			try{stmt2.close();}catch(Exception x){}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
+		return Projekt.KÕIK_OKEI;
+	}
+	
 	public static int muudaProjektiReitingutAndmebaasis(int projektID, int reiting, int juhtID){
 		
 		Connection con = new Mysql().getConnection();

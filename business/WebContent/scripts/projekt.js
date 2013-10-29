@@ -17,6 +17,12 @@ $(document).ready(function(){
 	$(".katkestaProjektiKustutamine").click(function(){
 		$(".muudaKustutaEsimene").show();
 		$(".muudaKustutaTeine").hide();
+		$(".muudaArhiveeri").hide();
+	});
+	
+	$("#projektiArhiveerimiseNupp").click(function(){
+		$(".muudaKustutaEsimene").hide();
+		$(".muudaArhiveeri").show();
 	});
 	
 	$(".tootajaKustutaNupp").click(function(){

@@ -18,6 +18,11 @@
     <put-attribute name="title" value="Projektide vaade" />  
 	<put-attribute name="body" value="/WEB-INF/jsp/vaadeProjektid.jsp" />
 </definition>
+
+<definition name="vaadeArhiiv" extends="menuTemplate">
+    <put-attribute name="title" value="Arhiivi vaade" />  
+	<put-attribute name="body" value="/WEB-INF/jsp/vaadeArhiiv.jsp" />
+</definition>
  
 <definition name="vaadePipeline" extends="menuTemplate">
     <put-attribute name="title" value="Pipeline vaade" />  

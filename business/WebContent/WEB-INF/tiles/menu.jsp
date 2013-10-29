@@ -9,6 +9,9 @@
 		<a href="vaadeTootajadTabel.htm">T&ouml;&ouml;tajad</a>
 	<div class=rahavoog_text>
 		<a href="vaadeRahavoog.htm">Rahavoog</a>
+	<div class=arhiiv_text>
+		<a href="vaadeArhiiv.htm">Arhiiv</a>
+	</div>
 	</div>
 	</div>
 	</div>

@@ -34,6 +34,7 @@ import bizint.post.UusKasutaja;
 import bizint.post.UusKirjeldus;
 import bizint.post.UusKommentaar;
 import bizint.post.UusProjektiNimi;
+import bizint.post.PaneProjektArhiivi;
 
 @Controller
 public class ProjektController {
@@ -238,6 +239,7 @@ public class ProjektController {
 		m.addAttribute("uusKommentaar", new UusKommentaar());
 		m.addAttribute("uusKirjeldus", new UusKirjeldus());
 		m.addAttribute("uusProjektiNimi", new UusProjektiNimi(projekt.getNimi(),projekt.getId()));
+		m.addAttribute("paneProjektArhiivi", new PaneProjektArhiivi(projekt.getId()));
 		m.addAttribute("eemaldaKasutaja",new Kasutaja());
 		
 		teade = null;
@@ -388,6 +390,7 @@ public class ProjektController {
 		m.addAttribute("uusTulu", new Tulu());
 		m.addAttribute("uusKulu", new Kulu());
 		m.addAttribute("uusProjektiNimi", new UusProjektiNimi(projekt.getNimi(),projekt.getId()));
+		m.addAttribute("paneProjektArhiivi", new PaneProjektArhiivi(projekt.getId()));
 		
 		teade = null;
 		
@@ -604,6 +607,36 @@ public class ProjektController {
 		}
 
 		return new RedirectView("vaadeProjektTeine.htm?id="+nimi.getProjektID());
+	}
+	
+	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"projektID"})
+	public View paneProjektArhiivi(@RequestParam("projektID") int projektID, Model m){
+		
+		int vastus = Projekt.paneProjektArhiiviAndmebaasis(projektID, juhtID);
+		
+		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
+			teade = "Viga andmebaasiga ühendumisel";
+		}
+		else{
+			teade = "Projekti arhiveerimine õnnestus";
+		}
+
+		return new RedirectView("vaadeProjektEsimene.htm?id="+projektID);
+	}
+	
+	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"projektID"})
+	public View paneProjektArhiivi2(@RequestParam("projektID") int projektID, Model m){
+		
+		int vastus = Projekt.paneProjektArhiiviAndmebaasis(projektID, juhtID);
+		
+		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
+			teade = "Viga andmebaasiga ühendumisel";
+		}
+		else{
+			teade = "Projekti arhiveerimine õnnestus";
+		}
+
+		return new RedirectView("vaadeProjektEsimene.htm?id="+projektID);
 	}
 	
 	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"projektID","kasutajaID"})

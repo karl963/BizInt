@@ -64,7 +64,7 @@ public class ProjektidController {
 				staatus.setNimi(staatusNimi);
 				staatus.setId(staatusID);
 				
-				String query2 = "SELECT projektNimi, projektID, projektiJärjekorraNR FROM projektid WHERE staatus_ID="+staatusID+" AND juhtID="+juhtID;
+				String query2 = "SELECT projektNimi, projektID, projektiJärjekorraNR FROM projektid WHERE arhiivis=0 AND staatus_ID="+staatusID+" AND juhtID="+juhtID;
 				Statement stmt2 = con.createStatement();
 				ResultSet rs2 = stmt2.executeQuery(query2);
 				
