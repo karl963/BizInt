@@ -211,7 +211,7 @@ public class Staatus {
 		return Staatus.KÕIK_OKEI;
 	}
 	
-	public static int muudaStaatuseJärjekordaAndmebaasis(int staatusID, int staatuseJärjekorraNR, int staatusVanaID, int staatuseVanaJärjekorraNR, int juhtID){
+	public static int muudaStaatuseJärjekordaAndmebaasis( int staatuseJärjekorraNR, int staatusVanaID, int staatuseVanaJärjekorraNR, int juhtID){
 		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
@@ -219,57 +219,32 @@ public class Staatus {
 		}
 		Statement stmt;
 		try {
-			if(staatuseJärjekorraNR < 0){
-				staatuseJärjekorraNR = 1;
-				Statement stmt3 = con.createStatement();
-				String query3 = "SELECT MAX(järjekorraNR) AS max FROM staatused WHERE juhtID="+juhtID;
-				ResultSet rs = stmt3.executeQuery(query3);
-				rs.next();
-				staatuseJärjekorraNR = rs.getInt("max")+1;
-				try{stmt3.close();}catch(Exception x){}
-			}
+			if(staatuseVanaJärjekorraNR-staatuseJärjekorraNR<0){
+				Statement stmt1 = con.createStatement();
+				String query1 = "UPDATE staatused SET järjekorraNR=järjekorraNR +1 WHERE järjekorraNR>"+staatuseJärjekorraNR+" AND juhtID="+juhtID;
+				stmt1.executeUpdate(query1);
+				try{stmt1.close();}catch(Exception x){}
+
 			
-			if(staatusID == staatusVanaID){
-				if(staatuseJärjekorraNR != 1 && staatuseVanaJärjekorraNR-staatuseJärjekorraNR<0){
-					staatuseJärjekorraNR -= 1;
-					Statement stmt1 = con.createStatement();
-					String query1 = "UPDATE staatused SET järjekorraNR=staatuseJärjekorraNR +1 WHERE järjekorraNR>"+staatuseJärjekorraNR+" AND juhtID="+juhtID;
-					stmt1.executeUpdate(query1);
-					try{stmt1.close();}catch(Exception x){}
-				}
-				else{
-					Statement stmt1 = con.createStatement();
-					String query1 = "UPDATE staatused SET järjekorraNR=staatuseJärjekorraNR +1 WHERE järjekorraNR>="+staatuseJärjekorraNR+" AND juhtID="+juhtID;
-					stmt1.executeUpdate(query1);
-					try{stmt1.close();}catch(Exception x){}
-				}
+				Statement stmt2 = con.createStatement();
+				String query2 = "UPDATE staatused SET järjekorraNR=järjekorraNR -1 WHERE järjekorraNR>"+staatuseVanaJärjekorraNR+" AND juhtID="+juhtID;
+				stmt2.executeUpdate(query2);
 			}
 			else{
 				Statement stmt1 = con.createStatement();
 				String query1 = "UPDATE staatused SET järjekorraNR=järjekorraNR +1 WHERE järjekorraNR>="+staatuseJärjekorraNR+" AND juhtID="+juhtID;
 				stmt1.executeUpdate(query1);
 				try{stmt1.close();}catch(Exception x){}
-			}
+
 			
-			Statement stmt2 = con.createStatement();
-			String query2 = "UPDATE staatused SET järjekorraNR=järjekorraNR -1 WHERE järjekorraNR>"+staatuseVanaJärjekorraNR+" AND juhtID="+juhtID;
-			stmt2.executeUpdate(query2);
-			
-			if(staatuseVanaJärjekorraNR-staatuseJärjekorraNR<0){
-				staatuseJärjekorraNR -= 1;
-				stmt = con.createStatement();
-				String query = "UPDATE staatused SET järjekorraNR="+ staatuseJärjekorraNR +" WHERE staatusID=" + staatusVanaID+" AND juhtID="+juhtID;
-				stmt.executeUpdate(query);
-				try{stmt.close();}catch(Exception x){}
+				Statement stmt2 = con.createStatement();
+				String query2 = "UPDATE staatused SET järjekorraNR=järjekorraNR -1 WHERE järjekorraNR>"+staatuseVanaJärjekorraNR+" AND juhtID="+juhtID;
+				stmt2.executeUpdate(query2);
 			}
-			else{
-				stmt = con.createStatement();
-				String query = "UPDATE staatused SET järjekorraNR="+ staatuseJärjekorraNR +" WHERE staatusID=" + staatusVanaID+" AND juhtID="+juhtID;
-				stmt.executeUpdate(query);
-				try{stmt.close();}catch(Exception x){}
-			}
-			
-			try{stmt2.close();}catch(Exception x){}
+			stmt = con.createStatement();
+			String query = "UPDATE staatused SET järjekorraNR="+ staatuseJärjekorraNR +" WHERE staatusID=" + staatusVanaID+" AND juhtID="+juhtID;
+			stmt.executeUpdate(query);
+			try{stmt.close();}catch(Exception x){}
 		} catch (SQLException e) {
 			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;

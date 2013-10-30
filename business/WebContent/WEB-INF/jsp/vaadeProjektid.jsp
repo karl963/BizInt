@@ -11,13 +11,12 @@
 
 <div class=textontop>
 
-<div class=staatusteKonteiner>
+<div id="staatusedDropZone" class=staatusteKonteiner>
 
 <c:forEach items="${staatused}" var="staatus">
 
-<div id="${staatus.id}staatusDiv" class="divNextToEachOther" ondrop="return dragDropStaatus(event)" ondragover="return dragOverStaatus(event)" ondragenter="return dragEnterStaatus(event)"></div>
-<div id="${staatus.id}staatusDrag" class="dropZoneStaatused divNextToEachOther" draggable="true" ondragstart="return dragStartStaatus(event,${staatus.id},${staatus.järjekorraNumber})" ondragover="return dragOverBigStaatus(event,${staatus.id},${staatus.järjekorraNumber})" ondrop="return dragDropStaatus(event)">
-	
+ 	<div id="${staatus.id}+${staatus.järjekorraNumber}" class="dropZoneStaatused divNextToEachOther">
+ 	
 	<div class=statustext>
 		<div class="staatuseNimi">
 			<div class="staatuseNimeKiri">${staatus.nimi}</div>
@@ -63,12 +62,14 @@
 			</tr>
 		</form:form>
 	</div>
-
-	<div id="${staatus.id}dropZone" class="scrollwindow" ondragenter="return dragEnter(event,${staatus.id})" ondragover="return dragOver(event)" ondrop="return dragDrop(event)" >
-		<c:forEach items="${staatus.projektid}" var="projekt">
+	
+	<div id="${staatus.id}" class="scrollwindow">
+	<c:forEach items="${staatus.projektid}" var="projekt">
+		<!--  
 		<div id="${projekt.id}projektDiv"></div>
 		<div id="${projekt.id}projektDrag" class="dropZoneProjekt projektdiv" draggable="true" ondragstart="return dragStartProjekt(event,${projekt.id},${staatus.id},${projekt.projektiJärjekorraNumber})" ondragover="return dragOverProjekt(event,${projekt.id},${projekt.projektiJärjekorraNumber})">
-			
+		-->
+		<div id="${staatus.id}+${projekt.id}+${projekt.projektiJärjekorraNumber}" class="dropZoneProjekt projektdiv">
 			<div class="projektIdDiv" style="display:none;">${projekt.id}</div>
 			
 			<table class="project">
@@ -106,15 +107,13 @@
 			</div>
 		</c:forEach>
 		
-		<div id="${staatus.id}staatusProjektDiv" class="dropZoneProjekt" style="min-height:20px;height: calc( 340px - (${staatus.projektideArv}*78px));" ondragover="return dragOverS(event,${staatus.id},&apos;noJNR&apos;)"></div>
-
 	</div>
 	
 </div>
 </c:forEach>
 
-	<div id="lastStaatusDiv" class="divNextToEachOther" ondrop="return dragDropStaatus(event)" ondragover="return dragOverStaatus(event)" ondragenter="return dragEnterStaatus(event)"></div>
-	<div class="dropZoneStaatused statustext divNextToEachOther newStatus UueStaatuseDiv" ondragover="return dragOverNewStaatus(event)" ondrop="return dragDropStaatus(event)">
+	<div id="lastStaatusDiv" class="divNextToEachOther" ></div>
+	<div class="statustext divNextToEachOther newStatus UueStaatuseDiv">
 		
 			<form:form modelAttribute="uusStaatus">
 				<form:input maxlength="45" class="uusProjekt looUusInputLahter" path="nimi" />

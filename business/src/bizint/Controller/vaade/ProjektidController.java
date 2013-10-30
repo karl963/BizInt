@@ -331,13 +331,11 @@ public class ProjektidController {
 		return new RedirectView("vaadeProjektid.htm");
 	}
 	
-	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"staatuseSDragId","staatuseSVanaDragId","staatuseSJNR","staatuseSVanaJNR"})
-	public View muudaStaatuseJNR(@RequestParam(value="staatuseSDragId", required=true) int staatusID,
-			@RequestParam(value="staatuseSJNR", required=true) int staatuseJärjekorraNR,@RequestParam(value="staatuseSVanaDragId", required=true) int staatusVanaID,
+	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"staatuseSVanaDragId","staatuseSJNR","staatuseSVanaJNR"})
+	public View muudaStaatuseJNR(@RequestParam(value="staatuseSJNR", required=true) int staatuseJärjekorraNR,@RequestParam(value="staatuseSVanaDragId", required=true) int staatusVanaID,
 			@RequestParam(value="staatuseSVanaJNR", required=true) int staatuseVanaJärjekorraNR){
 
-		int vastus = Staatus.muudaStaatuseJärjekordaAndmebaasis(staatusID,staatuseJärjekorraNR,staatusVanaID,staatuseVanaJärjekorraNR,juhtID);
-		
+		int vastus = Staatus.muudaStaatuseJärjekordaAndmebaasis(staatuseJärjekorraNR,staatusVanaID,staatuseVanaJärjekorraNR,juhtID);
 		if(vastus == Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
 		}

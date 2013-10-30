@@ -434,9 +434,8 @@ h1
 }
 
 .ajutineStaatusDiv {
-	position:relative;
 	width:200px;
-	height:470px;  
+	height:60px;  
 	border:solid 1px #c0c0c0;  
 	background-color:#e1e1e1;
 }

@@ -425,114 +425,121 @@ $(document).ready(function(){
 	//$("#tootajateGraafAndmed").trigger("click");
 });
 
-
+//projekti tõstmisel vajalikud variables
 var draggableProjektID;
 var draggableStaatusID;
 var draggableProjektiJNR;
 var draggableVanaStaatusID;
 var draggableVanaProjektiJNR;
 
-var projektOrStaatus;
-var projektDragging = false;
+//staatuse tõstmisel vajalikud variables
+var draggableSStaatusID;
+var draggableStaatusJNR;
+var draggableVanaSStaatusID;
+var draggableVanaStaatusJNR;
 
-var newelement;
-var idd;
+var dropToimus = true;
 
-function dragStartProjekt(ev, projektID,staatusID,projektiJärjekorraNR) {
-	var id = projektID+"projektDrag";
-	ev.dataTransfer.setData("text/plain",ev.target.className.split(" ")[0]);
-	projektOrStaatus = document.getElementById(id).className.split(" ")[0];
-	projektDragging = true;
-	draggableProjektID = projektID;
-	draggableVanaStaatusID = staatusID;
-	draggableVanaProjektiJNR = projektiJärjekorraNR;
+$(document).ready(function(){
 	
-	//document.getElementById(id).innerHTML="";
+	//projekti tõstmise drag and drop
 	
-	return true;
-}
+	$('.dropZoneProjekt').draggable({
+		connectToSortable: ".scrollwindow",
+	    cursor: 'move',
+	    revert: 'invalid',
+	    opacity: 0.85,
+	    helper: 'clone', 
+	    appendTo: 'body',
+	    revertDuration: 900,
+	    scroll: true,
+	    start: function(){
+	        $(this).css({opacity:0});
+	    },
+	    stop: function(){
+	        $(this).css({opacity:1});
+	    },
+	    drag: function(event, ui) {	
+	    	dropToimus = false;
+	        var allID = $(this).attr("id");
+	        var splitID = allID.split("+");
+	        draggableVanaStaatusID = splitID[0];
+	        draggableProjektID = splitID[1];
+	        draggableVanaProjektiJNR = splitID[2];    
+	    }
+	});
+	
+	$(".scrollwindow").sortable({
+		placeholder: 'ajutineDiv',
+	    connectWith: ".scrollwindow",
+	    stop: function(event, ui) {
+	    	draggableProjektiJNR = ui.item.index() + 1;
+	    	muudaProjektiStaatust();
+	    },	
+	    receive: function (event, ui) {
+	        ui.item.remove(); 
+	    }
+	}).disableSelection();
+	  
+	$('.scrollwindow').droppable({
+		  accept: '.dropZoneProjekt',
+		  drop: function(event, ui) {
+		   	if(!dropToimus){
+		        var allID = $(this).attr("id");
+		        var splitID = allID.split("+");
+		        draggableStaatusID = splitID[0];
+		        dropToimus = true;	        
+		    }
+		  }
+	  });
+	  
+	  //staatuse tõstmise drag and drop
+	  $(".staatusteKonteiner").sortable({
+		//placeholder: 'ajutineStaatusDiv',
+	    connectWith: ".staatusteKonteiner",
+	    stop: function(event, ui) {
+	    	draggableStaatusJNR = ui.item.index() + 1;
+	    	muudaStaatuseJNR();
+	    },
+	    receive: function (event, ui) {
+	        ui.item.remove(); 
+	    }
+	  });
 
-function dragEnter(ev,staatusID) {
-	var data=ev.dataTransfer.getData("text/plain");	
-	if(data == "dropZoneProjekt" || projektOrStaatus == "dropZoneProjekt"){
-		draggableStaatusID = staatusID;
-		ev.preventDefault();
-		return true;
-	}
-}
-
-var kasTuhiDivOnLoodud = false;
-var kasOnSamalDivil;
-
-function dragOverS(ev,staatusID,jNR) {
-	var data=ev.dataTransfer.getData("text/plain");
-	if(data == "dropZoneProjekt" || projektOrStaatus == "dropZoneProjekt"){
-		draggableProjektiJNR = jNR;
-			draggableStaatusID = staatusID;
-			var divID;
-			divID = staatusID;
-			if(!kasTuhiDivOnLoodud){
-				kasOnSamalDivil = divID;
-				var divTag = document.createElement("div"); 
-				divTag.id = "ajutine"; 
-				divTag.className = "ajutineDiv";
-				var divIdNimi = divID+"staatusProjektDiv";
-				document.getElementById(divIdNimi).appendChild(divTag);
-				kasTuhiDivOnLoodud = true;		
-			}
-			if(kasOnSamalDivil != divID){
-				document.getElementById("ajutine").remove();
-				kasTuhiDivOnLoodud = false;
-			}
-		return false;
-	}
-}
-
-function dragOverProjekt(ev,projektID,projektiJNR) {
-	var data=ev.dataTransfer.getData("text/plain");
-	if(data == "dropZoneProjekt" || projektOrStaatus == "dropZoneProjekt"){
-		draggableProjektiJNR = projektiJNR;
-		var divID;
-		divID = projektID;
-		if(!kasTuhiDivOnLoodud){
-				kasOnSamalDivil = divID;
-				var divTag = document.createElement("div"); 
-				divTag.id = "ajutine"; 
-				divTag.className = "ajutineDiv";
-				var divIdNimi = divID+"projektDiv";
-				document.getElementById(divIdNimi).appendChild(divTag);
-				kasTuhiDivOnLoodud = true;
-			
-		}
-		
-		if(kasOnSamalDivil != divID){
-			document.getElementById("ajutine").remove();
-			kasTuhiDivOnLoodud = false;
-		}
-		return false;
-	}
-}
-
-function dragOver(ev) {
-	var data=ev.dataTransfer.getData("text/plain");	
-	if(data == "dropZoneProjekt" || projektOrStaatus == "dropZoneProjekt"){
-		return false;
-	}
-}
-
-function dragDrop(ev) {
-	var data=ev.dataTransfer.getData("text/plain");	
-	if(data == "dropZoneProjekt" || projektOrStaatus == "dropZoneProjekt"){
-		muudaProjektiStaatust();
-		projektDragging = false;
-		return false;
-	}
-}
+	  $('.dropZoneStaatused').draggable({
+		connectToSortable: ".staatusteKonteiner",
+		cursor: 'move',
+	    helper: 'clone',
+	    appendTo: 'body',
+		revert: 'invalid',
+		opacity: 0.85,
+	    revertDuration: 900,
+	    start: function(){
+	        $(this).css({opacity:0});
+	    },
+	    stop: function(){
+	        $(this).css({opacity:1});
+	    },
+	    drag: function(event, ui) {
+	    	dropToimus = false;
+	        var allID = $(this).attr("id");
+	        var splitID = allID.split("+");
+	        draggableVanaSStaatusID = splitID[0];
+	        draggableVanaStaatusJNR = splitID[1];
+	    }
+	  }).disableSelection();
+		  
+	$('.staatusteKonteiner').droppable({
+		  accept: '.dropZoneStaatused',
+		  drop: function(event, ui) {
+		   	if(!dropToimus){
+		        dropToimus = true;	        
+		    }
+		  }
+	});	  
+});
 
 function muudaProjektiStaatust(){
-	if(draggableProjektiJNR == "noJNR"){
-		draggableProjektiJNR = -99;
-	}
 
 	$.ajax({
 	    type : "POST",
@@ -549,104 +556,13 @@ function muudaProjektiStaatust(){
 	});
 };
 
-var draggableSStaatusID;
-var draggableStaatusJNR;
-var draggableVanaSStaatusID;
-var draggableVanaStaatusJNR;
-var kasTuhiStaatuseDivOnLoodud = false;
-var kasStaatusOnSamalDivil;
-
-function dragStartStaatus(ev,staatusID,staatusJärjekorraNR) {
-	var id = staatusID+"staatusDrag";
-	draggableVanaSStaatusID = staatusID;
-	draggableVanaStaatusJNR = staatusJärjekorraNR;
-	if(!projektDragging){
-		ev.dataTransfer.setData("Text",ev.target.className.split(" ")[0]);
-		var id = staatusID+"staatusDrag";
-		projektOrStaatus = document.getElementById(id).className.split(" ")[0];
-	
-		//document.getElementById(id).innerHTML="";
-	}
-	return true;
-}
-
-function dragOverBigStaatus(ev,staatusID,staatusJärjekorraNR){
-	var data=ev.dataTransfer.getData("Text");
-	if(data == "dropZoneStaatused" || projektOrStaatus == "dropZoneStaatused"){
-		draggableSStaatusID = staatusID;
-		draggableStaatusJNR = staatusJärjekorraNR;
-		var divID;
-		divID = staatusID;
-		if(!kasTuhiStaatuseDivOnLoodud){
-			kasStaatusOnSamalDivil = divID;
-			var divTag = document.createElement("div"); 
-			divTag.id = "ajutine2"; 
-			divTag.className = "ajutineStaatusDiv";
-			var divIdNimi = divID+"staatusDiv";
-			document.getElementById(divIdNimi).appendChild(divTag);
-			kasTuhiStaatuseDivOnLoodud = true;		
-		}
-		if(kasStaatusOnSamalDivil != divID){
-			document.getElementById("ajutine2").remove();
-			kasTuhiStaatuseDivOnLoodud = false;
-		}
-		return false;
-	}
-}
-
-function dragOverNewStaatus(ev){
-	var data=ev.dataTransfer.getData("Text");
-	if(data == "dropZoneStaatused" || projektOrStaatus == "dropZoneStaatused"){
-		draggableSStaatusID = -99;
-		draggableStaatusJNR = -99;
-		var divID;
-		divID = -99;
-		if(!kasTuhiStaatuseDivOnLoodud){
-			kasStaatusOnSamalDivil = divID;
-			var divTag = document.createElement("div"); 
-			divTag.id = "ajutine2"; 
-			divTag.className = "ajutineStaatusDiv";
-			var divIdNimi = "lastStaatusDiv";
-			document.getElementById(divIdNimi).appendChild(divTag);
-			kasTuhiStaatuseDivOnLoodud = true;		
-		}
-		if(kasStaatusOnSamalDivil != divID){
-			document.getElementById("ajutine2").remove();
-			kasTuhiStaatuseDivOnLoodud = false;
-		}
-		return false;
-	}
-}
-
-function dragDropStaatus(ev) {
-	var data=ev.dataTransfer.getData("Text");	
-	if(data == "dropZoneStaatused" || projektOrStaatus == "dropZoneStaatused"){
-		muudaStaatuseJNR();
-		return false;
-	}
-}
-
-function dragOverStaatus(ev) {
-	var data=ev.dataTransfer.getData("Text");	
-	if(data == "dropZoneStaatused" || projektOrStaatus == "dropZoneStaatused"){
-		return false;
-	}
-}
-
-function dragEnterStaatus(ev) {
-	var data=ev.dataTransfer.getData("Text");	
-	if(data == "dropZoneStaatused" || projektOrStaatus == "dropZoneStaatused"){
-		return true;
-	}
-}
-
 function muudaStaatuseJNR(){
 
 	$.ajax({
 	    type : "POST",
 	    url : rakenduseNimi+"/vaadeProjektid.htm",
 	    data : {staatuseSVanaDragId: draggableVanaSStaatusID, staatuseSJNR: draggableStaatusJNR,
-	    	staatuseSVanaJNR: draggableVanaStaatusJNR,staatuseSDragId: draggableSStaatusID },
+	    	staatuseSVanaJNR: draggableVanaStaatusJNR},
 	    success : function(response) {
 	    	document.location.href = "vaadeProjektid.htm";
 	    },
@@ -655,4 +571,3 @@ function muudaStaatuseJNR(){
 	    }
 	});
 };
-

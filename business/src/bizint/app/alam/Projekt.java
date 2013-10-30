@@ -905,19 +905,9 @@ public class Projekt {
 		}
 		Statement stmt;
 		try {
-			if(projektiJärjekorraNR < 0){
-				projektiJärjekorraNR = 1;
-				Statement stmt3 = con.createStatement();
-				String query3 = "SELECT MAX(projektiJärjekorraNR) AS max FROM projektid WHERE staatus_ID="+staatusID+" AND juhtID="+juhtID;
-				ResultSet rs = stmt3.executeQuery(query3);
-				rs.next();
-				projektiJärjekorraNR = rs.getInt("max")+1;
-				try{stmt3.close();}catch(Exception x){}
-			}
 			
 			if(staatusID == staatusVanaID){
 				if(projektiJärjekorraNR != 1 && projektiVanaJärjekorraNR-projektiJärjekorraNR<0){
-					projektiJärjekorraNR -= 1;
 					Statement stmt1 = con.createStatement();
 					String query1 = "UPDATE projektid SET projektiJärjekorraNR=projektiJärjekorraNR +1 WHERE staatus_ID=" + staatusID + " AND projektiJärjekorraNR>"+projektiJärjekorraNR+" AND juhtID="+juhtID;
 					stmt1.executeUpdate(query1);
@@ -929,7 +919,7 @@ public class Projekt {
 					stmt1.executeUpdate(query1);
 					try{stmt1.close();}catch(Exception x){}
 				}
-			}
+			}	
 			else{
 				Statement stmt1 = con.createStatement();
 				String query1 = "UPDATE projektid SET projektiJärjekorraNR=projektiJärjekorraNR +1 WHERE staatus_ID=" + staatusID + " AND projektiJärjekorraNR>="+projektiJärjekorraNR+" AND juhtID="+juhtID;
