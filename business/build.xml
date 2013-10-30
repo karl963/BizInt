@@ -1,15 +1,47 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <project name="BizInt" default="help" basedir=".">
   <!-- Define the properties used by the build -->
-  <property name="app.name"      	value="business"/>
-  <property name="tcserver.home" 	value="/usr/share/tomcat6" />
-  <property name="work.home"    	value="${basedir}/work"/>
-  <property name="dist.home"    	value="${basedir}/dist"/>
-  <property name="src.home"     	value="${basedir}/src"/>
-  <property name="web.home"    		value="${basedir}/WebContent"/>
-  <property name="lib.home" 		value="${basedir}/WebContent/WEB-INF/lib"/>
+  	<property name="app.name"      	value="business"/>
+  	<property name="tcserver.home" 	value="/usr/share/tomcat6" />
+  	<property name="work.home"    	value="${basedir}/work"/>
+  	<property name="dist.home"    	value="${basedir}/dist"/>
+  	<property name="src.home"     	value="${basedir}/src"/>
+  	<property name="web.home"    	value="${basedir}/WebContent"/>
+  	<property name="lib.home" 		value="${basedir}/WebContent/WEB-INF/lib"/>
 	<property name="tcserver.webapps" value="${tcserver.home}/webapps"/>
-
+	<property name="test.dir" 		location="tests" />
+	<property name="test.report.dir" location="testreport" />
+	<property name="build.dir" 		location="bin" />
+	
+	
+	<path id="junit.class.path">
+		<fileset dir="${lib.home}">
+		  	<include name="junit-4.11.jar"/>
+			<include name="selenium-server-standalone-2.37.0.jar"/>
+		</fileset>
+		<pathelement location="${build.dir}" />
+	</path>
+	
+	
+	<target name="compiletests" depends="clean, prepare">
+	    <javac srcdir="${test.dir}" destdir="${build.dir}">
+	      <classpath refid="junit.class.path" />
+	    </javac>
+	</target>
+	
+	<target name="runtests" depends="compiletests">
+	    <junit printsummary="on" fork="true" haltonfailure="yes">
+	      <classpath refid="junit.class.path" />
+	      <formatter type="xml" />
+	      <batchtest todir="${test.report.dir}">
+	        <fileset dir="${test.dir}">
+	          <include name="**/*Test*.java" />
+	        </fileset>
+	      </batchtest>
+	    </junit>
+	  </target>
+	
+	
   <target name="help">
     <echo>You can use the following targets:</echo>
     <echo> </echo>
@@ -31,10 +63,12 @@
   	
   	<fileset dir="${lib.home}">
   		<include name="*.jar"/>
+  		<exclude name="junit-4.11.jar"/>
+  		<exclude name="selenium-server-standalone-2.37.0.jar"/>
   	</fileset>
     
   	<pathelement location="${tcserver.home}/lib"/>
-    
+  	
   	<fileset dir="${tcserver.home}/lib">
     	<include name="*.jar"/>
     </fileset>
@@ -47,6 +81,8 @@
           description="Delete old work and dist directories">
     <delete dir="${work.home}"/>
     <delete dir="${dist.home}"/>
+  	<delete dir="${build.dir}" />
+  	<delete dir="${test.report.dir}" />
   </target>
 
   <target name="prepare" depends="clean"
@@ -54,6 +90,8 @@
     <mkdir  dir="${dist.home}"/>
   	<mkdir  dir="${dist.home}/WEB-INF"/>
     <mkdir  dir="${work.home}/WEB-INF/classes"/>
+  	<mkdir 	dir="${build.dir}" />
+  	<mkdir 	dir="${test.report.dir}" />
   	
     <!-- Copy static HTML and JSP files to work dir -->
     <copy todir="${work.home}">
