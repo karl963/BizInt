@@ -301,11 +301,11 @@ public class ArhiivController {
 	
 	
 	@RequestMapping(value = "/vaadeArhiiv.htm", method = RequestMethod.POST, params={"projektDragId","staatusDragId","projektiDragJNR"})
-	public View muudaProjektiStaatust(@RequestParam(value="staatusDragId", required=true) int staatusID,@RequestParam(value="projektDragId", required=true) int projektID,
+	public View muudaProjektiStaatustArhiivis(@RequestParam(value="staatusDragId", required=true) int staatusID,@RequestParam(value="projektDragId", required=true) int projektID,
 			@RequestParam(value="projektiDragJNR", required=true) int projektiJärjekorraNR,@RequestParam(value="staatusVanaDragId", required=true) int staatusVanaID,
 			@RequestParam(value="projektiVanaDragJNR", required=true) int projektiVanaJärjekorraNR,Model m){
 
-		int vastus = Projekt.muudaProjektiStaatustAndmebaasis(projektID,staatusID,projektiJärjekorraNR,staatusVanaID,projektiVanaJärjekorraNR,juhtID);
+		int vastus = Projekt.muudaProjektiStaatustArhiiviAndmebaasis(projektID,staatusID,projektiJärjekorraNR,staatusVanaID,projektiVanaJärjekorraNR,juhtID);
 		
 		if(vastus == Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";

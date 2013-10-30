@@ -493,7 +493,7 @@ $(document).ready(function(){
 	    receive: function (event, ui) {
 	        ui.item.remove(); 
 	    }
-	}).disableSelection();
+	});
 	  
 	$('.scrollwindow').droppable({
 		  accept: '.dropZoneProjekt',
@@ -541,7 +541,7 @@ $(document).ready(function(){
 	        draggableVanaSStaatusID = splitID[0];
 	        draggableVanaStaatusJNR = splitID[1];
 	    }
-	  }).disableSelection();
+	  });
 		  
 	$('.staatusteKonteiner').droppable({
 		  accept: '.dropZoneStaatused',
@@ -550,7 +550,58 @@ $(document).ready(function(){
 		        dropToimus = true;	        
 		    }
 		  }
-	});	  
+	});
+	
+	//arhiivi projekti tõstmise drag and drop
+	
+	$('.dropZoneProjekt').draggable({
+		connectToSortable: ".scrollwindow",
+	    cursor: 'move',
+	    revert: 'invalid',
+	    opacity: 0.85,
+	    helper: 'clone', 
+	    appendTo: 'body',
+	    revertDuration: 900,
+	    scroll: true,
+	    start: function(){
+	        $(this).css({opacity:0});
+	    },
+	    stop: function(){
+	        $(this).css({opacity:1});
+	    },
+	    drag: function(event, ui) {	
+	    	dropToimus = false;
+	        var allID = $(this).attr("id");
+	        var splitID = allID.split("+");
+	        draggableVanaStaatusID = splitID[0];
+	        draggableProjektID = splitID[1];
+	        draggableVanaProjektiJNR = splitID[2];    
+	    }
+	});
+	
+	$(".scrollwindow").sortable({
+		placeholder: 'ajutineDiv',
+	    connectWith: ".scrollwindow",
+	    stop: function(event, ui) {
+	    	draggableProjektiJNR = ui.item.index() + 1;
+	    	muudaProjektiStaatustArhiivis();
+	    },	
+	    receive: function (event, ui) {
+	        ui.item.remove(); 
+	    }
+	});
+	  
+	$('.scrollwindow').droppable({
+		  accept: '.dropZoneProjekt',
+		  drop: function(event, ui) {
+		   	if(!dropToimus){
+		        var allID = $(this).attr("id");
+		        var splitID = allID.split("+");
+		        draggableStaatusID = splitID[0];
+		        dropToimus = true;	        
+		    }
+		  }
+	  });
 });
 
 function muudaProjektiStaatust(){
@@ -582,6 +633,23 @@ function muudaStaatuseJNR(){
 	    },
 	    error : function(e) {
 	    	document.location.href = "vaadeProjektid.htm";
+	    }
+	});
+};
+
+function muudaProjektiStaatustArhiivis(){
+
+	$.ajax({
+	    type : "POST",
+	    url : rakenduseNimi+"/vaadeArhiiv.htm",
+	    data : {staatusDragId: draggableStaatusID, projektDragId: draggableProjektID,
+	    	projektiDragJNR: draggableProjektiJNR, staatusVanaDragId: draggableVanaStaatusID, 
+	    	projektiVanaDragJNR: draggableVanaProjektiJNR},
+	    success : function(response) {
+	    	document.location.href = "vaadeArhiiv.htm";
+	    },
+	    error : function(e) {
+	    	document.location.href = "vaadeArhiiv.htm";
 	    }
 	});
 };

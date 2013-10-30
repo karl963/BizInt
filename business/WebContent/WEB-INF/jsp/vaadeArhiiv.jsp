@@ -12,7 +12,7 @@
 
 <c:forEach items="${staatused}" var="staatus">
 
-<div class=divNextToEachOther>
+<div class="divNextToEachOther">
 	
 	<div class=statustext>
 		<div class="staatuseNimiArhiivis">
@@ -39,10 +39,10 @@
 		</div>
 	</div>
 
-	<div id="${staatus.id}dropZone" class="scrollwindow" ondragenter="return dragEnter(event,${staatus.id})" ondragover="return dragOver(event)" ondrop="return dragDrop(event)" >
-		<c:forEach items="${staatus.projektid}" var="projekt">
-		<div id="${projekt.id}projektDiv"></div>
-		<div id="${projekt.id}projektDrag" class="projektdiv" draggable="true" ondragstart="return dragStart(event,${projekt.id},${staatus.id},${projekt.projektiJärjekorraNumber})" ondragover="return dragOverProjekt(event,${projekt.id},${projekt.projektiJärjekorraNumber})">
+	<div id="${staatus.id}" class="scrollwindow">
+	<c:forEach items="${staatus.projektid}" var="projekt">
+
+		<div id="${staatus.id}+${projekt.id}+${projekt.projektiJärjekorraNumber}" class="dropZoneProjekt projektdiv">
 			
 			<div class="projektIdDiv" style="display:none;">${projekt.id}</div>
 			
@@ -64,8 +64,6 @@
 			<p></p>
 			</div>
 		</c:forEach>
-		
-		<div id="${staatus.id}staatusDiv" style="min-height:20px;height: calc( 340px - (${staatus.projektideArv}*78px));" ondragover="return dragOverStaatus(event,${staatus.id},'noJNR')"></div>
 
 	</div>
 	

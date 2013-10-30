@@ -996,6 +996,80 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 	}
 	
+	public static int muudaProjektiStaatustArhiiviAndmebaasis(int projektID, int staatusID, int projektiJärjekorraNR, int staatusVanaID, int projektiVanaJärjekorraNR, int juhtID) {
+		Connection con = new Mysql().getConnection();
+		if(con==null){
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		Statement stmt;
+		try {
+			
+			if(staatusID == staatusVanaID){
+				if(projektiJärjekorraNR != 1 && projektiVanaJärjekorraNR-projektiJärjekorraNR<0){
+					Statement stmt1 = con.createStatement();
+					String query1 = "UPDATE projektid SET projektiJärjekorraNR=projektiJärjekorraNR +1 WHERE staatus_ID=" + staatusID + " AND projektiJärjekorraNR>"+projektiJärjekorraNR+" AND juhtID="+juhtID+" AND arhiivis = '1'";
+					stmt1.executeUpdate(query1);
+					try{stmt1.close();}catch(Exception x){}
+				}
+				else{
+					Statement stmt1 = con.createStatement();
+					String query1 = "UPDATE projektid SET projektiJärjekorraNR=projektiJärjekorraNR +1 WHERE staatus_ID=" + staatusID + " AND projektiJärjekorraNR>="+projektiJärjekorraNR+" AND juhtID="+juhtID+" AND arhiivis = '1'";;
+					stmt1.executeUpdate(query1);
+					try{stmt1.close();}catch(Exception x){}
+				}
+			}	
+			else{
+				Statement stmt1 = con.createStatement();
+				String query1 = "UPDATE projektid SET projektiJärjekorraNR=projektiJärjekorraNR +1 WHERE staatus_ID=" + staatusID + " AND projektiJärjekorraNR>="+projektiJärjekorraNR+" AND juhtID="+juhtID+" AND arhiivis = '1'";;
+				stmt1.executeUpdate(query1);
+				try{stmt1.close();}catch(Exception x){}
+			}
+			
+			Statement stmt2 = con.createStatement();
+			String query2 = "UPDATE projektid SET projektiJärjekorraNR=projektiJärjekorraNR -1 WHERE staatus_ID=" + staatusVanaID + " AND projektiJärjekorraNR>"+projektiVanaJärjekorraNR+" AND juhtID="+juhtID+" AND arhiivis = '1'";;
+			stmt2.executeUpdate(query2);
+			
+			stmt = con.createStatement();
+			String query = "UPDATE projektid SET staatus_ID="+ staatusID + " , projektiJärjekorraNR="+ projektiJärjekorraNR +" WHERE projektID=" + projektID+" AND juhtID="+juhtID+" AND arhiivis = '1'";;
+			stmt.executeUpdate(query);
+			
+			try{stmt2.close();}catch(Exception x){}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		try {
+			
+			Statement stmt9 = con.createStatement();
+			String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
+			ResultSet rs9 = stmt9.executeQuery(query9);
+			rs9.next();
+			String kasutajanimi = rs9.getString("kasutajaNimi");
+			
+			Statement stmt1 = con.createStatement();
+			String query1 = "SELECT staatusNimi FROM staatused WHERE staatusID="+staatusID+" AND juhtID="+juhtID;
+			ResultSet rs = stmt1.executeQuery(query1);
+			
+			rs.next();
+			
+			String staatusnimi = rs.getString("staatusNimi");
+			
+			Statement stmt2 = con.createStatement();
+			String query2 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+projektID+","+"'"+kasutajanimi+" muutis projekti staatust : "+staatusnimi+"',"+juhtID+")";
+			stmt2.executeUpdate(query2);
+			
+			try{rs.close();stmt.close();}catch(Exception x){}
+			try{stmt2.close();}catch(Exception x){}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
+		return Projekt.KÕIK_OKEI;
+	}
+	
 	public static int muudaProjektiVastutajatAndmebaasis(int projektID,String kasutajaNimi, int juhtID){
 
 		Connection con = new Mysql().getConnection();

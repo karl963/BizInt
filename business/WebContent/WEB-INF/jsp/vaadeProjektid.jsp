@@ -11,7 +11,7 @@
 
 <div class=textontop>
 
-<div id="staatusedDropZone" class=staatusteKonteiner>
+<div class=staatusteKonteiner>
 
 <c:forEach items="${staatused}" var="staatus">
 
