@@ -39,7 +39,7 @@
 		</div>
 	</div>
 
-	<div id="${staatus.id}" class="scrollwindow">
+	<div id="${staatus.id}" class="dropZoneArhiiv scrollwindow">
 	<c:forEach items="${staatus.projektid}" var="projekt">
 
 		<div id="${staatus.id}+${projekt.id}+${projekt.projektiJärjekorraNumber}" class="dropZoneProjekt projektdiv">

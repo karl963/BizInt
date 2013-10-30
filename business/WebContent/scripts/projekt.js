@@ -555,7 +555,7 @@ $(document).ready(function(){
 	//arhiivi projekti tõstmise drag and drop
 	
 	$('.dropZoneProjekt').draggable({
-		connectToSortable: ".scrollwindow",
+		connectToSortable: ".dropZoneArhiiv",
 	    cursor: 'move',
 	    revert: 'invalid',
 	    opacity: 0.85,
@@ -579,9 +579,9 @@ $(document).ready(function(){
 	    }
 	});
 	
-	$(".scrollwindow").sortable({
+	$(".dropZoneArhiiv").sortable({
 		placeholder: 'ajutineDiv',
-	    connectWith: ".scrollwindow",
+	    connectWith: ".dropZoneArhiiv",
 	    stop: function(event, ui) {
 	    	draggableProjektiJNR = ui.item.index() + 1;
 	    	muudaProjektiStaatustArhiivis();
@@ -591,7 +591,7 @@ $(document).ready(function(){
 	    }
 	});
 	  
-	$('.scrollwindow').droppable({
+	$('.dropZoneArhiiv').droppable({
 		  accept: '.dropZoneProjekt',
 		  drop: function(event, ui) {
 		   	if(!dropToimus){
