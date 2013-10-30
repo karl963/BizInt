@@ -61,6 +61,16 @@
 	<put-attribute name="body" value="/WEB-INF/jsp/vaadeProjektTeine.jsp" />
 </definition>
 
+<definition name="vaadeProjektArhiivisEsimene" extends="projektTemplate">
+    <put-attribute name="title" value="Projekti detailvaade" />  
+	<put-attribute name="body" value="/WEB-INF/jsp/vaadeProjektArhiivisEsimene.jsp" />
+</definition>
+ 
+<definition name="vaadeProjektArhiivisTeine" extends="projektTemplate">
+    <put-attribute name="title" value="Projekti detailvaade" />  
+	<put-attribute name="body" value="/WEB-INF/jsp/vaadeProjektArhiivisTeine.jsp" />
+</definition>
+
 <!-- login leht -->
  
 <definition name="muudTemplate" template="/WEB-INF/tiles/muudTemplate.jsp">

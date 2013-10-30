@@ -50,7 +50,7 @@ public class ArhiivController {
 		try{
 			
 			Statement stmt = con.createStatement();
-			String query = "SELECT staatusNimi,järjekorraNR,staatusID FROM staatused WHERE juhtID="+juhtID;
+			String query = "SELECT staatusNimi,järjekorraNR,staatusID FROM staatused WHERE juhtID=0 ";
 			ResultSet rs = stmt.executeQuery(query);
 		
 			while(rs.next()){

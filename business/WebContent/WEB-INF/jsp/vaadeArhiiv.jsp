@@ -68,7 +68,7 @@
 			<div class="projektIdDiv" style="display:none;">${projekt.id}</div>
 			
 			<table class="project">
-				<tr class="projektLink">
+				<tr class="projektArhiivisLink">
 					<th COLSPAN=2 style="background-color:#74CEFF">${projekt.nimi}</th>
 				</tr>
 				<tr>
