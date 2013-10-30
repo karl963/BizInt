@@ -39,13 +39,14 @@ Current RELEASED (taged) verison: 2.0 alpha
 
 
 -- Lisam�rkused
-* S�ntaksiliselt valesti lisatud tulu/kulu asendatakse automaatselt 0 -ga
+* Syntaksiliselt valesti lisatud tulu/kulu asendatakse automaatselt 0 -ga
 * Kasutajaid ei saa projekti mitmekordselt lisada (loogiline)
-* Projektil saab olla ainult �ks vastutaja
-* S�ntaksiliselt valesti olev t��taja osalus projektis muudetakse (v�etakse �ra vigased karakterid, mitme punkti korral arvestatakse vasakult esimest)
-* Staatused on kuvatud vastavalt nende j�rekorranumbrile
-* T��taja kustutamine t��taja vaates ei eemalda teda olemas olevatest ning olnud projektidest (ajalugu s�ilib)
-* Staatust saab kustutada ainult siis, kui temaga pole seotud �htegi projekti
+* Projektil saab olla ainult yks vastutaja
+* Syntaksiliselt valesti olev tootaja osalus projektis muudetakse (v6etakse 2ra vigased karakterid, mitme punkti korral arvestatakse vasakult esimest)
+* Staatused on kuvatud vastavalt nende j2rekorranumbrile
+* Tootaja kustutamine tootaja vaates ei eemalda teda olemas olevatest ning olnud projektidest (ajalugu s2ilib)
+* Staatust saab kustutada ainult siis, kui temaga pole seotud yhtegi projekti
+
 
 -- Bug fixes
 * Kommentaaride kuup�ev parandatud
