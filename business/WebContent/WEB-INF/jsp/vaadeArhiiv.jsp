@@ -15,19 +15,8 @@
 <div class=divNextToEachOther>
 	
 	<div class=statustext>
-		<div class="staatuseNimi">
+		<div class="staatuseNimiArhiivis">
 			<div class="staatuseNimeKiri">${staatus.nimi}</div>
-			<div class="staatuseNimeMuutmine" style="display:none;">
-			
-				<form:form modelAttribute="staatuseNimeMuutmine">
-					<form:input maxlength="45" class="staatuseNimeMuutmiseLahter" path="nimi" value="${staatus.nimi}" />
-					<form:input type="hidden" path="id" value="${staatus.id}" />
-					<input type="submit" class="projektDetailNupp" value="muuda" />
-				</form:form>
-				
-				<button type="button" class="punaneProjektDetailNupp kustutaStaatusNupp" >kustuta staatus</button>
-				
-			</div>
 			<div class="kustutaStaatusConfirmationDiv" style="display:none;">
 				
 				<form:form modelAttribute="staatuseKustutamine">
@@ -48,16 +37,6 @@
 		<div class=tulutext>
 			&euro; ${staatus.kogutulu}
 		</div>
-
-		<form:form modelAttribute="uusProjekt">
-			<tr>
-				<td>
-					<form:input maxlength="45" class="uusProjekt looUusInputLahter" path="nimi" />
-					<form:input path="staatusID" value="${staatus.id}" type="hidden"/>
-					<input type="submit" class="projektDetailNupp" value="+" /><!--style="background:url(${pageContext.request.contextPath}/images/addbutton.png) no-repeat;" />-->
-				</td>
-			</tr>
-		</form:form>
 	</div>
 
 	<div id="${staatus.id}dropZone" class="scrollwindow" ondragenter="return dragEnter(event,${staatus.id})" ondragover="return dragOver(event)" ondrop="return dragDrop(event)" >
@@ -73,24 +52,8 @@
 				</tr>
 				<tr>
 					<td >Vastutaja:</td>
-					<td class="staatusVastutajaTd" >
+					<td class="staatusVastutajaTd2" >
 						<div class="staatusVastutajaText" >${projekt.vastutaja.kasutajaNimi}</div>
-						<div class="staatusVastutajaDiv" style="display:none;">
-							<div class="vastutajaProjektID" style="display:none;">${projekt.id}</div>
-							<select class="staatusVastutajaValimine">
-								<option selected value="valige töötaja" disabled>valige töötaja</option>
-								<c:forEach items="${kasutajad}" var="kasutaja">
-									<c:choose>
-										<c:when test="${kasutaja == projekt.vastutaja.kasutajaNimi}">
-											<option selected value="${kasutaja}">${kasutaja}</option>
-										</c:when>
-										<c:otherwise>
-											<option value="${kasutaja}">${kasutaja}</option>
-										</c:otherwise>
-									</c:choose>
-								</c:forEach>
-							</select>
-						</div>
 					</td>
 				</tr>
 				<tr class="projektLink">
@@ -109,15 +72,7 @@
 </div>
 </c:forEach>
 
-	<div class="statustext divNextToEachOther newStatus">
-		
-			<form:form modelAttribute="uusStaatus">
-				<form:input maxlength="45" class="uusProjekt looUusInputLahter" path="nimi" />
-				<input type="submit" value="+" class="projektDetailNupp"/><!-- style="background:url(${pageContext.request.contextPath}/images/addbutton.png) no-repeat;" />-->
-					<!-- <img class=addbutton src="${pageContext.request.contextPath}/images/addbutton.png">-->
-			</form:form>
-		
-	</div>
+
 	
 	</div>
 </div>
