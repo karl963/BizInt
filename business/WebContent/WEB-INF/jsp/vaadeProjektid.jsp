@@ -65,10 +65,7 @@
 	
 	<div id="${staatus.id}" class="scrollwindow">
 	<c:forEach items="${staatus.projektid}" var="projekt">
-		<!--  
-		<div id="${projekt.id}projektDiv"></div>
-		<div id="${projekt.id}projektDrag" class="dropZoneProjekt projektdiv" draggable="true" ondragstart="return dragStartProjekt(event,${projekt.id},${staatus.id},${projekt.projektiJärjekorraNumber})" ondragover="return dragOverProjekt(event,${projekt.id},${projekt.projektiJärjekorraNumber})">
-		-->
+
 		<div id="${staatus.id}+${projekt.id}+${projekt.projektiJärjekorraNumber}" class="dropZoneProjekt projektdiv">
 			<div class="projektIdDiv" style="display:none;">${projekt.id}</div>
 			
