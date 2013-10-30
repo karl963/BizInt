@@ -41,14 +41,14 @@ public class RahavoogController {
 	public static SimpleDateFormat AJAFORMAAT = new SimpleDateFormat("dd.MM.yyyy");
 	
 	@RequestMapping(value = "/vaadeRahavoog.htm", method = RequestMethod.GET)
-	public String vaadeRahavoog(HttpServletRequest request,@RequestParam("algus") String algus,@RequestParam("lopp") String lõpp,Model m) {
+	public String vaadeRahavoog(HttpServletRequest request,Model m){//@RequestParam("algus") String algus,@RequestParam("lopp") String lõpp,Model m) {
 		
 		if(request.getSession().getAttribute("kasutajaNimi") == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
 			request.getSession().setAttribute("suunatudLink", "vaadeRahavoog.htm");
 			return "redirect:/vaadeViga.htm";
 		}
-		
+		/*
 		Connection con = (new Mysql()).getConnection();
 		
 		Timestamp algusAeg,lõppAeg;
@@ -72,6 +72,7 @@ public class RahavoogController {
 		
 		String andmedString = "";
 		
+		
 		try{
 			
 			Statement stmt = con.createStatement();
@@ -90,10 +91,10 @@ public class RahavoogController {
 			if(con!=null){try{con.close();}catch(Exception x){}}
 		}
 		
-		
-
+		*/
+		m.addAttribute("tegemisel","Rahavoo vaade on veel arendamisel (tähtaeg 28.november)");
 		m.addAttribute("teade",teade);
-		m.addAttribute("andmedString",andmedString);
+		//m.addAttribute("andmedString",andmedString);
 		
 		teade = null;
 		return "vaadeRahavoog"; 
