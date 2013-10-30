@@ -37,17 +37,16 @@ import bizint.post.UusProjektiNimi;
 import bizint.post.PaneProjektArhiivi;
 
 @Controller
-public class ProjektController {
+public class ProjektArhiivisController {
 
 	private String teade = null;
 	private int juhtID = 0;
 	
-	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.GET, params={"id"})
-	public String vaadeProjektEsimene(HttpServletRequest request,@RequestParam("id") int projektID, Model m) {
+	@RequestMapping(value = "/vaadeProjektArhiivisEsimene.htm", method = RequestMethod.GET, params={"id"})
+	public String vaadeProjektArhiivisEsimene(HttpServletRequest request,@RequestParam("id") int projektID, Model m) {
 		
 		if(request.getSession().getAttribute("kasutajaNimi") == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
-			request.getSession().setAttribute("suunatudLink", "vaadeProjektEsimene.htm?id="+projektID);
 			return "redirect:/vaadeViga.htm";
 		}
 		
@@ -71,12 +70,8 @@ public class ProjektController {
 			Statement stmt = con.createStatement();
 			String query = "SELECT kirjeldus, projektNimi, reiting FROM projektid WHERE projektID="+projektID+" AND juhtID="+juhtID;
 			ResultSet rs = stmt.executeQuery(query);
-
-			if(!rs.next()){
-				request.getSession().setAttribute("viga", VigaController.VIGA_PROJEKTI_POLE_OLEMAS);
-				request.getSession().setAttribute("suunatudLink", "vaadeProjektid.htm");
-				return "redirect:/vaadeViga.htm";
-			}
+			
+			rs.next();
 			
 			nimi = rs.getString("projektNimi");
 			kirjeldus = rs.getString("kirjeldus");
@@ -219,10 +214,10 @@ public class ProjektController {
 		String html = "";
 		for(int i = 1; i <= 5 ;i++){
 			if(i <= reiting){
-				html+="<a class='reitingNuppOn' href='vaadeProjektEsimene.htm?projektID="+projektID+"&reiting="+i+"' >"+i+"</a> ";
+				html+="<a class='reitingNuppOn' href='vaadeProjektArhiivisEsimene.htm?projektID="+projektID+"&reiting="+i+"' >"+i+"</a> ";
 			}
 			else{
-				html+="<a class='reitingNuppPole' href='vaadeProjektEsimene.htm?projektID="+projektID+"&reiting="+i+"' >"+i+"</a> ";
+				html+="<a class='reitingNuppPole' href='vaadeProjektArhiivisEsimene.htm?projektID="+projektID+"&reiting="+i+"' >"+i+"</a> ";
 			}
 		}
 		
@@ -249,15 +244,14 @@ public class ProjektController {
 		
 		teade = null;
 		
-		return "vaadeProjektEsimene"; 
+		return "vaadeProjektArhiivisEsimene"; 
 	}
 
-	@RequestMapping("/vaadeProjektTeine.htm")
-	public String vaadeProjektTeine(HttpServletRequest request,@RequestParam("id") int projektID, Model m) {
+	@RequestMapping("/vaadeProjektArhiivisTeine.htm")
+	public String vaadeProjektArhiivisTeine(HttpServletRequest request,@RequestParam("id") int projektID, Model m) {
 		
 		if(request.getSession().getAttribute("kasutajaNimi") == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
-			request.getSession().setAttribute("suunatudLink", "vaadeProjektTeine.htm?id="+projektID);
 			return "redirect:/vaadeViga.htm";
 		}
 		
@@ -279,11 +273,7 @@ public class ProjektController {
 			String query = "SELECT projektNimi, reiting FROM projektid WHERE projektID="+projektID+" AND juhtID="+juhtID;
 			ResultSet rs = stmt.executeQuery(query);
 			
-			if(!rs.next()){
-				request.getSession().setAttribute("viga", VigaController.VIGA_PROJEKTI_POLE_OLEMAS);
-				request.getSession().setAttribute("suunatudLink", "vaadeProjektid.htm");
-				return "redirect:/vaadeViga.htm";
-			}
+			rs.next();
 			
 			nimi = rs.getString("projektNimi");
 			reiting = rs.getInt("reiting");
@@ -375,10 +365,10 @@ public class ProjektController {
 		String html = "";
 		for(int i = 1; i <= 5 ;i++){
 			if(i <= reiting){
-				html+="<a class='reitingNuppOn' href='vaadeProjektTeine.htm?projektID="+projektID+"&reiting="+i+"' >"+i+"</a> ";
+				html+="<a class='reitingNuppOn' href='vaadeProjektArhiivisTeine.htm?projektID="+projektID+"&reiting="+i+"' >"+i+"</a> ";
 			}
 			else{
-				html+="<a class='reitingNuppPole' href='vaadeProjektTeine.htm?projektID="+projektID+"&reiting="+i+"' >"+i+"</a> ";
+				html+="<a class='reitingNuppPole' href='vaadeProjektArhiivisTeine.htm?projektID="+projektID+"&reiting="+i+"' >"+i+"</a> ";
 			}
 		}
 		
@@ -404,10 +394,10 @@ public class ProjektController {
 		
 		teade = null;
 		
-		return "vaadeProjektTeine";
+		return "vaadeProjektArhiivisTeine";
 	}
 	
-	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"sonum","projektID"})
+	@RequestMapping(value = "/vaadeProjektArhiivisEsimene.htm", method = RequestMethod.POST, params={"sonum","projektID"})
 	public View addKommentaar1(@ModelAttribute("uusKommentaar") UusKommentaar uusKommentaar, Model m){
 
 		int vastus = Projekt.lisaKommentaarAndmebaasi(uusKommentaar,juhtID);
@@ -419,9 +409,9 @@ public class ProjektController {
 			teade = "Kommenteerimine õnnestus";
 		}
 
-		return new RedirectView("vaadeProjektEsimene.htm?id="+uusKommentaar.getProjektID());
+		return new RedirectView("vaadeProjektArhiivisEsimene.htm?id="+uusKommentaar.getProjektID());
 	}
-	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"sonum","projektID"})
+	@RequestMapping(value = "/vaadeProjektArhiivisTeine.htm", method = RequestMethod.POST, params={"sonum","projektID"})
 	public View addKommentaar2(@ModelAttribute("uusKommentaar") UusKommentaar uusKommentaar, Model m){
 
 		int vastus = Projekt.lisaKommentaarAndmebaasi(uusKommentaar,juhtID);
@@ -433,10 +423,10 @@ public class ProjektController {
 			teade = "Kommenteerimine õnnestus";
 		}
 
-		return new RedirectView("vaadeProjektTeine.htm?id="+uusKommentaar.getProjektID());
+		return new RedirectView("vaadeProjektArhiivisTeine.htm?id="+uusKommentaar.getProjektID());
 	}
 	
-	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"kirjeldus","projektID"})
+	@RequestMapping(value = "/vaadeProjektArhiivisEsimene.htm", method = RequestMethod.POST, params={"kirjeldus","projektID"})
 	public View muudaKirjeldus(@ModelAttribute("uusKirjeldus") UusKirjeldus uusKirjeldus, Model m){
 		
 		int vastus = Projekt.muudaProjektiKirjeldusAndmebaasis(uusKirjeldus,juhtID);
@@ -448,10 +438,10 @@ public class ProjektController {
 			teade = "Kirjelduse muutmine õnnestus";
 		}
 
-		return new RedirectView("vaadeProjektEsimene.htm?id="+uusKirjeldus.getProjektID());
+		return new RedirectView("vaadeProjektArhiivisEsimene.htm?id="+uusKirjeldus.getProjektID());
 	}
 	
-	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"kasutajaNimi","projektID"})
+	@RequestMapping(value = "/vaadeProjektArhiivisEsimene.htm", method = RequestMethod.POST, params={"kasutajaNimi","projektID"})
 	public View addKasutaja(@ModelAttribute("uusKasutaja") UusKasutaja uusKasutaja, Model m){
 		
 		int vastus = Projekt.lisaUusKasutajaAndmebaasi(uusKasutaja,juhtID);
@@ -463,10 +453,10 @@ public class ProjektController {
 			teade = "Kasutaja lisamine õnnestus";
 		}
 
-		return new RedirectView("vaadeProjektEsimene.htm?id="+uusKasutaja.getProjektID());
+		return new RedirectView("vaadeProjektArhiivisEsimene.htm?id="+uusKasutaja.getProjektID());
 	}
 	
-	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"aeg.time","tuluNimi","summa","stringAeg","projektID"})
+	@RequestMapping(value = "/vaadeProjektArhiivisTeine.htm", method = RequestMethod.POST, params={"aeg.time","tuluNimi","summa","stringAeg","projektID"})
 	public View addTulu(@ModelAttribute("uusTulu") Tulu tulu, Model m){
 
 		Date uusAeg = Tulu.muudaStringAjaks(tulu.getStringAeg());
@@ -488,10 +478,10 @@ public class ProjektController {
 			}
 		}
 
-		return new RedirectView("vaadeProjektTeine.htm?id="+tulu.getProjektID());
+		return new RedirectView("vaadeProjektArhiivisTeine.htm?id="+tulu.getProjektID());
 	}
 	
-	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"aeg.time","kuluNimi","summa","stringAeg","projektID","kasutajaNimi"})
+	@RequestMapping(value = "/vaadeProjektArhiivisTeine.htm", method = RequestMethod.POST, params={"aeg.time","kuluNimi","summa","stringAeg","projektID","kasutajaNimi"})
 	public View addKulu(@ModelAttribute("uusKulu") Kulu kulu, Model m){
 
 		Date uusAeg = Kulu.muudaStringAjaks(kulu.getStringAeg());
@@ -512,10 +502,10 @@ public class ProjektController {
 				teade = "Kulu lisamine õnnestus";
 			}
 		}
-		return new RedirectView("vaadeProjektTeine.htm?id="+kulu.getProjektID());
+		return new RedirectView("vaadeProjektArhiivisTeine.htm?id="+kulu.getProjektID());
 	}
 	
-	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"kuluNimi","summa","stringAeg","projektID"})
+	@RequestMapping(value = "/vaadeProjektArhiivisTeine.htm", method = RequestMethod.POST, params={"kuluNimi","summa","stringAeg","projektID"})
 	public View kustutaKulu(@ModelAttribute("kustutaKulu") Kulu kulu, Model m){
 		
 		int vastus = Projekt.kustutaKuluAndmebaasist(kulu,juhtID);
@@ -527,10 +517,10 @@ public class ProjektController {
 			teade = "Kulu eemaldamine õnnestus";
 		}
 
-		return new RedirectView("vaadeProjektTeine.htm?id="+kulu.getProjektID());
+		return new RedirectView("vaadeProjektArhiivisTeine.htm?id="+kulu.getProjektID());
 	}
 	
-	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"tuluNimi","summa","stringAeg","projektID"})
+	@RequestMapping(value = "/vaadeProjektArhiivisTeine.htm", method = RequestMethod.POST, params={"tuluNimi","summa","stringAeg","projektID"})
 	public View kustutaTulu(@ModelAttribute("kustutaTulu") Tulu tulu, Model m){
 
 		int vastus = Projekt.kustutaTuluAndmebaasist(tulu,juhtID);
@@ -542,10 +532,10 @@ public class ProjektController {
 			teade = "Tulu eemaldamine õnnestus";
 		}
 
-		return new RedirectView("vaadeProjektTeine.htm?id="+tulu.getProjektID());
+		return new RedirectView("vaadeProjektArhiivisTeine.htm?id="+tulu.getProjektID());
 	}
 	
-	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"kustuta","projektID"})
+	@RequestMapping(value = "/vaadeProjektArhiivisEsimene.htm", method = RequestMethod.POST, params={"kustuta","projektID"})
 	public View kustutaProjekt1(@RequestParam("projektID") int id,@RequestParam("kustuta") String käsk, Model m){
 
 		if(käsk.equals("jah")){
@@ -554,20 +544,20 @@ public class ProjektController {
 			
 			if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 				teade = "Viga andmebaasiga ühendumisel";
-				return new RedirectView("vaadeProjektEsimene.htm?id="+id);
+				return new RedirectView("vaadeProjektArhiivisEsimene.htm?id="+id);
 			}
 			else{
 				//teade = "Projekti kustutamine õnnestus";
-				return new RedirectView("vaadeProjektid.htm");
+				return new RedirectView("vaadeArhiiv.htm");
 			}
 			
 		}
 		else{
-			return new RedirectView("vaadeProjektEsimene.htm?id="+id);
+			return new RedirectView("vaadeProjektArhiivisEsimene.htm?id="+id);
 		}
 	}
 	
-	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"kustuta","projektID"})
+	@RequestMapping(value = "/vaadeProjektArhiivisTeine.htm", method = RequestMethod.POST, params={"kustuta","projektID"})
 	public View kustutaProjekt2(@RequestParam("projektID") int id,@RequestParam("kustuta") String käsk, Model m){
 
 		if(käsk.equals("jah")){
@@ -576,20 +566,20 @@ public class ProjektController {
 			
 			if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 				teade = "Viga andmebaasiga ühendumisel";
-				return new RedirectView("vaadeProjektTeine.htm?id="+id);
+				return new RedirectView("vaadeProjektArhiivisTeine.htm?id="+id);
 			}
 			else{
 				//teade = "Projekti kustutamine õnnestus";
-				return new RedirectView("vaadeProjektid.htm");
+				return new RedirectView("vaadeArhiiv.htm");
 			}
 			
 		}
 		else{
-			return new RedirectView("vaadeProjektEsimene.htm?id="+id);
+			return new RedirectView("vaadeProjektArhiivisEsimene.htm?id="+id);
 		}
 	}
 	
-	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"uusNimi","projektID"})
+	@RequestMapping(value = "/vaadeProjektArhiivisEsimene.htm", method = RequestMethod.POST, params={"uusNimi","projektID"})
 	public View muudaProjektiNime1(@ModelAttribute("uusProjektiNimi") UusProjektiNimi nimi, Model m){
 		
 		int vastus = Projekt.muudaProjektiNimeAndmebaasis(nimi,juhtID);
@@ -601,10 +591,10 @@ public class ProjektController {
 			teade = "Projekti nime muutmine õnnestus";
 		}
 
-		return new RedirectView("vaadeProjektEsimene.htm?id="+nimi.getProjektID());
+		return new RedirectView("vaadeProjektArhiivisEsimene.htm?id="+nimi.getProjektID());
 	}
 	
-	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"uusNimi","projektID"})
+	@RequestMapping(value = "/vaadeProjektArhiivisTeine.htm", method = RequestMethod.POST, params={"uusNimi","projektID"})
 	public View muudaProjektiNime2(@ModelAttribute("uusProjektiNimi") UusProjektiNimi nimi, Model m){
 
 		int vastus = Projekt.muudaProjektiNimeAndmebaasis(nimi,juhtID);
@@ -616,10 +606,10 @@ public class ProjektController {
 			teade = "Projekti nime muutmine õnnestus";
 		}
 
-		return new RedirectView("vaadeProjektTeine.htm?id="+nimi.getProjektID());
+		return new RedirectView("vaadeProjektArhiivisTeine.htm?id="+nimi.getProjektID());
 	}
 	
-	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"projektID"})
+	@RequestMapping(value = "/vaadeProjektArhiivisEsimene.htm", method = RequestMethod.POST, params={"projektID"})
 	public View paneProjektArhiivi(@RequestParam("projektID") int projektID, Model m){
 		
 		int vastus = Projekt.paneProjektArhiiviAndmebaasis(projektID, juhtID);
@@ -631,10 +621,10 @@ public class ProjektController {
 			teade = "Projekti arhiveerimine õnnestus";
 		}
 
-		return new RedirectView("vaadeArhiiv.htm");
+		return new RedirectView("vaadeProjektid.htm");
 	}
 	
-	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"projektID"})
+	@RequestMapping(value = "/vaadeProjektArhiivisTeine.htm", method = RequestMethod.POST, params={"projektID"})
 	public View paneProjektArhiivi2(@RequestParam("projektID") int projektID, Model m){
 		
 		int vastus = Projekt.paneProjektArhiiviAndmebaasis(projektID, juhtID);
@@ -646,10 +636,11 @@ public class ProjektController {
 			teade = "Projekti arhiveerimine õnnestus";
 		}
 
-		return new RedirectView("vaadeProjektEsimene.htm?id="+projektID);
+		return new RedirectView("vaadeProjektid.htm");
 	}
+
 	
-	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"projektID","kasutajaID"})
+	@RequestMapping(value = "/vaadeProjektArhiivisEsimene.htm", method = RequestMethod.POST, params={"projektID","kasutajaID"})
 	public View eemaldaKasutaja(@RequestParam("kasutajaID") int kasutajaID,@RequestParam("projektID") int projektID, Model m){
 		
 		
@@ -662,10 +653,10 @@ public class ProjektController {
 			teade = "Töötaja eemaldamine õnnestus";
 		}
 
-		return new RedirectView("vaadeProjektEsimene.htm?id="+projektID);
+		return new RedirectView("vaadeProjektArhiivisEsimene.htm?id="+projektID);
 	}
 	
-	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"projektID","kasutajaNimi"})
+	@RequestMapping(value = "/vaadeProjektArhiivisEsimene.htm", method = RequestMethod.POST, params={"projektID","kasutajaNimi"})
 	public void lisaKasutajaProjekti(HttpServletRequest request, HttpServletResponse response,@RequestParam("projektID") int projektID,@RequestParam("kasutajaNimi") String nimi, Model m){
 		
 		int vastus = Projekt.lisaKasutajaProjektiAndmebaasis(nimi, projektID,juhtID);
@@ -679,7 +670,7 @@ public class ProjektController {
 
 	}
 	
-	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"projektID","kasutajad"})
+	@RequestMapping(value = "/vaadeProjektArhiivisEsimene.htm", method = RequestMethod.POST, params={"projektID","kasutajad"})
 	public void muudaKasutajateAndmeid(HttpServletRequest request, HttpServletResponse response,@RequestParam("kasutajad") String kasutajad, @RequestParam("projektID") int projektID, Model m){
 		
 		int vastus = Projekt.muudaKasutajateAndmeidProjektigaAndmebaasis(kasutajad, projektID,juhtID);
@@ -693,7 +684,7 @@ public class ProjektController {
 	
 	}
 	
-	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.GET, params={"reiting","projektID"})
+	@RequestMapping(value = "/vaadeProjektArhiivisEsimene.htm", method = RequestMethod.GET, params={"reiting","projektID"})
 	public View muudaReitingut1(@RequestParam("reiting") int reiting,@RequestParam("projektID") int projektID, Model m){
 		
 		
@@ -706,10 +697,10 @@ public class ProjektController {
 			teade = "Reitingu muutmine õnnestus";
 		}
 
-		return new RedirectView("vaadeProjektEsimene.htm?id="+projektID);
+		return new RedirectView("vaadeProjektArhiivisEsimene.htm?id="+projektID);
 	}
 	
-	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.GET, params={"reiting","projektID"})
+	@RequestMapping(value = "/vaadeProjektArhiivisTeine.htm", method = RequestMethod.GET, params={"reiting","projektID"})
 	public View muudaReitingut2(@RequestParam("reiting") int reiting,@RequestParam("projektID") int projektID, Model m){
 		
 		
@@ -722,10 +713,10 @@ public class ProjektController {
 			teade = "Reitingu muutmine õnnestus";
 		}
 
-		return new RedirectView("vaadeProjektTeine.htm?id="+projektID);
+		return new RedirectView("vaadeProjektArhiivisTeine.htm?id="+projektID);
 	}
 	
-	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"teade"})
+	@RequestMapping(value = "/vaadeProjektArhiivisEsimene.htm", method = RequestMethod.POST, params={"teade"})
 	public void muudaTeade(HttpServletRequest request, HttpServletResponse response,@RequestParam("teade") String teade, Model m){
 
 		this.teade = teade;

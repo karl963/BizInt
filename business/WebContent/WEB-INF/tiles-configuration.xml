@@ -18,6 +18,11 @@
     <put-attribute name="title" value="Projektide vaade" />  
 	<put-attribute name="body" value="/WEB-INF/jsp/vaadeProjektid.jsp" />
 </definition>
+
+<definition name="vaadeArhiiv" extends="menuTemplate">
+    <put-attribute name="title" value="Arhiivi vaade" />  
+	<put-attribute name="body" value="/WEB-INF/jsp/vaadeArhiiv.jsp" />
+</definition>
  
 <definition name="vaadePipeline" extends="menuTemplate">
     <put-attribute name="title" value="Pipeline vaade" />  
@@ -54,6 +59,16 @@
 <definition name="vaadeProjektTeine" extends="projektTemplate">
     <put-attribute name="title" value="Projekti detailvaade" />  
 	<put-attribute name="body" value="/WEB-INF/jsp/vaadeProjektTeine.jsp" />
+</definition>
+
+<definition name="vaadeProjektArhiivisEsimene" extends="projektTemplate">
+    <put-attribute name="title" value="Projekti detailvaade" />  
+	<put-attribute name="body" value="/WEB-INF/jsp/vaadeProjektArhiivisEsimene.jsp" />
+</definition>
+ 
+<definition name="vaadeProjektArhiivisTeine" extends="projektTemplate">
+    <put-attribute name="title" value="Projekti detailvaade" />  
+	<put-attribute name="body" value="/WEB-INF/jsp/vaadeProjektArhiivisTeine.jsp" />
 </definition>
 
 <!-- login leht -->

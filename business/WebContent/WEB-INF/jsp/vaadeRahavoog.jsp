@@ -9,6 +9,4 @@
 </div>
 </div>
 
-<center>  
-<h1>${teade}</h1>
-</center> 
+<div style="position:absolute;top:200px;left:100px;color:red;"><b><big>${tegemisel}</big></b></div>

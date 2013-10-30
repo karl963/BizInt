@@ -23,6 +23,12 @@ $(document).ready(function(){
 	$(".katkestaProjektiKustutamine").click(function(){
 		$(".muudaKustutaEsimene").show();
 		$(".muudaKustutaTeine").hide();
+		$(".muudaArhiveeri").hide();
+	});
+	
+	$("#projektiArhiveerimiseNupp").click(function(){
+		$(".muudaKustutaEsimene").hide();
+		$(".muudaArhiveeri").show();
 	});
 	
 	$(".tootajaKustutaNupp").click(function(){
@@ -85,6 +91,10 @@ $(document).ready(function(){
 		avaProjektiDetiliLeht($(this).closest(".projektdiv").children(".projektIdDiv").html());
 	});
 	
+	$(".projektArhiivisLink").click(function (e) {
+		avaArhiivisProjektiDetiliLeht($(this).closest(".projektdiv").children(".projektIdDiv").html());
+	});
+	
 	$(".staatusVastutajaTd").click(function () {
 		$(".staatusVastutajaDiv").hide();
 		$(".staatusVastutajaText").show();
@@ -98,6 +108,10 @@ $(document).ready(function(){
 
 function avaProjektiDetiliLeht(pid){
 	document.location.href = "vaadeProjektEsimene.htm?id="+pid;
+}
+
+function avaArhiivisProjektiDetiliLeht(pid){
+	document.location.href = "vaadeProjektArhiivisEsimene.htm?id="+pid;
 }
 
 function muudaVastutajaProjektid(pid,nimi){

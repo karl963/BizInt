@@ -56,6 +56,7 @@ public class TootajadController {
 		
 		if(request.getSession().getAttribute("kasutajaNimi") == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
+			request.getSession().setAttribute("suunatudLink", "vaadeTootajadTabel.htm");
 			return "redirect:/vaadeViga.htm";
 		}
 		
@@ -262,6 +263,7 @@ public class TootajadController {
 
 		if(request.getSession().getAttribute("kasutajaNimi") == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
+			request.getSession().setAttribute("suunatudLink", "vaadeTootajadTabel.htm?aasta="+aasta+"&kvartal="+hetkeKvartal);
 			return "redirect:/vaadeViga.htm";
 		}
 		
@@ -529,6 +531,7 @@ public class TootajadController {
 		
 		if(request.getSession().getAttribute("kasutajaNimi") == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
+			request.getSession().setAttribute("suunatudLink", "vaadeTootajadGraaf.htm");
 			return "redirect:/vaadeViga.htm";
 		}
 		

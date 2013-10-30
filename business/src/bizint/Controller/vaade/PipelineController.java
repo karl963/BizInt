@@ -37,6 +37,7 @@ public class PipelineController {
 		
 		if(request.getSession().getAttribute("kasutajaNimi") == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
+			request.getSession().setAttribute("suunatudLink", "vaadePipeline.htm");
 			return "redirect:/vaadeViga.htm";
 		}
 		

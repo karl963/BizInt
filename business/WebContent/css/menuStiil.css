@@ -127,6 +127,13 @@
 	left:150px;
 }
 
+.arhiiv_text
+{
+	position:absolute;
+	top:0px;
+	left:150px;
+}
+
 a
 {
 	text-decoration:none;
@@ -135,7 +142,7 @@ a
 .login_as
 {
 	position:absolute;
-	left:850px;
+	left:800px;
 	top:125px;
 	width:250px;
 }

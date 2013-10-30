@@ -24,6 +24,7 @@
 		
 		<div class="muudaKustuta muudaKustutaEsimene">
 			<button class="projektDetailNupp" type="button" id="projektiNimeMuutmiseNupp" >Muuda nime</button>
+			<button class="projektDetailNupp" type="button" id="projektiArhiveerimiseNupp"> Arhiveeri</button>
 			<button class="punaneProjektDetailNupp kustutaProjektNupp" type="button" >Kustuta projekt</button>
 		</div>
 		<div class="muudaKustuta muudaKustutaTeine" style="display:none;">
@@ -31,6 +32,19 @@
 			<button class="punaneProjektDetailNupp" type="button" onclick="javascript:document.kustutaProjekt.submit()" >Jah</button>
 			<button class="projektDetailNupp katkestaProjektiKustutamine" type="button" >Katkesta</button>
 		</div>
+		
+			<div class="muudaKustuta muudaArhiveeri" style="display:none;">
+			<table>
+			<tr>
+			<th style="vertical-align:top;"><b>Arhiveeri projekt ? </b><th>
+			<th><form:form modelAttribute="paneProjektArhiivi">
+				<form:input path="projektID" type="hidden" />
+				<input class="punaneProjektDetailNupp" type="submit" value="Jah" />
+			</form:form></th>
+			<th style="vertical-align:top;"><button class="projektDetailNupp katkestaProjektiKustutamine" type="button" >Katkesta</button><th>
+			<tr>
+			</table>
+			</div>
 		
 <form name="kustutaProjekt" method="POST" action="vaadeProjektTeine.htm">
 	<input type="hidden" name="projektID" value="${projekt.id}">

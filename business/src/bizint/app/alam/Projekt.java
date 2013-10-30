@@ -411,6 +411,30 @@ public class Projekt {
 		return Projekt.KÕIK_OKEI;
 	}
 	
+	public static int paneProjektArhiiviAndmebaasis(int projektID, int juhtID){
+		
+		Connection con = new Mysql().getConnection();
+		if(con==null){
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		Statement stmt;
+		try {
+			stmt = con.createStatement();
+			String query = "UPDATE projektid SET arhiivis = '1', staatus_ID = '1' WHERE projektID="+projektID+" AND juhtID="+juhtID;
+			stmt.executeUpdate(query);
+			
+			try{stmt.close();}catch(Exception x){}
+		} catch (SQLException e) {
+			e.printStackTrace();
+			if (con!=null) try {con.close();}catch (Exception ignore) {}
+			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		
+		
+		if (con!=null) try {con.close();}catch (Exception ignore) {}
+		return Projekt.KÕIK_OKEI;
+	}
+	
 	public static int muudaProjektiReitingutAndmebaasis(int projektID, int reiting, int juhtID){
 		
 		Connection con = new Mysql().getConnection();

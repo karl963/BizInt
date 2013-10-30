@@ -6,7 +6,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -26,18 +25,18 @@ import bizint.app.alam.Staatus;
 import bizint.app.alam.rahaline.Tulu;
 
 @Controller
-public class ProjektidController {
+public class ArhiivController {
 	
 	private List<Staatus> staatused = new ArrayList<Staatus>();
 	private String teade;
 	private int juhtID = 0;
 	
-	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.GET)
-	public String vaadeProjektid(HttpServletRequest request,Model m){
+	@RequestMapping(value = "/vaadeArhiiv.htm", method = RequestMethod.GET)
+	public String vaadeArhiiv(HttpServletRequest request,Model m){
 		
 		if(request.getSession().getAttribute("kasutajaNimi") == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
-			request.getSession().setAttribute("suunatudLink", "vaadeProjektid.htm");
+			request.getSession().setAttribute("suunatudLink", "vaadeArhiiv.htm");
 			return "redirect:/vaadeViga.htm";
 		}
 		
@@ -51,12 +50,12 @@ public class ProjektidController {
 		try{
 			
 			Statement stmt = con.createStatement();
-			String query = "SELECT staatusNimi,järjekorraNR,staatusID FROM staatused WHERE juhtID="+juhtID;
+			String query = "SELECT staatusNimi,järjekorraNR,staatusID FROM staatused WHERE juhtID=0 ";
 			ResultSet rs = stmt.executeQuery(query);
 		
 			while(rs.next()){
 				Staatus staatus = new Staatus();
-				List<Projekt> projektid = new ArrayList<Projekt>();
+				List<Projekt> arhiiv = new ArrayList<Projekt>();
 				
 				String staatusNimi = rs.getString("staatusNimi");
 				int järjekorraNumber = rs.getInt("järjekorraNR");
@@ -66,7 +65,7 @@ public class ProjektidController {
 				staatus.setNimi(staatusNimi);
 				staatus.setId(staatusID);
 				
-				String query2 = "SELECT projektNimi, projektID, projektiJärjekorraNR FROM projektid WHERE arhiivis=0 AND staatus_ID="+staatusID+" AND juhtID="+juhtID;
+				String query2 = "SELECT projektNimi, projektID, projektiJärjekorraNR FROM projektid WHERE arhiivis=1 AND staatus_ID="+staatusID+" AND juhtID="+juhtID;
 				Statement stmt2 = con.createStatement();
 				ResultSet rs2 = stmt2.executeQuery(query2);
 				
@@ -120,14 +119,14 @@ public class ProjektidController {
 					projekt.setId(projektID);
 					projekt.setProjektiJärjekorraNumber(projektiJärjekorraNumber);
 					
-					projektid.add(projekt);
+					arhiiv.add(projekt);
 					
 				}
 				
 				try{rs2.close();stmt2.close();}catch(Exception x){}
 				
-				projektid = paneProjektidJärjekorda(projektid);
-				staatus.setProjektid(projektid);
+				arhiiv = paneProjektidJärjekorda(arhiiv);
+				staatus.setProjektid(arhiiv);
 				
 				staatused.add(staatus);
 			}
@@ -162,7 +161,7 @@ public class ProjektidController {
 		m.addAttribute("teade", teade);
 		teade = null;
 		
-		return "vaadeProjektid";
+		return "vaadeArhiiv";
 	}
 	
 	private List<Staatus> paneJärjekorda(List<Staatus> staatused){
@@ -192,16 +191,16 @@ public class ProjektidController {
 		return uusList;
 	}
 	
-	private List<Projekt> paneProjektidJärjekorda(List<Projekt> projektid){
+	private List<Projekt> paneProjektidJärjekorda(List<Projekt> arhiiv){
 		List<Projekt> uusList = new ArrayList<Projekt>();
 		
-		while(projektid.size()>0){
+		while(arhiiv.size()>0){
 			
 			int väikseimI = 0;
 			int väikseim = 99;
 			int index = 0;
 			
-			for(Projekt p : projektid){
+			for(Projekt p : arhiiv){
 				
 				if(p.getProjektiJärjekorraNumber()<väikseim){
 					väikseim = p.getProjektiJärjekorraNumber();
@@ -211,8 +210,8 @@ public class ProjektidController {
 				index++;
 			}
 			
-			uusList.add(projektid.get(väikseimI));
-			projektid.remove(väikseimI);
+			uusList.add(arhiiv.get(väikseimI));
+			arhiiv.remove(väikseimI);
 			
 		}
 		
@@ -220,7 +219,7 @@ public class ProjektidController {
 	}
 	
 
-	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"nimi"})
+	@RequestMapping(value = "/vaadeArhiiv.htm", method = RequestMethod.POST, params={"nimi"})
 	public View addStaatus(@ModelAttribute("uusStaatus") Staatus staatus, Model m){
 		
 		int vastus = Staatus.lisaStaatusAndmebaasi(staatus,juhtID);
@@ -235,10 +234,10 @@ public class ProjektidController {
 			teade = "Staatuse lisamine õnnestus";
 		}
 		
-		return new RedirectView("vaadeProjektid.htm");
+		return new RedirectView("vaadeArhiiv.htm");
 	}
 	
-	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"nimi","staatusID"})
+	@RequestMapping(value = "/vaadeArhiiv.htm", method = RequestMethod.POST, params={"nimi","staatusID"})
 	public View addProjekt(@ModelAttribute("uusProjekt") Projekt projekt,@RequestParam(value="staatusID", required=true) int staatusID, Model m){
 
 		int vastus = Projekt.lisaProjektAndmebaasi(projekt,staatusID,juhtID);
@@ -250,10 +249,10 @@ public class ProjektidController {
 			teade = "Projekti lisamine õnnestus";
 		}
 		
-		return new RedirectView("vaadeProjektid.htm");
+		return new RedirectView("vaadeArhiiv.htm");
 	}
 	
-	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"id","kustuta"})
+	@RequestMapping(value = "/vaadeArhiiv.htm", method = RequestMethod.POST, params={"id","kustuta"})
 	public View kustutaStaatus(@RequestParam("id") int staatusID, Model m){
 		
 		int vastus = Staatus.kustutaStaatusAndmebaasist(staatusID,juhtID);
@@ -268,10 +267,10 @@ public class ProjektidController {
 			teade = "Staatuse kustutamine õnnestus";
 		}
 		
-		return new RedirectView("vaadeProjektid.htm");
+		return new RedirectView("vaadeArhiiv.htm");
 	}
 	
-	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"nimi","id"})
+	@RequestMapping(value = "/vaadeArhiiv.htm", method = RequestMethod.POST, params={"nimi","id"})
 	public View muudaStaatuseNime(@ModelAttribute("staatuseNimeMuutmine") Staatus staatus, Model m){
 		
 		int vastus = Staatus.muudaStaatuseNimeAndmebaasis(staatus,juhtID);
@@ -283,30 +282,25 @@ public class ProjektidController {
 			teade = "Staatuse nime muutmine õnnestus";
 		}
 		
-		return new RedirectView("vaadeProjektid.htm");
+		return new RedirectView("vaadeArhiiv.htm");
 	}
 	
-	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.GET, params={"logivalja"})
+	@RequestMapping(value = "/vaadeArhiiv.htm", method = RequestMethod.GET, params={"logivalja"})
 	public View logiVälja(HttpServletRequest request, HttpServletResponse response,@RequestParam(value="logivalja", required=true) String välja){
 
 		if(välja.equals("1")){
 			request.getSession().removeAttribute("kasutajaNimi");
 			request.getSession().removeAttribute("juhtID");
-			request.getSession().removeAttribute("suunatudLink");
 			request.getSession().invalidate();
-			
-			response.addCookie(new Cookie("user",""));
-			response.addCookie(new Cookie("parool",""));
-			
 			return new RedirectView("vaadeLogin.htm");
 		}
 		else{
-			return new RedirectView("vaadeProjektid.htm");
+			return new RedirectView("vaadeArhiiv.htm");
 		}
 	}
 	
 	
-	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"projektDragId","staatusDragId","projektiDragJNR"})
+	@RequestMapping(value = "/vaadeArhiiv.htm", method = RequestMethod.POST, params={"projektDragId","staatusDragId","projektiDragJNR"})
 	public View muudaProjektiStaatust(@RequestParam(value="staatusDragId", required=true) int staatusID,@RequestParam(value="projektDragId", required=true) int projektID,
 			@RequestParam(value="projektiDragJNR", required=true) int projektiJärjekorraNR,@RequestParam(value="staatusVanaDragId", required=true) int staatusVanaID,
 			@RequestParam(value="projektiVanaDragJNR", required=true) int projektiVanaJärjekorraNR,Model m){
@@ -320,10 +314,10 @@ public class ProjektidController {
 			teade = "Projekti staatuse muutmine õnnestus";
 		}
 		
-		return new RedirectView("vaadeProjektid.htm");
+		return new RedirectView("vaadeArhiiv.htm");
 	}
 	
-	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"vastutajaProjektid","vastutajaNimi"})
+	@RequestMapping(value = "/vaadeArhiiv.htm", method = RequestMethod.POST, params={"vastutajaProjektid","vastutajaNimi"})
 	public View muudaProjektiStaatust(@RequestParam(value="vastutajaNimi", required=true) String nimi,@RequestParam(value="vastutajaProjektid", required=true) int projektID){
 
 		int vastus = Projekt.muudaProjektiVastutajatAndmebaasis(projektID,nimi,juhtID);
@@ -335,21 +329,7 @@ public class ProjektidController {
 			teade = "Vastutaja muutmine õnnestus";
 		}
 		
-		return new RedirectView("vaadeProjektid.htm");
+		return new RedirectView("vaadeArhiiv.htm");
 	}
 	
-	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.POST, params={"staatuseSVanaDragId","staatuseSJNR","staatuseSVanaJNR"})
-	public View muudaStaatuseJNR(@RequestParam(value="staatuseSJNR", required=true) int staatuseJärjekorraNR,@RequestParam(value="staatuseSVanaDragId", required=true) int staatusVanaID,
-			@RequestParam(value="staatuseSVanaJNR", required=true) int staatuseVanaJärjekorraNR){
-
-		int vastus = Staatus.muudaStaatuseJärjekordaAndmebaasis(staatuseJärjekorraNR,staatusVanaID,staatuseVanaJärjekorraNR,juhtID);
-		if(vastus == Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
-			teade = "Viga andmebaasiga ühendumisel";
-		}
-		else{
-			teade = "Staatuse järjekorra muutmine õnnestus";
-		}
-		
-		return new RedirectView("vaadeProjektid.htm");
-	}
 }

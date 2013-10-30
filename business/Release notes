@@ -38,14 +38,15 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Saab vaadata pipeline vaadet
 
 
--- Lisamï¿½rkused
-* Sï¿½ntaksiliselt valesti lisatud tulu/kulu asendatakse automaatselt 0 -ga
+-- Lisam2rkused
+* Syntaksiliselt valesti lisatud tulu/kulu asendatakse automaatselt 0 -ga
 * Kasutajaid ei saa projekti mitmekordselt lisada (loogiline)
-* Projektil saab olla ainult ï¿½ks vastutaja
-* Sï¿½ntaksiliselt valesti olev tï¿½ï¿½taja osalus projektis muudetakse (vï¿½etakse ï¿½ra vigased karakterid, mitme punkti korral arvestatakse vasakult esimest)
-* Staatused on kuvatud vastavalt nende jï¿½rekorranumbrile
-* Tï¿½ï¿½taja kustutamine tï¿½ï¿½taja vaates ei eemalda teda olemas olevatest ning olnud projektidest (ajalugu sï¿½ilib)
-* Staatust saab kustutada ainult siis, kui temaga pole seotud ï¿½htegi projekti
+* Projektil saab olla ainult yks vastutaja
+* Syntaksiliselt valesti olev tootaja osalus projektis muudetakse (v6etakse 2ra vigased karakterid, mitme punkti korral arvestatakse vasakult esimest)
+* Staatused on kuvatud vastavalt nende j2rekorranumbrile
+* Tootaja kustutamine tootaja vaates ei eemalda teda olemas olevatest ning olnud projektidest (ajalugu s2ilib)
+* Staatust saab kustutada ainult siis, kui temaga pole seotud yhtegi projekti
+* Kasutatakse logimise cookieseid, ehk kui kasutaja ei loginud välja, siis brauseri taasavamisel on ta ikka sisse logitud
 
 -- Bug fixes
 * Kommentaaride kuupï¿½ev parandatud
