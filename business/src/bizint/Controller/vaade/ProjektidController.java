@@ -36,6 +36,7 @@ public class ProjektidController {
 		
 		if(request.getSession().getAttribute("kasutajaNimi") == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
+			request.getSession().setAttribute("suunatudLink", "vaadeProjektid.htm");
 			return "redirect:/vaadeViga.htm";
 		}
 		
@@ -290,6 +291,7 @@ public class ProjektidController {
 		if(välja.equals("1")){
 			request.getSession().removeAttribute("kasutajaNimi");
 			request.getSession().removeAttribute("juhtID");
+			request.getSession().removeAttribute("suunatudLink");
 			request.getSession().invalidate();
 			return new RedirectView("vaadeLogin.htm");
 		}

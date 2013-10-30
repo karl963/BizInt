@@ -47,6 +47,7 @@ public class ProjektController {
 		
 		if(request.getSession().getAttribute("kasutajaNimi") == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
+			request.getSession().setAttribute("suunatudLink", "vaadeProjektEsimene.htm?id="+projektID);
 			return "redirect:/vaadeViga.htm";
 		}
 		
@@ -70,8 +71,12 @@ public class ProjektController {
 			Statement stmt = con.createStatement();
 			String query = "SELECT kirjeldus, projektNimi, reiting FROM projektid WHERE projektID="+projektID+" AND juhtID="+juhtID;
 			ResultSet rs = stmt.executeQuery(query);
-			
-			rs.next();
+
+			if(!rs.next()){
+				request.getSession().setAttribute("viga", VigaController.VIGA_PROJEKTI_POLE_OLEMAS);
+				request.getSession().setAttribute("suunatudLink", "vaadeProjektid.htm");
+				return "redirect:/vaadeViga.htm";
+			}
 			
 			nimi = rs.getString("projektNimi");
 			kirjeldus = rs.getString("kirjeldus");
@@ -252,6 +257,7 @@ public class ProjektController {
 		
 		if(request.getSession().getAttribute("kasutajaNimi") == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
+			request.getSession().setAttribute("suunatudLink", "vaadeProjektTeine.htm?id="+projektID);
 			return "redirect:/vaadeViga.htm";
 		}
 		
@@ -273,7 +279,11 @@ public class ProjektController {
 			String query = "SELECT projektNimi, reiting FROM projektid WHERE projektID="+projektID+" AND juhtID="+juhtID;
 			ResultSet rs = stmt.executeQuery(query);
 			
-			rs.next();
+			if(!rs.next()){
+				request.getSession().setAttribute("viga", VigaController.VIGA_PROJEKTI_POLE_OLEMAS);
+				request.getSession().setAttribute("suunatudLink", "vaadeProjektid.htm");
+				return "redirect:/vaadeViga.htm";
+			}
 			
 			nimi = rs.getString("projektNimi");
 			reiting = rs.getInt("reiting");

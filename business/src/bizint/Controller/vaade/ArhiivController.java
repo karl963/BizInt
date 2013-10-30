@@ -36,6 +36,7 @@ public class ArhiivController {
 		
 		if(request.getSession().getAttribute("kasutajaNimi") == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
+			request.getSession().setAttribute("suunatudLink", "vaadeArhiiv.htm");
 			return "redirect:/vaadeViga.htm";
 		}
 		

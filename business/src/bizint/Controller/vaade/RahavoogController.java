@@ -45,6 +45,7 @@ public class RahavoogController {
 		
 		if(request.getSession().getAttribute("kasutajaNimi") == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
+			request.getSession().setAttribute("suunatudLink", "vaadeRahavoog.htm");
 			return "redirect:/vaadeViga.htm";
 		}
 		
