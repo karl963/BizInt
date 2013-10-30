@@ -2,7 +2,7 @@
 <project name="BizInt" default="help" basedir=".">
   <!-- Define the properties used by the build -->
   	<property name="app.name"      	value="business"/>
-  	<property name="tcserver.home" 	value="C:\Users\Siimu\Desktop\apache-tomcat-6.0.37" />
+  	<property name="tcserver.home" 	value="/usr/share/tomcat6" />
   	<property name="work.home"    	value="${basedir}/work"/>
   	<property name="dist.home"    	value="${basedir}/dist"/>
   	<property name="src.home"     	value="${basedir}/src"/>
