@@ -554,7 +554,7 @@ $(document).ready(function(){
 	
 	//arhiivi projekti tõstmise drag and drop
 	
-	$('.dropZoneProjekt').draggable({
+	$('.arhiiviProjektDrag').draggable({
 		connectToSortable: ".dropZoneArhiiv",
 	    cursor: 'move',
 	    revert: 'invalid',
@@ -592,7 +592,7 @@ $(document).ready(function(){
 	});
 	  
 	$('.dropZoneArhiiv').droppable({
-		  accept: '.dropZoneProjekt',
+		  accept: '.arhiiviProjektDrag',
 		  drop: function(event, ui) {
 		   	if(!dropToimus){
 		        var allID = $(this).attr("id");
