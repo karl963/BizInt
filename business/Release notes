@@ -38,7 +38,7 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Saab vaadata pipeline vaadet
 
 
--- Lisamï¿½rkused
+-- Lisam2rkused
 * Syntaksiliselt valesti lisatud tulu/kulu asendatakse automaatselt 0 -ga
 * Kasutajaid ei saa projekti mitmekordselt lisada (loogiline)
 * Projektil saab olla ainult yks vastutaja
@@ -46,7 +46,7 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Staatused on kuvatud vastavalt nende j2rekorranumbrile
 * Tootaja kustutamine tootaja vaates ei eemalda teda olemas olevatest ning olnud projektidest (ajalugu s2ilib)
 * Staatust saab kustutada ainult siis, kui temaga pole seotud yhtegi projekti
-
+* Kasutatakse logimise cookieseid, ehk kui kasutaja ei loginud välja, siis brauseri taasavamisel on ta ikka sisse logitud
 
 -- Bug fixes
 * Kommentaaride kuupï¿½ev parandatud

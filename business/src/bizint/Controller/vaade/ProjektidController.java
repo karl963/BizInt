@@ -6,6 +6,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -293,6 +294,10 @@ public class ProjektidController {
 			request.getSession().removeAttribute("juhtID");
 			request.getSession().removeAttribute("suunatudLink");
 			request.getSession().invalidate();
+			
+			response.addCookie(new Cookie("user",""));
+			response.addCookie(new Cookie("parool",""));
+			
 			return new RedirectView("vaadeLogin.htm");
 		}
 		else{
