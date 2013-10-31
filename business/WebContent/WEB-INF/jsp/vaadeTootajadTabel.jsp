@@ -25,6 +25,15 @@
 
 <br>
 
+<div id="tootajadTabelLegend">
+	<span><b>Legend: </b></span>
+	<span class="tuluLahter" id="legendTulu">Töötaja tulu</span> <span> ; </span>
+	<span class="tootajaPalk" id="legendKuuPalk">Töötaja kuupalk</span> <span> ; </span>
+	<span class="palgaKuluLahter" id="legendProjektiPalk">Töötaja projekti palgad</span>
+</div>
+
+<br>
+
 <select id="aastateValikud">
 	<c:forEach items="${aastad}" var="aasta">
 		<c:choose>
@@ -75,6 +84,10 @@
 			<th class="tuluLahter">${kuupaev1}</th>
 		</c:forEach>
 		
+		<c:forEach items="${kuupaevProjektiPalgad1}" var="kuupaevProjektiPalk1">
+			<th class="palgaKuluLahter">${kuupaevProjektiPalk1}</th>
+		</c:forEach>
+		
 		<th class="tootajaPalk" id="tootajaPalgaKuupaev2">
 			<div class="tootajaPalgaMuutmine" style="display:none;">
 				<input style="width:40px" class="tootajaPalgaMuutmiseLahter" value="${palgaKuupaev2}" />
@@ -84,6 +97,10 @@
 		
 		<c:forEach items="${kuupaevad2}" var="kuupaev2">
 			<th class="tuluLahter">${kuupaev2}</th>
+		</c:forEach>
+	
+		<c:forEach items="${kuupaevProjektiPalgad2}" var="kuupaevProjektiPalk2">
+			<th class="palgaKuluLahter">${kuupaevProjektiPalk2}</th>
 		</c:forEach>
 		
 		<th class="tootajaPalk" id="tootajaPalgaKuupaev3">
@@ -95,6 +112,10 @@
 		
 		<c:forEach items="${kuupaevad3}" var="kuupaev3">
 			<th class="tuluLahter">${kuupaev3}</th>
+		</c:forEach>
+		
+		<c:forEach items="${kuupaevProjektiPalgad3}" var="kuupaevProjektiPalk3">
+			<th class="palgaKuluLahter">${kuupaevProjektiPalk3}</th>
 		</c:forEach>
 		
 	</tr>
@@ -131,6 +152,10 @@
 				<td class="tuluLahter">${tulu1}</td>
 			</c:forEach>
 			
+			<c:forEach items="${tootaja.tabeliAndmed.palgaKulud1}" var="kulu1">
+				<td class="palgaKuluLahter">${kulu1}</td>
+			</c:forEach>
+			
 			<td class="tootajaPalk">
 				<div class="tootajaPalgaMuutmine" style="display:none;">
 					<input style="width:40px" class="tootajaPalgaMuutmiseLahter" value="${tootaja.tabeliAndmed.palgad[1]}" />
@@ -142,6 +167,10 @@
 				<td class="tuluLahter">${tulu2}</td>
 			</c:forEach>
 			
+			<c:forEach items="${tootaja.tabeliAndmed.palgaKulud2}" var="kulu2">
+				<td class="palgaKuluLahter">${kulu2}</td>
+			</c:forEach>
+			
 			<td class="tootajaPalk">
 				<div class="tootajaPalgaMuutmine" style="display:none;">
 					<input style="width:40px" class="tootajaPalgaMuutmiseLahter" value="${tootaja.tabeliAndmed.palgad[2]}" />
@@ -151,6 +180,10 @@
 			
 			<c:forEach items="${tootaja.tabeliAndmed.tulud3}" var="tulu3">
 				<td class="tuluLahter">${tulu3}</td>
+			</c:forEach>
+			
+			<c:forEach items="${tootaja.tabeliAndmed.palgaKulud3}" var="kulu3">
+				<td class="palgaKuluLahter">${kulu3}</td>
 			</c:forEach>
 		</tr>
 

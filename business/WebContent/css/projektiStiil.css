@@ -50,6 +50,9 @@
 .tootajaPalk{
 	background-color:#FFE6E6;
 }
+.palgaKuluLahter{
+	background-color:#FFE1FF;
+}
 .tuluLahter{
 	background-color:#E6FAE6;
 }
@@ -120,7 +123,18 @@
    	background-color:#74CEFF;
    	top: 0px;
 }
-
+#tootajadTabelLegend{
+	heigth:20px;
+}
+#legendTulu{
+	width:110px;
+}
+#legendKuuPalk{
+	width:110px;
+}
+#legendProjektiPalk{
+	width:180px;
+}
 
 
 .projektDetailNupp{

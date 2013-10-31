@@ -20,9 +20,17 @@ public class TabeliData {
 	private Map<String,Double> tuludMap2 = new HashMap<String, Double>();
 	private Map<String,Double> tuludMap3 = new HashMap<String, Double>();
 	
+	private Map<String,Double> kuludMap1 = new HashMap<String, Double>();
+	private Map<String,Double> kuludMap2 = new HashMap<String, Double>();
+	private Map<String,Double> kuludMap3 = new HashMap<String, Double>();
+	
 	private List<Double> tulud1 = new ArrayList<Double>();
 	private List<Double> tulud2 = new ArrayList<Double>();
 	private List<Double> tulud3 = new ArrayList<Double>();
+	
+	private List<Double> palgaKulud1 = new ArrayList<Double>();
+	private List<Double> palgaKulud2 = new ArrayList<Double>();
+	private List<Double> palgaKulud3 = new ArrayList<Double>();
 	
 	public void lisaTuludMapistListi(){
 		
@@ -44,6 +52,24 @@ public class TabeliData {
 	        tulud3.add(pairs.getValue());
 	    }
 		
+	    
+		Iterator<Entry<String, Double>> it4 = kuludMap1.entrySet().iterator();
+	    while (it4.hasNext()) {
+	        Map.Entry<String,Double> pairs = (Map.Entry<String,Double>)it4.next();
+	        palgaKulud1.add(pairs.getValue());
+	    }
+
+		Iterator<Entry<String, Double>> it5 = kuludMap2.entrySet().iterator();
+	    while (it5.hasNext()) {
+	        Map.Entry<String,Double> pairs = (Map.Entry<String,Double>)it5.next();
+	        palgaKulud2.add(pairs.getValue());
+	    }
+
+		Iterator<Entry<String, Double>> it6 = kuludMap3.entrySet().iterator();
+	    while (it6.hasNext()) {
+	        Map.Entry<String,Double> pairs = (Map.Entry<String,Double>)it6.next();
+	        palgaKulud3.add(pairs.getValue());
+	    }
 	}
 	
 	public Double[] getPalgad() {
@@ -101,6 +127,54 @@ public class TabeliData {
 
 	public void setPalgaKuupäevad(int[] palgaKuupäevad) {
 		this.palgaKuupäevad = palgaKuupäevad;
+	}
+
+	public Map<String, Double> getKuludMap1() {
+		return kuludMap1;
+	}
+
+	public void setKuludMap1(Map<String, Double> kuludMap1) {
+		this.kuludMap1 = kuludMap1;
+	}
+
+	public Map<String, Double> getKuludMap2() {
+		return kuludMap2;
+	}
+
+	public void setKuludMap2(Map<String, Double> kuludMap2) {
+		this.kuludMap2 = kuludMap2;
+	}
+
+	public Map<String, Double> getKuludMap3() {
+		return kuludMap3;
+	}
+
+	public void setKuludMap3(Map<String, Double> kuludMap3) {
+		this.kuludMap3 = kuludMap3;
+	}
+
+	public List<Double> getPalgaKulud1() {
+		return palgaKulud1;
+	}
+
+	public void setPalgaKulud1(List<Double> palgaKulud1) {
+		this.palgaKulud1 = palgaKulud1;
+	}
+
+	public List<Double> getPalgaKulud2() {
+		return palgaKulud2;
+	}
+
+	public void setPalgaKulud2(List<Double> palgaKulud2) {
+		this.palgaKulud2 = palgaKulud2;
+	}
+
+	public List<Double> getPalgaKulud3() {
+		return palgaKulud3;
+	}
+
+	public void setPalgaKulud3(List<Double> palgaKulud3) {
+		this.palgaKulud3 = palgaKulud3;
 	}
 	
 	/*
