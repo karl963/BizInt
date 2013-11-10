@@ -161,17 +161,12 @@ public class LoginController {
 			
 		}
 		
-		if(lisaSidAndmebaasi(nimi,sid)){
-			return sid;
-		}
-		else{
-			return null;
-		}
+		return lisaSidAndmebaasi(nimi,sid);
 	}
 	
-	private boolean lisaSidAndmebaasi(String nimi, String sid){
+	private String lisaSidAndmebaasi(String nimi, String sid){
 		
-		boolean korras = false;
+		String sidTäiendus = null;
 		
 		Connection con = null;
 		
@@ -180,20 +175,29 @@ public class LoginController {
 			con = (new Mysql()).getConnection();
 			
 			Statement stmt0 = con.createStatement();
-			String query0 = "SELECT * FROM sessioonid WHERE kasutajaNimi = '"+nimi+"'";
+			String query0 = "SELECT juhtID FROM sessioonid, juhid WHERE sessioonid.kasutajaNimi = '"+nimi+"' AND juhid.kasutajaNimi = sessioonid.kasutajaNimi";
 			ResultSet rs0 = stmt0.executeQuery(query0);
 			
 			if(rs0.next()){
+				
+				sidTäiendus = rs0.getInt("juhtID")+"."+sid;
+				
 				Statement stmt = con.createStatement();
-				String query = "UPDATE sessioonid SET session_id='"+sid+"' WHERE kasutajaNimi='"+nimi+"'";
+				String query = "UPDATE sessioonid SET session_id='"+sidTäiendus+"' WHERE kasutajaNimi='"+nimi+"'";
 				stmt.executeUpdate(query);
 			}
 			else{
+				Statement stmt2 = con.createStatement();
+				String query2 = "SELECT juhtID FROM juhid WHERE kasutajaNimi = '"+nimi+"'";
+				ResultSet rs2 = stmt2.executeQuery(query2);
+				
+				sidTäiendus = rs2.getInt("juhtID")+"."+sid;
+				
 				Statement stmt = con.createStatement();
-				String query = "INSERT INTO sessioonid (kasutajaNimi, session_id) VALUES ('"+nimi+"','"+sid+"')";
+				String query = "INSERT INTO sessioonid (kasutajaNimi, session_id) VALUES ('"+nimi+"','"+sidTäiendus+"')";
 				stmt.executeUpdate(query);
 			}
-			korras = true;
+
 		}
 		catch(Exception x){
 			x.printStackTrace();
@@ -202,8 +206,19 @@ public class LoginController {
 			if(con!=null){try{con.close();}catch(Exception x){}}
 		}
 	
-		return korras;
+		return sidTäiendus;
 	
+	}
+	
+	public static String kontrolliSidOlemasolu(Cookie[] cookies){
+		
+		for(Cookie c : cookies){
+			if(c.getName().equals("sid")){
+				return c.getValue();
+			}
+		}
+		
+		return null;
 	}
 	
 }

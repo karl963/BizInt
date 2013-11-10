@@ -35,17 +35,24 @@ public class PipelineController {
 	@RequestMapping(value = "/vaadePipeline.htm", method = RequestMethod.GET)
 	public String vaadePipeline(HttpServletRequest request,Model m) {
 		
-		if(request.getSession().getAttribute("kasutajaNimi") == null){
+		if(LoginController.kontrolliSidOlemasolu(request.getCookies()) == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
 			request.getSession().setAttribute("suunatudLink", "vaadePipeline.htm");
 			return "redirect:/vaadeViga.htm";
 		}
 		
+		if(juhtID == 0){
+			if(request.getSession().getAttribute("juhtID") == null){
+				juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split(".")[0]);
+			}
+			else{
+				juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+			}
+		}
+		
 		staatused = new ArrayList<Staatus>();
 		
 		Connection con = new Mysql().getConnection();
-		
-		juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
 		
 		try{
 			

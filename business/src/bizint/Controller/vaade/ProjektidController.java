@@ -35,13 +35,20 @@ public class ProjektidController {
 	@RequestMapping(value = "/vaadeProjektid.htm", method = RequestMethod.GET)
 	public String vaadeProjektid(HttpServletRequest request,Model m){
 		
-		if(request.getSession().getAttribute("kasutajaNimi") == null){
+		if(LoginController.kontrolliSidOlemasolu(request.getCookies()) == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
 			request.getSession().setAttribute("suunatudLink", "vaadeProjektid.htm");
 			return "redirect:/vaadeViga.htm";
 		}
 		
-		juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+		if(juhtID == 0){
+			if(request.getSession().getAttribute("juhtID") == null){
+				juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split(".")[0]);
+			}
+			else{
+				juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+			}
+		}
 		
 		staatused = new ArrayList<Staatus>();
 		List<String> töötajad = new ArrayList<String>();

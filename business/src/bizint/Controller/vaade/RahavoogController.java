@@ -30,6 +30,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 
 
+
+
 import bizint.andmebaas.Mysql;
 import bizint.app.alam.Staatus;
 import bizint.app.alam.rahaline.Tulu;
@@ -39,14 +41,24 @@ public class RahavoogController {
 	
 	private String teade;
 	public static SimpleDateFormat AJAFORMAAT = new SimpleDateFormat("dd.MM.yyyy");
+	private int juhtID = 0;
 	
 	@RequestMapping(value = "/vaadeRahavoog.htm", method = RequestMethod.GET)
 	public String vaadeRahavoog(HttpServletRequest request,Model m){//@RequestParam("algus") String algus,@RequestParam("lopp") String lõpp,Model m) {
 		
-		if(request.getSession().getAttribute("kasutajaNimi") == null){
+		if(LoginController.kontrolliSidOlemasolu(request.getCookies()) == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
 			request.getSession().setAttribute("suunatudLink", "vaadeRahavoog.htm");
 			return "redirect:/vaadeViga.htm";
+		}
+		
+		if(juhtID == 0){
+			if(request.getSession().getAttribute("juhtID") == null){
+				juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split(".")[0]);
+			}
+			else{
+				juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+			}
 		}
 		/*
 		Connection con = (new Mysql()).getConnection();

@@ -55,13 +55,20 @@ public class TootajadController {
 	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.GET)
 	public String vaadeTootajadTabel(HttpServletRequest request,Model m) {
 		
-		if(request.getSession().getAttribute("kasutajaNimi") == null){
+		if(LoginController.kontrolliSidOlemasolu(request.getCookies()) == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
 			request.getSession().setAttribute("suunatudLink", "vaadeTootajadTabel.htm");
 			return "redirect:/vaadeViga.htm";
 		}
 		
-		juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+		if(juhtID == 0){
+			if(request.getSession().getAttribute("juhtID") == null){
+				juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split(".")[0]);
+			}
+			else{
+				juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+			}
+		}
 		
 		//// kvartalid 
 		
@@ -324,13 +331,20 @@ public class TootajadController {
 	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.GET, params = {"aasta","kvartal"})
 	public String vaadeTootajadTabelValitudAasta(HttpServletRequest request,@RequestParam(value = "aasta", required = true) int aasta,@RequestParam(value= "kvartal", required = true) String hetkeKvartal, Model m) {
 
-		if(request.getSession().getAttribute("kasutajaNimi") == null){
+		if(LoginController.kontrolliSidOlemasolu(request.getCookies()) == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
 			request.getSession().setAttribute("suunatudLink", "vaadeTootajadTabel.htm?aasta="+aasta+"&kvartal="+hetkeKvartal);
 			return "redirect:/vaadeViga.htm";
 		}
 		
-		juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+		if(juhtID == 0){
+			if(request.getSession().getAttribute("juhtID") == null){
+				juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split(".")[0]);
+			}
+			else{
+				juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+			}
+		}
 		
 		//// kvartalid 
 		
@@ -712,13 +726,20 @@ public class TootajadController {
 	@RequestMapping(value = "/vaadeTootajadGraaf.htm", method = RequestMethod.GET)
 	public String vaadeTootajadGraaf(HttpServletRequest request,Model m) {
 		
-		if(request.getSession().getAttribute("kasutajaNimi") == null){
+		if(LoginController.kontrolliSidOlemasolu(request.getCookies()) == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
 			request.getSession().setAttribute("suunatudLink", "vaadeTootajadGraaf.htm");
 			return "redirect:/vaadeViga.htm";
 		}
 		
-		juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+		if(juhtID == 0){
+			if(request.getSession().getAttribute("juhtID") == null){
+				juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split(".")[0]);
+			}
+			else{
+				juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+			}
+		}
 		
 		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
 		

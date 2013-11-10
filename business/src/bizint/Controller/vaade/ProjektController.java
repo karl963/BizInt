@@ -45,13 +45,20 @@ public class ProjektController {
 	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.GET, params={"id"})
 	public String vaadeProjektEsimene(HttpServletRequest request,@RequestParam("id") int projektID, Model m) {
 		
-		if(request.getSession().getAttribute("kasutajaNimi") == null){
+		if(LoginController.kontrolliSidOlemasolu(request.getCookies()) == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
 			request.getSession().setAttribute("suunatudLink", "vaadeProjektEsimene.htm?id="+projektID);
 			return "redirect:/vaadeViga.htm";
 		}
 		
-		juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+		if(juhtID == 0){
+			if(request.getSession().getAttribute("juhtID") == null){
+				juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split(".")[0]);
+			}
+			else{
+				juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+			}
+		}
 		
 		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
 		List<Logi> logi = new ArrayList<Logi>();
@@ -255,7 +262,7 @@ public class ProjektController {
 	@RequestMapping("/vaadeProjektTeine.htm")
 	public String vaadeProjektTeine(HttpServletRequest request,@RequestParam("id") int projektID, Model m) {
 		
-		if(request.getSession().getAttribute("kasutajaNimi") == null){
+		if(LoginController.kontrolliSidOlemasolu(request.getCookies()) == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
 			request.getSession().setAttribute("suunatudLink", "vaadeProjektTeine.htm?id="+projektID);
 			return "redirect:/vaadeViga.htm";

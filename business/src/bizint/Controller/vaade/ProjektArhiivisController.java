@@ -45,12 +45,19 @@ public class ProjektArhiivisController {
 	@RequestMapping(value = "/vaadeProjektArhiivisEsimene.htm", method = RequestMethod.GET, params={"id"})
 	public String vaadeProjektArhiivisEsimene(HttpServletRequest request,@RequestParam("id") int projektID, Model m) {
 		
-		if(request.getSession().getAttribute("kasutajaNimi") == null){
+		if(LoginController.kontrolliSidOlemasolu(request.getCookies()) == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
 			return "redirect:/vaadeViga.htm";
 		}
 		
-		juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+		if(juhtID == 0){
+			if(request.getSession().getAttribute("juhtID") == null){
+				juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split(".")[0]);
+			}
+			else{
+				juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+			}
+		}
 		
 		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
 		List<Logi> logi = new ArrayList<Logi>();
@@ -250,12 +257,19 @@ public class ProjektArhiivisController {
 	@RequestMapping("/vaadeProjektArhiivisTeine.htm")
 	public String vaadeProjektArhiivisTeine(HttpServletRequest request,@RequestParam("id") int projektID, Model m) {
 		
-		if(request.getSession().getAttribute("kasutajaNimi") == null){
+		if(LoginController.kontrolliSidOlemasolu(request.getCookies()) == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
 			return "redirect:/vaadeViga.htm";
 		}
 		
-		juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+		if(juhtID == 0){
+			if(request.getSession().getAttribute("juhtID") == null){
+				juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split(".")[0]);
+			}
+			else{
+				juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+			}
+		}
 		
 		List<Kulu> kulud = new ArrayList<Kulu>();
 		List<Tulu> tulud = new ArrayList<Tulu>();
@@ -687,7 +701,6 @@ public class ProjektArhiivisController {
 	@RequestMapping(value = "/vaadeProjektArhiivisEsimene.htm", method = RequestMethod.GET, params={"reiting","projektID"})
 	public View muudaReitingut1(@RequestParam("reiting") int reiting,@RequestParam("projektID") int projektID, Model m){
 		
-		
 		int vastus = Projekt.muudaProjektiReitingutAndmebaasis(projektID, reiting,juhtID);
 		
 		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
@@ -702,7 +715,6 @@ public class ProjektArhiivisController {
 	
 	@RequestMapping(value = "/vaadeProjektArhiivisTeine.htm", method = RequestMethod.GET, params={"reiting","projektID"})
 	public View muudaReitingut2(@RequestParam("reiting") int reiting,@RequestParam("projektID") int projektID, Model m){
-		
 		
 		int vastus = Projekt.muudaProjektiReitingutAndmebaasis(projektID, reiting,juhtID);
 		
