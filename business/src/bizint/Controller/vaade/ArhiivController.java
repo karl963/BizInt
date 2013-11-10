@@ -33,7 +33,7 @@ public class ArhiivController {
 	
 	@RequestMapping(value = "/vaadeArhiiv.htm", method = RequestMethod.GET)
 	public String vaadeArhiiv(HttpServletRequest request,Model m){
-		
+
 		if(request.getSession().getAttribute("kasutajaNimi") == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
 			request.getSession().setAttribute("suunatudLink", "vaadeArhiiv.htm");

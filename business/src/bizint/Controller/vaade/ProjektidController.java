@@ -295,8 +295,7 @@ public class ProjektidController {
 			request.getSession().removeAttribute("suunatudLink");
 			request.getSession().invalidate();
 			
-			response.addCookie(new Cookie("user",""));
-			response.addCookie(new Cookie("parool",""));
+			response.addCookie(new Cookie("sid",null));
 			
 			return new RedirectView("vaadeLogin.htm");
 		}

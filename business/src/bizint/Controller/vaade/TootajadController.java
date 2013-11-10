@@ -892,9 +892,6 @@ public class TootajadController {
 		if(vastus == Kasutaja.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
 		}
-		else if(vastus == Kasutaja.VIGA_JUBA_EKSISTEERIB){
-			teade  = "Selle nimega töötaja juba eksisteerib";
-		}
 		else{
 			teade = "Töötaja nime muutmine õnnestus";
 		}
