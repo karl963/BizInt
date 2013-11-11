@@ -214,9 +214,18 @@ public class LoginController {
 	
 	public static String kontrolliSidOlemasolu(Cookie[] cookies){
 		
+		if(cookies == null){
+			return null;
+		}
+		
 		for(Cookie c : cookies){
 			if(c.getName().equals("sid")){
-				return c.getValue();
+				if(c.getValue() == null || c.getValue().equals("")){
+					return null;
+				}
+				else{
+					return c.getValue();
+				}
 			}
 		}
 		
