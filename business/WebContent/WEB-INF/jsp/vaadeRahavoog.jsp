@@ -9,4 +9,12 @@
 </div>
 </div>
 
-<div style="position:absolute;top:200px;left:100px;color:red;"><b><big>${tegemisel}</big></b></div>
+<button type="button" style= "display:none;" id = "pipelineAndmed" onclick="javascript:tekitaPipelineGraaf('${andmedString}','tootajadGraaf');drawChart()"></button>
+
+<br>
+<br>
+<br>
+
+<div class="pipelineDivSuurus">
+    <div id="chart_div" class="diagrammiKorgus"></div>
+</div>

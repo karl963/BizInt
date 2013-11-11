@@ -371,33 +371,62 @@ $(document).ready(function() {
 google.load("visualization", "1", {packages:["corechart"]});
 google.setOnLoadCallback(tekitaPipelineGraaf);
 
-function tekitaPipelineGraaf(sisendString){
-
+function tekitaPipelineGraaf(sisendString,kaart){
+	
 	if(sisendString.target){ // kui on event, ehk ei laeta pipeline vaadet
 		return;
 	}
 	
-    var andmed = sisendString.split("/");
-    var tabel = new Array();
-    tabel[0]= ["Staatus", "Tulu", "Kulu" , "Bilanss"] ;
+	if(kaart == "pipeline"){
+	
+	    var andmed = sisendString.split("/");
+	    var tabel = new Array();
+	    tabel[0]= ["Staatus", "Tulu", "Kulu" , "Bilanss"] ;
+	    
+	    for(var i = 1;i < andmed.length ; i++){
+	    	var vaheTabel = andmed[i-1].split(";");
+	    		tabel[i] = [vaheTabel[0], parseFloat(vaheTabel[1]),parseFloat(vaheTabel[2]),parseFloat(vaheTabel[3])];	
+	    }
+	    var data = google.visualization.arrayToDataTable(tabel);
+	
+	    var options = {
+	      legend: {position: 'top'},
+	      colors: ['green','red', 'blue'],
+	      width: 500 + (150 * (tabel.length-1)),
+	      vAxis: {title: '€', titleTextStyle: {color: 'red'}},
+	      hAxis: {title: 'Staatus', titleTextStyle: {color: 'red'} }
+	    	
+	    };
+	
+	    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+	    chart.draw(data, options);
     
-    for(var i = 1;i < andmed.length ; i++){
-    	var vaheTabel = andmed[i-1].split(";");
-    		tabel[i] = [vaheTabel[0], parseFloat(vaheTabel[1]),parseFloat(vaheTabel[2]),parseFloat(vaheTabel[3])];	
-    }
-    var data = google.visualization.arrayToDataTable(tabel);
+	}
+	else if(kaart == "tootajadGraaf"){
 
-    var options = {
-      legend: {position: 'top'},
-      colors: ['green','red', 'blue'],
-      width: 500 + (150 * (tabel.length-1)),
-      vAxis: {title: '€', titleTextStyle: {color: 'red'}},
-      hAxis: {title: 'Staatus', titleTextStyle: {color: 'red'} }
-    	
-    };
-
-    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-    chart.draw(data, options);
+	    var andmed = sisendString.split("/");
+	    var tabel = new Array();
+	    tabel[0]= ["Aeg", "Tulu", "Kulu" , "Bilanss"] ;
+	    
+	    for(var i = 1;i < andmed.length ; i++){
+	    	var vaheTabel = andmed[i-1].split(";");
+	    		tabel[i] = [vaheTabel[0], parseFloat(vaheTabel[1]),parseFloat(vaheTabel[2]),parseFloat(vaheTabel[3])];	
+	    }
+	    var data = google.visualization.arrayToDataTable(tabel);
+	
+	    var options = {
+	      legend: {position: 'top'},
+	      colors: ['green','red', 'blue'],
+	      width: 500 + (50 * (tabel.length-1)),
+	      vAxis: {title: '€', titleTextStyle: {color: 'red'}},
+	      hAxis: {title: 'Staatus', titleTextStyle: {color: 'red'} }
+	    	
+	    };
+	
+	    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+	    chart.draw(data, options);
+	    
+	}
 }
 
 /*

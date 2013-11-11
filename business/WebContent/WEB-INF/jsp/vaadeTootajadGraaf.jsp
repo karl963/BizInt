@@ -11,27 +11,12 @@
 </div>
 </div>
 
-<br><br><br><br>
-
-<div>
-	<table>
-		<tr>
-			<th><a href="vaadeTootajadTabel.htm">Tabel</a></th>
-			<th class=activeTab ><a href="vaadeTootajadGraaf.htm">Graaf</a></th>
-		</tr>
-	</table>
-</div>
+<button type="button" style= "display:none;" id = "pipelineAndmed" onclick="javascript:tekitaPipelineGraaf('${andmeString}','tootajadGraaf');drawChart()"></button>
 
 <br>
+<br>
+<br>
 
-<table>
-	<tr>
-		<th>Töötajad</th>
-	</tr>
-	<c:forEach items="${kasutajad}" var="tootaja" >
-		<tr>
-			<td>${tootaja.kasutajaNimi}</td>
-		</tr>
-	</c:forEach>
-
-</table>
+<div class="pipelineDivSuurus">
+    <div id="chart_div" class="diagrammiKorgus"></div>
+</div>
