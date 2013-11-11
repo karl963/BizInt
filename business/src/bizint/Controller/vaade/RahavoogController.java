@@ -104,7 +104,7 @@ public class RahavoogController {
 		try{
 			
 			Statement stmt = con.createStatement();
-			String query = "SELECT kulu,aeg FROM kulu > 0 AND kulud WHERE aeg >= '"+algusAeg.toString()+"' AND aeg <= '"+lõppAeg.toString()+"' AND juhtID="+juhtID;
+			String query = "SELECT kulu,aeg FROM kulud WHERE aeg >= '"+algusAeg.toString()+"' AND aeg <= '"+lõppAeg.toString()+"' AND juhtID="+juhtID;
 			ResultSet rs = stmt.executeQuery(query);
 			
 			while(rs.next()){
@@ -128,7 +128,7 @@ public class RahavoogController {
 			try{rs.close();stmt.close();}catch(Exception ex){}
 			
 			Statement stmt2 = con.createStatement();
-			String query2 = "SELECT tulu,aeg FROM tulud WHERE tulu > 0 AND aeg >= '"+algusAeg.toString()+"' AND aeg <= '"+lõppAeg.toString()+"' AND juhtID="+juhtID;
+			String query2 = "SELECT tulu,aeg FROM tulud WHERE aeg >= '"+algusAeg.toString()+"' AND aeg <= '"+lõppAeg.toString()+"' AND juhtID="+juhtID;
 			ResultSet rs2 = stmt2.executeQuery(query2);
 			
 			while(rs2.next()){
@@ -164,7 +164,7 @@ public class RahavoogController {
 			int lõppAasta = lõppCal.get(Calendar.YEAR);
 			
 			Statement stmt3 = con.createStatement();
-			String query3 = "SELECT päev,kuu,palk,aasta FROM palgad WHERE palk > 0 AND kuu >= "+algusKuu+" AND kuu <= "+lõppKuu+" AND aasta >= "+algusAasta+" AND aasta <= "+lõppAasta+" AND päev >= "+algusPäev+" AND päev <= "+lõppPäev+" AND juhtID="+juhtID;
+			String query3 = "SELECT päev,kuu,palk,aasta FROM palgad WHERE kuu >= "+algusKuu+" AND kuu <= "+lõppKuu+" AND aasta >= "+algusAasta+" AND aasta <= "+lõppAasta+" AND päev >= "+algusPäev+" AND päev <= "+lõppPäev+" AND juhtID="+juhtID;
 			ResultSet rs3 = stmt3.executeQuery(query3);
 			
 			while(rs3.next()){
