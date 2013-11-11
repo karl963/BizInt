@@ -53,7 +53,8 @@ public class ProjektController {
 		
 		if(juhtID == 0){
 			if(request.getSession().getAttribute("juhtID") == null){
-				juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split(".")[0]);
+				juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split("\\.")[0]);
+				request.getSession().setAttribute("kasutajaNimi", LoginController.getKasutajaNimiCookiest(request.getCookies()));
 			}
 			else{
 				juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
@@ -268,7 +269,15 @@ public class ProjektController {
 			return "redirect:/vaadeViga.htm";
 		}
 		
-		juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+		if(juhtID == 0){
+			if(request.getSession().getAttribute("juhtID") == null){
+				juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split("\\.")[0]);
+				request.getSession().setAttribute("kasutajaNimi", LoginController.getKasutajaNimiCookiest(request.getCookies()));
+			}
+			else{
+				juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+			}
+		}
 		
 		List<Kulu> kulud = new ArrayList<Kulu>();
 		List<Tulu> tulud = new ArrayList<Tulu>();

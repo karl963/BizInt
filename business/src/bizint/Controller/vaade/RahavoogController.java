@@ -82,7 +82,8 @@ public class RahavoogController {
 		
 		if(juhtID == 0){
 			if(request.getSession().getAttribute("juhtID") == null){
-				juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split(".")[0]);
+				juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split("\\.")[0]);
+				request.getSession().setAttribute("kasutajaNimi", LoginController.getKasutajaNimiCookiest(request.getCookies()));
 			}
 			else{
 				juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
@@ -113,7 +114,7 @@ public class RahavoogController {
 				
 				if(kulu != 0.0){
 					cal.setTime(aeg);
-					String stringAeg = cal.get(Calendar.DAY_OF_MONTH)+"."+cal.get(Calendar.MONTH)+1+"."+cal.get(Calendar.YEAR);
+					String stringAeg = cal.get(Calendar.DAY_OF_MONTH)+"."+(cal.get(Calendar.MONTH)+1)+"."+cal.get(Calendar.YEAR);
 					
 					kuupäevad.put(stringAeg, 0.0);
 					
@@ -137,7 +138,7 @@ public class RahavoogController {
 				
 				if(tulu != 0.0){
 					cal.setTime(aeg);
-					String stringAeg = cal.get(Calendar.DAY_OF_MONTH)+"."+cal.get(Calendar.MONTH)+1+"."+cal.get(Calendar.YEAR);
+					String stringAeg = cal.get(Calendar.DAY_OF_MONTH)+"."+(cal.get(Calendar.MONTH)+1)+"."+cal.get(Calendar.YEAR);
 					
 					kuupäevad.put(stringAeg, 0.0);
 					
@@ -263,6 +264,12 @@ public class RahavoogController {
 		    it2.remove();
 		    uusMap.put(väikseim, value);
 		}
+		
+		Iterator<Entry<String, Double>> it = map.entrySet().iterator();
+	    while (it.hasNext()) {
+	    	 Map.Entry<String, Double> pairs = (Map.Entry<String, Double>)it.next();
+	        System.out.println(pairs.getKey());
+	    }
 		
 		return uusMap;
 	}

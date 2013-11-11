@@ -51,7 +51,6 @@ public class LoginController {
 		if(onOlemasLogitud){
 			Connection con = (new Mysql()).getConnection();
 			try{
-				
 				Statement stmt0 = con.createStatement();
 				String query0 = "SELECT parool FROM juhid, sessioonid WHERE sessioonid.kasutajaNimi=juhid.kasutajaNimi AND session_id ='"+sid+"'";
 				ResultSet rs0 = stmt0.executeQuery(query0);
@@ -63,6 +62,8 @@ public class LoginController {
 					request.getSession().removeAttribute("kasutajaNimi");
 					request.getSession().removeAttribute("juhtID");
 				}
+				
+				kasutajaNimi = sid.split("\\.")[2];
 				
 				Statement stmt = con.createStatement();
 				String query = "SELECT juhtID FROM juhid WHERE kasutajaNimi='"+kasutajaNimi+"' AND parool='"+parool+"'";
@@ -180,7 +181,7 @@ public class LoginController {
 			
 			if(rs0.next()){
 				
-				sidTäiendus = rs0.getInt("juhtID")+"."+sid;
+				sidTäiendus = rs0.getInt("juhtID")+"."+sid+"."+nimi;
 				
 				Statement stmt = con.createStatement();
 				String query = "UPDATE sessioonid SET session_id='"+sidTäiendus+"' WHERE kasutajaNimi='"+nimi+"'";
@@ -192,7 +193,7 @@ public class LoginController {
 				ResultSet rs2 = stmt2.executeQuery(query2);
 				
 				rs2.next();
-				sidTäiendus = rs2.getInt("juhtID")+"."+sid;
+				sidTäiendus = rs2.getInt("juhtID")+"."+sid+"."+nimi;
 				
 				Statement stmt = con.createStatement();
 				String query = "INSERT INTO sessioonid (kasutajaNimi, session_id) VALUES ('"+nimi+"','"+sidTäiendus+"')";
@@ -210,6 +211,25 @@ public class LoginController {
 	
 		return sidTäiendus;
 	
+	}
+	
+	public static String getKasutajaNimiCookiest(Cookie[] cookies){
+		if(cookies == null){
+			return null;
+		}
+		
+		for(Cookie c : cookies){
+			if(c.getName().equals("sid")){
+				if(c.getValue() == null || c.getValue().equals("")){
+					return null;
+				}
+				else{
+					return c.getValue().split("\\.")[2];
+				}
+			}
+		}
+		
+		return null;
 	}
 	
 	public static String kontrolliSidOlemasolu(Cookie[] cookies){
