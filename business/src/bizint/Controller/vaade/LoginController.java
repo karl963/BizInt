@@ -191,6 +191,7 @@ public class LoginController {
 				String query2 = "SELECT juhtID FROM juhid WHERE kasutajaNimi = '"+nimi+"'";
 				ResultSet rs2 = stmt2.executeQuery(query2);
 				
+				rs2.next();
 				sidTäiendus = rs2.getInt("juhtID")+"."+sid;
 				
 				Statement stmt = con.createStatement();
@@ -200,6 +201,7 @@ public class LoginController {
 
 		}
 		catch(Exception x){
+			teade = "Viga kasutajanime või parooliga";
 			x.printStackTrace();
 		}
 		finally{
