@@ -696,15 +696,21 @@ public class ProjektController {
 	}
 	
 	@RequestMapping(value = "/vaadeProjektEsimene.htm", method = RequestMethod.POST, params={"projektID","kasutajad"})
-	public void muudaKasutajateAndmeid(HttpServletRequest request, HttpServletResponse response,@RequestParam("kasutajad") String kasutajad, @RequestParam("projektID") int projektID, Model m){
+	public void muudaKasutajateAndmeid(HttpServletRequest request, HttpServletResponse response,@RequestParam("kasutajad") String kasutajad, @RequestParam("projektID") int projektID,@RequestParam("osalus") double osalus, Model m){
 		
-		int vastus = Projekt.muudaKasutajateAndmeidProjektigaAndmebaasis(kasutajad, projektID,juhtID);
-		
-		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
-			teade = "Viga andmebaasiga ühendumisel";
+		if(osalus > 1.0){
+			teade = "Osalus ei tohi olla üle 1.0!";
 		}
-		else{
-			teade = "Töötajate andmete muutmine õnnestus";
+		
+		else{	
+			int vastus = Projekt.muudaKasutajateAndmeidProjektigaAndmebaasis(kasutajad, projektID,juhtID);
+			
+			if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
+				teade = "Viga andmebaasiga ühendumisel";
+			}
+			else{
+				teade = "Töötajate andmete muutmine õnnestus";
+			}
 		}
 	
 	}
