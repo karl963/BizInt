@@ -80,14 +80,12 @@ public class RahavoogController {
 			return "redirect:/vaadeViga.htm";
 		}
 		
-		if(juhtID == 0){
-			if(request.getSession().getAttribute("juhtID") == null){
-				juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split("\\.")[0]);
-				request.getSession().setAttribute("kasutajaNimi", LoginController.getKasutajaNimiCookiest(request.getCookies()));
-			}
-			else{
-				juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
-			}
+		if(request.getSession().getAttribute("juhtID") == null){
+			juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split("\\.")[0]);
+			request.getSession().setAttribute("kasutajaNimi", LoginController.getKasutajaNimiCookiest(request.getCookies()));
+		}
+		else{
+			juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
 		}
 		
 		Map<String,Double> tulud = new HashMap<String,Double>();
@@ -264,12 +262,6 @@ public class RahavoogController {
 		    it2.remove();
 		    uusMap.put(väikseim, value);
 		}
-		
-		Iterator<Entry<String, Double>> it = map.entrySet().iterator();
-	    while (it.hasNext()) {
-	    	 Map.Entry<String, Double> pairs = (Map.Entry<String, Double>)it.next();
-	        System.out.println(pairs.getKey());
-	    }
 		
 		return uusMap;
 	}

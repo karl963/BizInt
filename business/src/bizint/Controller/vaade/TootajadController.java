@@ -61,15 +61,15 @@ public class TootajadController {
 			return "redirect:/vaadeViga.htm";
 		}
 		
-		if(juhtID == 0){
-			if(request.getSession().getAttribute("juhtID") == null){
-				juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split("\\.")[0]);
-				request.getSession().setAttribute("kasutajaNimi", LoginController.getKasutajaNimiCookiest(request.getCookies()));
-			}
-			else{
-				juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
-			}
+
+		if(request.getSession().getAttribute("juhtID") == null){
+			juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split("\\.")[0]);
+			request.getSession().setAttribute("kasutajaNimi", LoginController.getKasutajaNimiCookiest(request.getCookies()));
 		}
+		else{
+			juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+		}
+
 		
 		//// kvartalid 
 		
@@ -290,6 +290,10 @@ public class TootajadController {
 		int[] aastad = {hetkeAasta-3,hetkeAasta-2,hetkeAasta-1,hetkeAasta,hetkeAasta+1,hetkeAasta+2,hetkeAasta+3};
 		
 		////
+		System.out.println(kuupaevad1.size()+" - "+kuupaevad2.size()+" - "+kuupaevad3.size());
+		System.out.println(kuupaevadKulud1.size()+" - "+kuupaevadKulud2.size()+" - "+kuupaevadKulud3.size());
+		System.out.println(esimeseKuuTulusid+" - "+teiseKuuTulusid+" - "+kolmandaKuuTulusid+" - "+esimeseKuuKulusid+" - "+teiseKuuKulusid+" - "+kolmandaKuuKulusid);
+		
 		
 		m.addAttribute("hetkeAasta", Calendar.getInstance().get(Calendar.YEAR));
 		m.addAttribute("hetkeKvartal",hetkeKvartalNimi);
@@ -338,14 +342,12 @@ public class TootajadController {
 			return "redirect:/vaadeViga.htm";
 		}
 		
-		if(juhtID == 0){
-			if(request.getSession().getAttribute("juhtID") == null){
-				juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split("\\.")[0]);
-				request.getSession().setAttribute("kasutajaNimi", LoginController.getKasutajaNimiCookiest(request.getCookies()));
-			}
-			else{
-				juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
-			}
+		if(request.getSession().getAttribute("juhtID") == null){
+			juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split("\\.")[0]);
+			request.getSession().setAttribute("kasutajaNimi", LoginController.getKasutajaNimiCookiest(request.getCookies()));
+		}
+		else{
+			juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
 		}
 		
 		//// kvartalid 
@@ -734,15 +736,12 @@ public class TootajadController {
 			return "redirect:/vaadeViga.htm";
 		}
 		
-		if(juhtID == 0){
-			if(request.getSession().getAttribute("juhtID") == null){
-				juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split("\\.")[0]);
-				request.getSession().setAttribute("kasutajaNimi", LoginController.getKasutajaNimiCookiest(request.getCookies()));
-			}
-			else{
-				juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
-			}
-			
+		if(request.getSession().getAttribute("juhtID") == null){
+			juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split("\\.")[0]);
+			request.getSession().setAttribute("kasutajaNimi", LoginController.getKasutajaNimiCookiest(request.getCookies()));
+		}
+		else{
+			juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
 		}
 		
 		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();

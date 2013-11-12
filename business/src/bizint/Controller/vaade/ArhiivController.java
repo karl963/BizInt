@@ -40,14 +40,14 @@ public class ArhiivController {
 			return "redirect:/vaadeViga.htm";
 		}
 		
-		if(juhtID == 0){
-			if(request.getSession().getAttribute("juhtID") == null){
-				juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split("\\.")[0]);
-			}
-			else{
-				juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
-			}
+
+		if(request.getSession().getAttribute("juhtID") == null){
+			juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split("\\.")[0]);
 		}
+		else{
+			juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
+		}
+
 		
 		staatused = new ArrayList<Staatus>();
 		List<String> töötajad = new ArrayList<String>();
