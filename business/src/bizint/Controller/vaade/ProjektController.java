@@ -529,7 +529,7 @@ public class ProjektController {
 	
 	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"kuluNimi","summa","stringAeg","projektID"})
 	public View kustutaKulu(@ModelAttribute("kustutaKulu") Kulu kulu, Model m){
-		
+
 		int vastus = Projekt.kustutaKuluAndmebaasist(kulu,juhtID);
 		
 		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
@@ -544,7 +544,6 @@ public class ProjektController {
 	
 	@RequestMapping(value = "/vaadeProjektTeine.htm", method = RequestMethod.POST, params={"tuluNimi","summa","stringAeg","projektID"})
 	public View kustutaTulu(@ModelAttribute("kustutaTulu") Tulu tulu, Model m){
-
 		int vastus = Projekt.kustutaTuluAndmebaasist(tulu,juhtID);
 		
 		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){

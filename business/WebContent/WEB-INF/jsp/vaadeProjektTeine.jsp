@@ -132,7 +132,7 @@ Reiting: ${projekt.reitinguHTML}
 	<form:form modelAttribute="kustutaKulu">
 		<form:input path="kuluNimi" type="hidden" value="${kulu.kuluNimi}" />
 		<form:input path="summa" type="hidden" value="${kulu.summa}" />
-		<form:input path="stringAeg" type="hidden" value="${tulu.formaaditudAeg}" />
+		<form:input path="stringAeg" type="hidden" value="${kulu.formaaditudAeg}" />
 		<form:input path="projektID" type="hidden" value="${projekt.id}" />
 
 

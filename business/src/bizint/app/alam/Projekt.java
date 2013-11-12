@@ -720,8 +720,9 @@ public class Projekt {
 		String query = null;
 		
 		try {
-			
+
 			aeg = new Timestamp(Kulu.AJAFORMAAT.parse(kulu.getStringAeg()).getTime());
+
 			query = "DELETE FROM kulud WHERE kulu="+kulu.getSumma()
 					+ " AND aeg='"+aeg
 					+ "' AND kuluNimi='"+kulu.getKuluNimi()
