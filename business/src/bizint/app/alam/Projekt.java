@@ -430,6 +430,23 @@ public class Projekt {
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		
+		try {
+			
+			Statement stmt9 = con.createStatement();
+			String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
+			ResultSet rs9 = stmt9.executeQuery(query9);
+			rs9.next();
+			String kasutajanimi = rs9.getString("kasutajaNimi");
+			
+			Statement stmt2 = con.createStatement();
+			String query2 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+projektID+","+"'"+kasutajanimi+" arhiveeris projekti " +"',"+juhtID+")";
+			stmt2.executeUpdate(query2);
+			
+			try{stmt2.close();}catch(Exception x){}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
 		
 		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Projekt.KÕIK_OKEI;

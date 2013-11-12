@@ -498,12 +498,14 @@ $(document).ready(function(){
 	    helper: 'clone', 
 	    appendTo: 'body',
 	    revertDuration: 900,
-	    scroll: true,
+	    scroll: false,
 	    start: function(){
-	        $(this).css({opacity:0});
+	    	$(this).hide(); 
+	        //$(this).css({opacity:0});
 	    },
 	    stop: function(){
-	        $(this).css({opacity:1});
+	    	$(this).show()
+	        //$(this).css({opacity:1});
 	    },
 	    drag: function(event, ui) {	
 	    	dropToimus = false;
@@ -561,10 +563,12 @@ $(document).ready(function(){
 		opacity: 0.85,
 	    revertDuration: 900,
 	    start: function(){
-	        $(this).css({opacity:0});
+	    	$(this).hide(); 
+	        //$(this).css({opacity:0});
 	    },
 	    stop: function(){
-	        $(this).css({opacity:1});
+	    	$(this).show()
+	        //$(this).css({opacity:1});
 	    },
 	    drag: function(event, ui) {
 	    	dropToimus = false;
@@ -596,10 +600,12 @@ $(document).ready(function(){
 	    revertDuration: 900,
 	    scroll: true,
 	    start: function(){
-	        $(this).css({opacity:0});
+	    	$(this).hide(); 
+	        //$(this).css({opacity:0});;
 	    },
 	    stop: function(){
-	        $(this).css({opacity:1});
+	    	$(this).show()
+	        //$(this).css({opacity:1});
 	    },
 	    drag: function(event, ui) {	
 	    	dropToimus = false;
