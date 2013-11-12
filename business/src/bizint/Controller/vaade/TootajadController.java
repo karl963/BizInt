@@ -156,21 +156,23 @@ public class TootajadController {
 			
 			while(rs01.next()){
 				
-				long aeg = rs01.getTimestamp("aeg").getTime();
+				Long aeg = rs01.getTimestamp("aeg").getTime();
 				
-				if(kuupäevadMap.get(aeg) == null){
+				if(kuupäevadKuludMap.get(aeg) == null){
 					kuupäevadKuludMap.put(aeg, TabeliData.AJAFORMAAT.format(aeg));
 					
 					Calendar cal1 = Calendar.getInstance();
 					cal1.setTime(new Date(aeg));
 					int päev = cal1.get(Calendar.DAY_OF_MONTH);
-					if(cal1.get(Calendar.MONTH)+1 == 1 || cal1.get(Calendar.MONTH)+1 == 4 || cal1.get(Calendar.MONTH)+1 == 7 || cal1.get(Calendar.MONTH)+1 == 10){
+					int kuu = cal1.get(Calendar.MONTH)+1;
+
+					if(kuu == 1 || kuu == 4 || kuu == 7 || kuu == 10){
 						kuupaevadKulud1.add(päev+"");
 					}
-					else if(cal1.get(Calendar.MONTH)+1 == 2 || cal1.get(Calendar.MONTH)+1 == 5 || cal1.get(Calendar.MONTH)+1 == 8 || cal1.get(Calendar.MONTH)+1 == 11){
+					else if(kuu == 2 || kuu == 5 || kuu == 8 || kuu == 11){
 						kuupaevadKulud2.add(päev+"");
 					}
-					else if(cal1.get(Calendar.MONTH)+1 == 3 || cal1.get(Calendar.MONTH)+1 == 6 || cal1.get(Calendar.MONTH)+1 == 9 || cal1.get(Calendar.MONTH)+1 == 12){
+					else if(kuu == 3 || kuu == 6 || kuu == 9 || kuu == 12){
 						kuupaevadKulud3.add(päev+"");
 					}
 				}
@@ -247,7 +249,7 @@ public class TootajadController {
 				try{rs3.close();stmt3.close();}catch(Exception ex){}
 				
 				Statement stmt4 = con.createStatement();
-				String query4 = "SELECT kulu, aeg FROM kulud WHERE kulud.kuluNimi LIKE '%"+kasutajaNimi+"%' AND YEAR(aeg)="+hetkeAasta+" AND (MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+" OR MONTH(aeg)="+(algusKvartal+2)+")"+" AND kulud.juhtID="+juhtID+" AND kulud.kasPalk=1";
+				String query4 = "SELECT kulu, aeg FROM kulud WHERE kulud.kuluNimi LIKE '%"+kasutajaNimi+"%' AND YEAR(aeg)="+hetkeAasta+" AND (MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+" OR MONTH(aeg)="+(algusKvartal+2)+")"+" AND kulud.juhtID="+juhtID+" AND kasPalk=1";
 				ResultSet rs4 = stmt4.executeQuery(query4);
 
 				while(rs4.next()){
@@ -290,6 +292,7 @@ public class TootajadController {
 		int[] aastad = {hetkeAasta-3,hetkeAasta-2,hetkeAasta-1,hetkeAasta,hetkeAasta+1,hetkeAasta+2,hetkeAasta+3};
 		
 		////
+		
 		System.out.println(kuupaevad1.size()+" - "+kuupaevad2.size()+" - "+kuupaevad3.size());
 		System.out.println(kuupaevadKulud1.size()+" - "+kuupaevadKulud2.size()+" - "+kuupaevadKulud3.size());
 		System.out.println(esimeseKuuTulusid+" - "+teiseKuuTulusid+" - "+kolmandaKuuTulusid+" - "+esimeseKuuKulusid+" - "+teiseKuuKulusid+" - "+kolmandaKuuKulusid);
@@ -432,7 +435,7 @@ public class TootajadController {
 				
 				long aeg = rs01.getTimestamp("aeg").getTime();
 				
-				if(kuupäevadMap.get(aeg) == null){
+				if(kuupäevadKuludMap.get(aeg) == null){
 					kuupäevadKuludMap.put(aeg, TabeliData.AJAFORMAAT.format(aeg));
 					
 					Calendar cal1 = Calendar.getInstance();
@@ -619,15 +622,15 @@ public class TootajadController {
 	        cal.setTime(new Date(pairs.getKey()));
 	        int kuu = cal.get(Calendar.MONTH)+1;
 
-	        if((kuu==1 || kuu==4 || kuu==7 || kuu==10) && data.getTuludMap1().get(cal.get(Calendar.DAY_OF_MONTH)) == null){
+	        if((kuu==1 || kuu==4 || kuu==7 || kuu==10) && data.getTuludMap1().get(cal.get(Calendar.DAY_OF_MONTH)+"") == null){
 	        	data.getTuludMap1().put((cal.get(Calendar.DAY_OF_MONTH))+"",0.0);
 	        	esimeseKuuTulusid++;
 	        }
-	        else if((kuu==2 || kuu==5 || kuu==8 || kuu==11) && data.getTuludMap2().get(cal.get(Calendar.DAY_OF_MONTH)) == null){
+	        else if((kuu==2 || kuu==5 || kuu==8 || kuu==11) && data.getTuludMap2().get(cal.get(Calendar.DAY_OF_MONTH)+"") == null){
 	        	data.getTuludMap2().put((cal.get(Calendar.DAY_OF_MONTH))+"",0.0);
 	        	teiseKuuTulusid++;
 	        }
-	        else if((kuu==3 || kuu==6 || kuu==9 || kuu==12) && data.getTuludMap3().get(cal.get(Calendar.DAY_OF_MONTH)) == null){
+	        else if((kuu==3 || kuu==6 || kuu==9 || kuu==12) && data.getTuludMap3().get(cal.get(Calendar.DAY_OF_MONTH)+"") == null){
 	        	data.getTuludMap3().put((cal.get(Calendar.DAY_OF_MONTH))+"",0.0);
 	        	kolmandaKuuTulusid++;
 	        }
@@ -643,20 +646,19 @@ public class TootajadController {
 	        cal.setTime(new Date(pairs.getKey()));
 	        int kuu = cal.get(Calendar.MONTH)+1;
 
-	        if((kuu==1 || kuu==4 || kuu==7 || kuu==10) && data.getKuludMap1().get(cal.get(Calendar.DAY_OF_MONTH)) == null){
+	        if((kuu==1 || kuu==4 || kuu==7 || kuu==10) && data.getKuludMap1().get(cal.get(Calendar.DAY_OF_MONTH)+"") == null){
 	        	data.getKuludMap1().put((cal.get(Calendar.DAY_OF_MONTH))+"",0.0);
 	        	esimeseKuuKulusid++;
 	        }
-	        else if((kuu==2 || kuu==5 || kuu==8 || kuu==11) && data.getKuludMap2().get(cal.get(Calendar.DAY_OF_MONTH)) == null){
+	        else if((kuu==2 || kuu==5 || kuu==8 || kuu==11) && data.getKuludMap2().get(cal.get(Calendar.DAY_OF_MONTH)+"") == null){
 	        	data.getKuludMap2().put((cal.get(Calendar.DAY_OF_MONTH))+"",0.0);
 	        	teiseKuuKulusid++;
 	        }
-	        else if((kuu==3 || kuu==6 || kuu==9 || kuu==12) && data.getKuludMap3().get(cal.get(Calendar.DAY_OF_MONTH)) == null){
+	        else if((kuu==3 || kuu==6 || kuu==9 || kuu==12) && data.getKuludMap3().get(cal.get(Calendar.DAY_OF_MONTH)+"") == null){
 	        	data.getKuludMap3().put((cal.get(Calendar.DAY_OF_MONTH))+"",0.0);
 	        	kolmandaKuuKulusid++;
 	        }
 	    }
-
 	    
 		return data;
 	}
