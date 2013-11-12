@@ -150,6 +150,7 @@ function lisaProjektiKasutaja(pid){
 function listiProjektiKasutajadJaSalvesta(pid){
 
 	var kasutajad = "";
+	var osalus = 0;
 	
 	var table = document.getElementById("kasutajateTabel");
 	for(var i = 0, row; row = table.rows[i]; i++){
@@ -162,7 +163,8 @@ function listiProjektiKasutajadJaSalvesta(pid){
 			kasutaja += row.getElementsByTagName("td")[4].getElementsByTagName("input")[0].value+"''"; // kasutajaID
 	     
 	        kasutaja += valideeriOsalus(row.getElementsByTagName("td")[3].getElementsByTagName("input")[0].value.toString()); // osalus
-			
+			osalus += parseFloat(row.getElementsByTagName("td")[3].getElementsByTagName("input")[0].value.toString());
+	        
 			kasutajad += kasutaja;
 			kasutajad += ";";
 
@@ -170,16 +172,17 @@ function listiProjektiKasutajadJaSalvesta(pid){
 		
 	}
 	
-	salvestaProjektiKasutajad(pid,kasutajad);
+	salvestaProjektiKasutajad(pid,kasutajad,osalus);
+
 }
 
 
-function salvestaProjektiKasutajad(pid,kasutajadList){
+function salvestaProjektiKasutajad(pid,kasutajadList,osalus){
 
 	$.ajax({
 	    type : "POST",
 	    url : rakenduseNimi+"/vaadeProjektEsimene.htm",
-	    data : {kasutajad: kasutajadList, projektID: pid},
+	    data : {kasutajad: kasutajadList, projektID: pid, osalus: osalus},
 	    success : function(response) {
 	    	document.location.href = "vaadeProjektEsimene.htm?id="+pid;
 	    },
