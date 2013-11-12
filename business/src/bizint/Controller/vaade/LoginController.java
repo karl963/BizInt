@@ -39,7 +39,7 @@ public class LoginController {
 				if(cookie.getName().equals("sid")){
 					sid = cookie.getValue();
 			
-					if(sid != null){
+					if(sid != null && !sid.equals("")){
 						cookie.setMaxAge(10*24*60*60*1000); // 10 päeva
 						onOlemasLogitud = true;
 						break;
