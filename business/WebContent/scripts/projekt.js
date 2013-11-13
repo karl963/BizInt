@@ -371,6 +371,7 @@ $(document).ready(function() {
 		document.location.href = "vaadeRahavoog.htm?aasta="+$(this).val();
 	});
 
+	
 });
 
 
