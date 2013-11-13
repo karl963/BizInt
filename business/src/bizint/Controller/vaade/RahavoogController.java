@@ -50,6 +50,8 @@ import org.springframework.web.servlet.view.RedirectView;
 
 
 
+
+
 import bizint.andmebaas.Mysql;
 import bizint.app.alam.Staatus;
 import bizint.app.alam.rahaline.Tulu;
@@ -62,7 +64,7 @@ public class RahavoogController {
 	private int juhtID = 0;
 	
 	@RequestMapping(value = "/vaadeRahavoog.htm", method = RequestMethod.GET)
-	public String vaadeRahavoog(HttpServletRequest request,@RequestParam(value = "aasta", defaultValue = "puudub") String hetkeAastaString ,Model m){
+	public String vaadeRahavoog(HttpServletRequest request,@RequestParam(value = "aasta", defaultValue = "puudub") String hetkeAastaString,@RequestParam(value = "kvartal", defaultValue = "puudub") String hetkeKvartalString ,Model m){
 		
 		Connection con = (new Mysql()).getConnection();
 		if(con==null){
@@ -93,20 +95,50 @@ public class RahavoogController {
 			hetkeAasta = Calendar.getInstance().get(Calendar.YEAR);
 		}
 		
+		int alguseKuu = 1;int lõpuKuu = 12;
+		if(hetkeKvartalString.equals("puudub")){
+			int hetkeKuu = Calendar.getInstance().get(Calendar.MONTH)+1;
+			if(hetkeKuu <= 1 && hetkeKuu <= 3){
+				alguseKuu=1;lõpuKuu=3;
+			}
+			else if(hetkeKuu <= 4 && hetkeKuu <= 6){
+				alguseKuu=4;lõpuKuu=6;
+			}
+			else if(hetkeKuu <= 7 && hetkeKuu <= 9){
+				alguseKuu=7;lõpuKuu=9;
+			}
+			else if(hetkeKuu <= 10 && hetkeKuu <= 12){
+				alguseKuu=10;lõpuKuu=12;
+			}
+		}
+		else{
+			if(hetkeKvartalString.equals("I - esimene kvartal")){
+				alguseKuu=1;lõpuKuu=3;
+			}
+			else if(hetkeKvartalString.equals("II - teine kvartal")){
+				alguseKuu=4;lõpuKuu=6;
+			}
+			else if(hetkeKvartalString.equals("III - kolmas kvartal")){
+				alguseKuu=7;lõpuKuu=9;
+			}
+			else if(hetkeKvartalString.equals("IV - neljas kvartal")){
+				alguseKuu=10;lõpuKuu=12;
+			}
+		}
+		
 		Calendar cal = Calendar.getInstance();
 		
 		cal.set(Calendar.YEAR, hetkeAasta);
-		cal.set(Calendar.WEEK_OF_YEAR, 1);
-		cal.set(Calendar.DAY_OF_WEEK, 1);
+		cal.set(Calendar.MONTH, alguseKuu);
+		cal.set(Calendar.DAY_OF_MONTH, 1);
 		Date start = cal.getTime();
 		String algus = AJAFORMAAT.format(start);
 		
-		cal.set(Calendar.YEAR, hetkeAasta);
-		cal.set(Calendar.MONTH, 11); 
-		cal.set(Calendar.DAY_OF_MONTH, 31);
+		cal.set(Calendar.MONTH, lõpuKuu); 
+		cal.set(Calendar.DAY_OF_MONTH, 0); // viimane päev kuus
 		Date end = cal.getTime();
 		String lõpp = AJAFORMAAT.format(end);
-		
+
 		///////
 		
 		Map<String,Double> tulud = new HashMap<String,Double>();
@@ -219,9 +251,13 @@ public class RahavoogController {
 		}
 		
 		int[] aastad = {hetkeAasta-3,hetkeAasta-2,hetkeAasta-1,hetkeAasta,hetkeAasta+1,hetkeAasta+2,hetkeAasta+3};
+		String[] kvartalid = {"I - esimene kvartal","II - teine kvartal","III - kolmas kvartal","IV - neljas kvartal"};
 		
 		m.addAttribute("hetkeAasta", hetkeAasta);
 		m.addAttribute("aastad", aastad);
+		
+		m.addAttribute("hetkeKvartal",hetkeKvartalString);
+		m.addAttribute("kvartalid",kvartalid);
 
 		m.addAttribute("teade",teade);
 		m.addAttribute("andmedString",andmed);
@@ -307,12 +343,6 @@ public class RahavoogController {
 		    uusMap.put(väikseim, value);
 
 		}
-
-		Iterator<Entry<String, Double>> it = uusMap.entrySet().iterator();
-	    while (it.hasNext()) {
-	        Map.Entry<String, Double> pairs = (Map.Entry<String, Double>)it.next();
-	        System.out.println(pairs.getKey());
-	    }
 		
 		return uusMap;
 	}
