@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -26,6 +27,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.View;
 import org.springframework.web.servlet.view.RedirectView;
+
 
 
 
@@ -262,32 +264,55 @@ public class RahavoogController {
 	
 	private Map<String, Double> sordiMap(Map<String,Double> map){
 		
-		Map<String,Double> uusMap = new HashMap<String,Double>();
-		
+		Map<String,Double> uusMap = new LinkedHashMap<String,Double>(); // linkedHashMap on insertion order based
+
 		while(map.size()>0){
 			
-			String väikseim = "31.12.9999";
+			String väikseim = "";
 			Double value = 0.0;
+			int i = 0;
 			
 			Iterator<Entry<String, Double>> it = map.entrySet().iterator();
-			Iterator<Entry<String, Double>> it2 = null;
 		    while (it.hasNext()) {
+
 		        Map.Entry<String, Double> pairs = (Map.Entry<String, Double>)it.next();
 		        
-		        if(Integer.parseInt(pairs.getKey().split("\\.")[2]) <= Integer.parseInt(väikseim.split("\\.")[2])){
-		        	if(Integer.parseInt(pairs.getKey().split("\\.")[1]) <= Integer.parseInt(väikseim.split("\\.")[2])){
-		        		if(Integer.parseInt(pairs.getKey().split("\\.")[0]) <= Integer.parseInt(väikseim.split("\\.")[2])){
-		        			it2 = it;
+		    	if(i==0){
+		    		väikseim = pairs.getKey();
+		    	}
+
+		    	
+		        if(Integer.parseInt(pairs.getKey().split("\\.")[2]) < Integer.parseInt(väikseim.split("\\.")[2])){
+		        	väikseim = pairs.getKey();
+		        	value = pairs.getValue();
+
+		        }
+		        if(Integer.parseInt(pairs.getKey().split("\\.")[2]) == Integer.parseInt(väikseim.split("\\.")[2])){
+		        	if(Integer.parseInt(pairs.getKey().split("\\.")[1]) < Integer.parseInt(väikseim.split("\\.")[1])){
+		        		väikseim = pairs.getKey();
+		        		value = pairs.getValue();
+		        		
+		        	}
+		        	else if(Integer.parseInt(pairs.getKey().split("\\.")[1]) == Integer.parseInt(väikseim.split("\\.")[1])){
+		        		if(Integer.parseInt(pairs.getKey().split("\\.")[0]) <= Integer.parseInt(väikseim.split("\\.")[0])){
 		        			väikseim = pairs.getKey();
 		        			value = pairs.getValue();
 		        		}
 		        	}
 		        }
+		        i++;
 		    }
 		    
-		    it2.remove();
+		    map.remove(väikseim);
 		    uusMap.put(väikseim, value);
+
 		}
+
+		Iterator<Entry<String, Double>> it = uusMap.entrySet().iterator();
+	    while (it.hasNext()) {
+	        Map.Entry<String, Double> pairs = (Map.Entry<String, Double>)it.next();
+	        System.out.println(pairs.getKey());
+	    }
 		
 		return uusMap;
 	}
