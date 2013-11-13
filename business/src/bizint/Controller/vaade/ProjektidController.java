@@ -285,6 +285,9 @@ public class ProjektidController {
 		if(vastus == Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
 		}
+		else if(vastus == Staatus.STAATUSE_NIMI_TÜHI){
+			teade = "Staatuse nimi ei tohi olla tühi ega sisaldada ainult tühikuid!";
+		}
 		else{
 			teade = "Staatuse nime muutmine õnnestus";
 		}

@@ -13,7 +13,7 @@ public class Staatus {
 	
 	public static final String DEFAULT_NIMI = "uus staatus";
 	public static final int DEFAULT_JÄRJEKORRA_NUMBER = 0;
-	public static final  int ERROR_JUBA_EKSISTEERIB = 0, VIGA_ANDMEBAASIGA_ÜHENDUMISEL = 1, KÕIK_OKEI = 2, ERROR_STAATUS_POLE_TÜHI = 3;
+	public static final  int ERROR_JUBA_EKSISTEERIB = 0, VIGA_ANDMEBAASIGA_ÜHENDUMISEL = 1, KÕIK_OKEI = 2, ERROR_STAATUS_POLE_TÜHI = 3, STAATUSE_NIMI_TÜHI = 4;
 	
 	private List<Projekt> projektid;
 	private String nimi;
@@ -195,16 +195,22 @@ public class Staatus {
 			return Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
 		Statement stmt;
+		if(staatus.getNimi() != null && !staatus.getNimi().isEmpty() && !staatus.getNimi().trim().isEmpty()){
 		try {
-			stmt = con.createStatement();
-			String query = "UPDATE staatused SET staatusNimi = '"+staatus.getNimi()+"' WHERE staatusID="+staatus.getId()+" AND juhtID="+juhtID;
-			stmt.executeUpdate(query);
 			
-			try{stmt.close();}catch(Exception x){}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			if (con!=null) try {con.close();}catch (Exception ignore) {}
-			return Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+				stmt = con.createStatement();
+				String query = "UPDATE staatused SET staatusNimi = '"+staatus.getNimi()+"' WHERE staatusID="+staatus.getId()+" AND juhtID="+juhtID;
+				stmt.executeUpdate(query);
+				
+				try{stmt.close();}catch(Exception x){}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				if (con!=null) try {con.close();}catch (Exception ignore) {}
+				return Staatus.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+			}
+		}
+		if(staatus.getNimi() == null || staatus.getNimi().isEmpty() || staatus.getNimi().trim().isEmpty()){
+			return Staatus.STAATUSE_NIMI_TÜHI;
 		}
 		
 		if (con!=null) try {con.close();}catch (Exception ignore) {}
