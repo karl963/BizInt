@@ -47,6 +47,7 @@ import org.springframework.web.servlet.view.RedirectView;
 
 
 
+
 import bizint.andmebaas.Mysql;
 import bizint.app.alam.Staatus;
 import bizint.app.alam.rahaline.Tulu;
@@ -59,20 +60,12 @@ public class RahavoogController {
 	private int juhtID = 0;
 	
 	@RequestMapping(value = "/vaadeRahavoog.htm", method = RequestMethod.GET)
-	public String vaadeRahavoog(HttpServletRequest request,Model m){//@RequestParam("algus") String algus,@RequestParam("lopp") String lõpp,Model m) {
+	public String vaadeRahavoog(HttpServletRequest request,@RequestParam(value = "aasta", defaultValue = "puudub") String hetkeAastaString ,Model m){
 		
 		Connection con = (new Mysql()).getConnection();
 		if(con==null){
 			teade = "Viga andmebaasige ühendusmisel";
 		}
-		
-		String algus = AJAFORMAAT.format(new Date());
-
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(new Date());
-		cal.add(Calendar.MONTH, 3);
-		
-		String lõpp = AJAFORMAAT.format(cal.getTime());
 		
 		if(LoginController.kontrolliSidOlemasolu(request.getCookies()) == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
@@ -87,6 +80,32 @@ public class RahavoogController {
 		else{
 			juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
 		}
+		
+		String andmed = "";
+		
+		int hetkeAasta = 0;
+		try{
+			hetkeAasta = Integer.parseInt(hetkeAastaString);
+		}
+		catch(Exception x){
+			hetkeAasta = Calendar.getInstance().get(Calendar.YEAR);
+		}
+		
+		Calendar cal = Calendar.getInstance();
+		
+		cal.set(Calendar.YEAR, hetkeAasta);
+		cal.set(Calendar.WEEK_OF_YEAR, 1);
+		cal.set(Calendar.DAY_OF_WEEK, 1);
+		Date start = cal.getTime();
+		String algus = AJAFORMAAT.format(start);
+		
+		cal.set(Calendar.YEAR, hetkeAasta);
+		cal.set(Calendar.MONTH, 11); 
+		cal.set(Calendar.DAY_OF_MONTH, 31);
+		Date end = cal.getTime();
+		String lõpp = AJAFORMAAT.format(end);
+		
+		///////
 		
 		Map<String,Double> tulud = new HashMap<String,Double>();
 		Map<String,Double> kulud = new HashMap<String,Double>();
@@ -184,6 +203,11 @@ public class RahavoogController {
 			}
 			try{rs3.close();stmt3.close();}catch(Exception ex){}
 			
+			andmed = paneAndmedStringi(tulud,kulud,kuupäevad);
+			
+			if(andmed.equals("")){
+				teade = "Nende valikutega andmed puuduvad";
+			}
 		}
 		catch(Exception x){
 			teade = "Viga andmebaasiga ühendumisel !";
@@ -192,9 +216,11 @@ public class RahavoogController {
 			if(con!=null){try{con.close();}catch(Exception x){}}
 		}
 		
-		String andmed = paneAndmedStringi(tulud,kulud,kuupäevad);
+		int[] aastad = {hetkeAasta-3,hetkeAasta-2,hetkeAasta-1,hetkeAasta,hetkeAasta+1,hetkeAasta+2,hetkeAasta+3};
 		
-		m.addAttribute("tegemisel","Rahavoo vaade on veel arendamisel (tähtaeg 28.november)");
+		m.addAttribute("hetkeAasta", hetkeAasta);
+		m.addAttribute("aastad", aastad);
+
 		m.addAttribute("teade",teade);
 		m.addAttribute("andmedString",andmed);
 		

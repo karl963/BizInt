@@ -367,6 +367,9 @@ $(document).ready(function() {
     $('#kvartaliteValikud').change(function() {
     	document.location.href = "vaadeTootajadTabel.htm?aasta="+$("#aastateValikud").val()+"&kvartal="+$(this).val();
     });
+	$('#rahaVoogAastaValik').change(function() {
+		document.location.href = "vaadeRahavoog.htm?aasta="+$(this).val();
+	});
 
 });
 
@@ -379,9 +382,12 @@ function tekitaPipelineGraaf(sisendString,kaart){
 	if(sisendString.target){ // kui on event, ehk ei laeta pipeline vaadet
 		return;
 	}
+	if(sisendString == ""){
+		return;
+	}
 	
 	if(kaart == "pipeline"){
-	
+		
 	    var andmed = sisendString.split("/");
 	    var tabel = new Array();
 	    tabel[0]= ["Staatus", "Tulu", "Kulu" , "Bilanss"] ;
@@ -406,7 +412,7 @@ function tekitaPipelineGraaf(sisendString,kaart){
     
 	}
 	else if(kaart == "tootajadGraaf"){
-
+		
 	    var andmed = sisendString.split("/");
 	    var tabel = new Array();
 	    tabel[0]= ["Aeg", "Tulu", "Kulu" , "Bilanss"] ;
@@ -418,11 +424,12 @@ function tekitaPipelineGraaf(sisendString,kaart){
 	    var data = google.visualization.arrayToDataTable(tabel);
 	
 	    var options = {
+	      curveType: "function",
 	      legend: {position: 'top'},
 	      colors: ['green','red', 'blue'],
 	      width: 500 + (50 * (tabel.length-1)),
 	      vAxis: {title: '€', titleTextStyle: {color: 'red'}},
-	      hAxis: {title: 'Staatus', titleTextStyle: {color: 'red'} }
+	      hAxis: {title: 'Kuupäev', titleTextStyle: {color: 'red'} }
 	    	
 	    };
 	
