@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -47,6 +48,10 @@ import org.springframework.web.servlet.view.RedirectView;
 
 
 
+
+
+
+
 import bizint.andmebaas.Mysql;
 import bizint.app.alam.Staatus;
 import bizint.app.alam.rahaline.Tulu;
@@ -59,20 +64,12 @@ public class RahavoogController {
 	private int juhtID = 0;
 	
 	@RequestMapping(value = "/vaadeRahavoog.htm", method = RequestMethod.GET)
-	public String vaadeRahavoog(HttpServletRequest request,Model m){//@RequestParam("algus") String algus,@RequestParam("lopp") String lõpp,Model m) {
+	public String vaadeRahavoog(HttpServletRequest request,@RequestParam(value = "aasta", defaultValue = "puudub") String hetkeAastaString,@RequestParam(value = "kvartal", defaultValue = "puudub") String hetkeKvartalString ,Model m){
 		
 		Connection con = (new Mysql()).getConnection();
 		if(con==null){
 			teade = "Viga andmebaasige ühendusmisel";
 		}
-		
-		String algus = AJAFORMAAT.format(new Date());
-
-		Calendar cal = Calendar.getInstance();
-		cal.setTime(new Date());
-		cal.add(Calendar.MONTH, 3);
-		
-		String lõpp = AJAFORMAAT.format(cal.getTime());
 		
 		if(LoginController.kontrolliSidOlemasolu(request.getCookies()) == null){
 			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
@@ -87,6 +84,62 @@ public class RahavoogController {
 		else{
 			juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
 		}
+		
+		String andmed = "";
+		
+		int hetkeAasta = 0;
+		try{
+			hetkeAasta = Integer.parseInt(hetkeAastaString);
+		}
+		catch(Exception x){
+			hetkeAasta = Calendar.getInstance().get(Calendar.YEAR);
+		}
+		
+		int alguseKuu = 1;int lõpuKuu = 12;
+		if(hetkeKvartalString.equals("puudub")){
+			int hetkeKuu = Calendar.getInstance().get(Calendar.MONTH)+1;
+			if(hetkeKuu <= 1 && hetkeKuu <= 3){
+				alguseKuu=1;lõpuKuu=3;
+			}
+			else if(hetkeKuu <= 4 && hetkeKuu <= 6){
+				alguseKuu=4;lõpuKuu=6;
+			}
+			else if(hetkeKuu <= 7 && hetkeKuu <= 9){
+				alguseKuu=7;lõpuKuu=9;
+			}
+			else if(hetkeKuu <= 10 && hetkeKuu <= 12){
+				alguseKuu=10;lõpuKuu=12;
+			}
+		}
+		else{
+			if(hetkeKvartalString.equals("I - esimene kvartal")){
+				alguseKuu=1;lõpuKuu=3;
+			}
+			else if(hetkeKvartalString.equals("II - teine kvartal")){
+				alguseKuu=4;lõpuKuu=6;
+			}
+			else if(hetkeKvartalString.equals("III - kolmas kvartal")){
+				alguseKuu=7;lõpuKuu=9;
+			}
+			else if(hetkeKvartalString.equals("IV - neljas kvartal")){
+				alguseKuu=10;lõpuKuu=12;
+			}
+		}
+		
+		Calendar cal = Calendar.getInstance();
+		
+		cal.set(Calendar.YEAR, hetkeAasta);
+		cal.set(Calendar.MONTH, alguseKuu);
+		cal.set(Calendar.DAY_OF_MONTH, 1);
+		Date start = cal.getTime();
+		String algus = AJAFORMAAT.format(start);
+		
+		cal.set(Calendar.MONTH, lõpuKuu); 
+		cal.set(Calendar.DAY_OF_MONTH, 0); // viimane päev kuus
+		Date end = cal.getTime();
+		String lõpp = AJAFORMAAT.format(end);
+
+		///////
 		
 		Map<String,Double> tulud = new HashMap<String,Double>();
 		Map<String,Double> kulud = new HashMap<String,Double>();
@@ -184,6 +237,11 @@ public class RahavoogController {
 			}
 			try{rs3.close();stmt3.close();}catch(Exception ex){}
 			
+			andmed = paneAndmedStringi(tulud,kulud,kuupäevad);
+			
+			if(andmed.equals("")){
+				teade = "Nende valikutega andmed puuduvad";
+			}
 		}
 		catch(Exception x){
 			teade = "Viga andmebaasiga ühendumisel !";
@@ -192,9 +250,15 @@ public class RahavoogController {
 			if(con!=null){try{con.close();}catch(Exception x){}}
 		}
 		
-		String andmed = paneAndmedStringi(tulud,kulud,kuupäevad);
+		int[] aastad = {hetkeAasta-3,hetkeAasta-2,hetkeAasta-1,hetkeAasta,hetkeAasta+1,hetkeAasta+2,hetkeAasta+3};
+		String[] kvartalid = {"I - esimene kvartal","II - teine kvartal","III - kolmas kvartal","IV - neljas kvartal"};
 		
-		m.addAttribute("tegemisel","Rahavoo vaade on veel arendamisel (tähtaeg 28.november)");
+		m.addAttribute("hetkeAasta", hetkeAasta);
+		m.addAttribute("aastad", aastad);
+		
+		m.addAttribute("hetkeKvartal",hetkeKvartalString);
+		m.addAttribute("kvartalid",kvartalid);
+
 		m.addAttribute("teade",teade);
 		m.addAttribute("andmedString",andmed);
 		
@@ -236,31 +300,48 @@ public class RahavoogController {
 	
 	private Map<String, Double> sordiMap(Map<String,Double> map){
 		
-		Map<String,Double> uusMap = new HashMap<String,Double>();
-		
+		Map<String,Double> uusMap = new LinkedHashMap<String,Double>(); // linkedHashMap on insertion order based
+
 		while(map.size()>0){
 			
-			String väikseim = "31.12.9999";
+			String väikseim = "";
 			Double value = 0.0;
+			int i = 0;
 			
 			Iterator<Entry<String, Double>> it = map.entrySet().iterator();
-			Iterator<Entry<String, Double>> it2 = null;
 		    while (it.hasNext()) {
+
 		        Map.Entry<String, Double> pairs = (Map.Entry<String, Double>)it.next();
 		        
-		        if(Integer.parseInt(pairs.getKey().split("\\.")[2]) <= Integer.parseInt(väikseim.split("\\.")[2])){
-		        	if(Integer.parseInt(pairs.getKey().split("\\.")[1]) <= Integer.parseInt(väikseim.split("\\.")[2])){
-		        		if(Integer.parseInt(pairs.getKey().split("\\.")[0]) <= Integer.parseInt(väikseim.split("\\.")[2])){
-		        			it2 = it;
+		    	if(i==0){
+		    		väikseim = pairs.getKey();
+		    	}
+
+		    	
+		        if(Integer.parseInt(pairs.getKey().split("\\.")[2]) < Integer.parseInt(väikseim.split("\\.")[2])){
+		        	väikseim = pairs.getKey();
+		        	value = pairs.getValue();
+
+		        }
+		        if(Integer.parseInt(pairs.getKey().split("\\.")[2]) == Integer.parseInt(väikseim.split("\\.")[2])){
+		        	if(Integer.parseInt(pairs.getKey().split("\\.")[1]) < Integer.parseInt(väikseim.split("\\.")[1])){
+		        		väikseim = pairs.getKey();
+		        		value = pairs.getValue();
+		        		
+		        	}
+		        	else if(Integer.parseInt(pairs.getKey().split("\\.")[1]) == Integer.parseInt(väikseim.split("\\.")[1])){
+		        		if(Integer.parseInt(pairs.getKey().split("\\.")[0]) <= Integer.parseInt(väikseim.split("\\.")[0])){
 		        			väikseim = pairs.getKey();
 		        			value = pairs.getValue();
 		        		}
 		        	}
 		        }
+		        i++;
 		    }
 		    
-		    it2.remove();
+		    map.remove(väikseim);
 		    uusMap.put(väikseim, value);
+
 		}
 		
 		return uusMap;

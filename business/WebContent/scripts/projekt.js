@@ -15,7 +15,60 @@ $(document).ready(function(){
 		    opacity: 0.0,
 		  }, 3000 );
 	});
+	
+	$(".yldKuluNimetusTextDiv").click(function(){
+		$(this).closest(".yldKuluNimetusCell").children(".yldKuluNimetusInputDiv").show();
+		$(this).closest(".yldKuluNimetusCell").find("input.yldKuluNimetusInputDiv").focus().val($(this).closest(".yldKuluNimetusCell").find("input.yldKuluNimetusInputDiv").val());
+		$(this).hide();
+	});
+	$(".yldKuluSummaTextDiv").click(function(){
+		$(this).closest(".yldKuluSummaCell").children(".yldKuluSummaInputDiv").show();
+		$(this).closest(".yldKuluSummaCell").find("input.yldKuluSummaInputDiv").focus().val($(this).closest(".yldKuluSummaCell").find("input.yldKuluSummaInputDiv").val());
+		$(this).hide();
+	});
+	$(".yldKuluKuupäevTextDiv").click(function(){
+		$(this).closest(".yldKuluKuupäevCell").children(".yldKuluKuupäevInputDiv").show();
+		$(this).closest(".yldKuluKuupäevCell").find("input.yldKuluKuupäevInput").focus().val($(this).closest(".yldKuluKuupäevCell").find("input.yldKuluKuupäevInput").val());
+		$(this).hide();
+	});
+	
+	$(".yldKuluNimetusInput").blur(function(){
+		$(this).closest(".yldKuluNimetusCell").children(".yldKuluNimetusTextDiv").val($(this).val());
+		$(".yldKuluNimetusInputDiv").hide();
+		$(".yldKuluNimetusTextDiv").show();
+	});
+	$(".yldKuluSummaInput").blur(function(){
+		$(this).closest(".yldKuluSummaCell").children(".yldKuluSummaTextDiv").val($(this).val());
+		$(".yldKuluSummaInputDiv").hide();
+		$(".yldKuluSummaTextDiv").show();
+	});
+	$(".yldKuluKuupäevInput").blur(function(){
+		$(this).closest(".yldKuluKuupäevCell").children(".yldKuluKuupäevTextDiv").val($(this).val());
+		$(".yldKuluKuupäevInputDiv").hide();
+		$(".yldKuluKuupäevTextDiv").show();
+	});
 
+	$("#lisaYldKuluNupp").click(function() {
+		
+		var kuluSumma = $("#uusYldKuluSumma").val();
+		var kuluKuupaev = $("#uusYldKuluKuupäev").val();
+		var kuluNimetus = $("#uusYldKuluNimi").val();
+		
+		$.ajax({
+		    type : "POST",
+		    url : rakenduseNimi+"/vaadeRahavoog.htm",
+		    data : {summa: kuluSumma, nimetus: kuluNimetus, kuupaev: kuluKuupaev},
+		    success : function(response) {
+		    	document.location.href = "vaadeRahavoog.htm";
+		    },
+		    error : function(e) {
+		    	document.location.href = "vaadeRahavoog.htm";
+		    }
+		});
+	});
+	
+	////////////////////////////////////////////77
+	
 	$(".kustutaProjektNupp").click(function(){
 		$(".muudaKustutaEsimene").hide();
 		$(".muudaKustutaTeine").show();
@@ -367,21 +420,31 @@ $(document).ready(function() {
     $('#kvartaliteValikud').change(function() {
     	document.location.href = "vaadeTootajadTabel.htm?aasta="+$("#aastateValikud").val()+"&kvartal="+$(this).val();
     });
-
+	$('#rahaVoogAastaValik').change(function() {
+		document.location.href = "vaadeRahavoog.htm?aasta="+$(this).val()+"&kvartal="+$("#rahaVoogKvartaliteValikud").val();
+	});
+	$('#rahaVoogKvartaliteValikud').change(function() {
+		document.location.href = "vaadeRahavoog.htm?aasta="+$("#rahaVoogAastaValik").val()+"&kvartal="+$(this).val();
+	});
+	
 });
 
 
 google.load("visualization", "1", {packages:["corechart"]});
 google.setOnLoadCallback(tekitaPipelineGraaf);
+var andmedString = "";
 
 function tekitaPipelineGraaf(sisendString,kaart){
 	
 	if(sisendString.target){ // kui on event, ehk ei laeta pipeline vaadet
 		return;
 	}
+	if(sisendString == ""){
+		return;
+	}
 	
 	if(kaart == "pipeline"){
-	
+		
 	    var andmed = sisendString.split("/");
 	    var tabel = new Array();
 	    tabel[0]= ["Staatus", "Tulu", "Kulu" , "Bilanss"] ;
@@ -406,10 +469,12 @@ function tekitaPipelineGraaf(sisendString,kaart){
     
 	}
 	else if(kaart == "tootajadGraaf"){
-
+		
+		andmedString = sisendString;
+		
 	    var andmed = sisendString.split("/");
 	    var tabel = new Array();
-	    tabel[0]= ["Aeg", "Tulu", "Kulu" , "Bilanss"] ;
+	    tabel[0]= ["Aeg", "Kogu Tulu", "Kogu Kulu" , "Bilanss"] ;
 	    
 	    for(var i = 1;i < andmed.length ; i++){
 	    	var vaheTabel = andmed[i-1].split(";");
@@ -418,14 +483,14 @@ function tekitaPipelineGraaf(sisendString,kaart){
 	    var data = google.visualization.arrayToDataTable(tabel);
 	
 	    var options = {
+	      curveType: "function",
 	      legend: {position: 'top'},
 	      colors: ['green','red', 'blue'],
 	      width: 500 + (50 * (tabel.length-1)),
 	      vAxis: {title: '€', titleTextStyle: {color: 'red'}},
-	      hAxis: {title: 'Staatus', titleTextStyle: {color: 'red'} }
-	    	
+	      hAxis: {title: 'Kuupäev', titleTextStyle: {color: 'red'} }
 	    };
-	
+
 	    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
 	    chart.draw(data, options);
 	    

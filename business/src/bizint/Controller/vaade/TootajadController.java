@@ -70,7 +70,6 @@ public class TootajadController {
 			juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
 		}
 
-		
 		//// kvartalid 
 		
 		String hetkeKvartalNimi = "";
@@ -122,7 +121,7 @@ public class TootajadController {
 			Map<Long,String> kuupäevadMap = new HashMap<Long,String>();
 			
 			Statement stmt0 = con.createStatement();
-			String query0 = "SELECT aeg FROM tulud, projektikasutajad,kasutajad WHERE töötab=1 AND YEAR(aeg)="+hetkeAasta+" AND projektikasutajad.kasutaja_ID=kasutajad.kasutajaID AND (MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+" OR MONTH(aeg)="+(algusKvartal+2)+")"+" AND tulud.juhtID="+juhtID+" AND projektikasutajad.juhtID="+juhtID+" AND kasutajad.juhtID="+juhtID;
+			String query0 = "SELECT aeg FROM tulud, projektikasutajad,kasutajad WHERE projektikasutajad.projekt_ID=tulud.projekt_ID AND YEAR(aeg)="+hetkeAasta+" AND projektikasutajad.kasutaja_ID=kasutajad.kasutajaID AND (MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+" OR MONTH(aeg)="+(algusKvartal+2)+")"+" AND tulud.juhtID="+juhtID+" AND projektikasutajad.juhtID="+juhtID+" AND kasutajad.juhtID="+juhtID+" AND töötab=1";
 			ResultSet rs0 = stmt0.executeQuery(query0);
 			
 			while(rs0.next()){
@@ -293,11 +292,6 @@ public class TootajadController {
 		
 		////
 		
-		System.out.println(kuupaevad1.size()+" - "+kuupaevad2.size()+" - "+kuupaevad3.size());
-		System.out.println(kuupaevadKulud1.size()+" - "+kuupaevadKulud2.size()+" - "+kuupaevadKulud3.size());
-		System.out.println(esimeseKuuTulusid+" - "+teiseKuuTulusid+" - "+kolmandaKuuTulusid+" - "+esimeseKuuKulusid+" - "+teiseKuuKulusid+" - "+kolmandaKuuKulusid);
-		
-		
 		m.addAttribute("hetkeAasta", Calendar.getInstance().get(Calendar.YEAR));
 		m.addAttribute("hetkeKvartal",hetkeKvartalNimi);
 		m.addAttribute("aastad", aastad);
@@ -399,7 +393,7 @@ public class TootajadController {
 			Map<Long,String> kuupäevadMap = new HashMap<Long,String>();
 			
 			Statement stmt0 = con.createStatement();
-			String query0 = "SELECT aeg FROM tulud, projektikasutajad,kasutajad WHERE töötab=1 AND YEAR(aeg)="+hetkeAasta+" AND projektikasutajad.kasutaja_ID=kasutajad.kasutajaID AND (MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+" OR MONTH(aeg)="+(algusKvartal+2)+")"+" AND tulud.juhtID="+juhtID+" AND projektikasutajad.juhtID="+juhtID+" AND kasutajad.juhtID="+juhtID;
+			String query0 = "SELECT aeg FROM tulud, projektikasutajad,kasutajad WHERE projektikasutajad.projekt_ID=tulud.projekt_ID AND YEAR(aeg)="+hetkeAasta+" AND projektikasutajad.kasutaja_ID=kasutajad.kasutajaID AND (MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+" OR MONTH(aeg)="+(algusKvartal+2)+")"+" AND tulud.juhtID="+juhtID+" AND projektikasutajad.juhtID="+juhtID+" AND kasutajad.juhtID="+juhtID+" AND töötab=1";
 			ResultSet rs0 = stmt0.executeQuery(query0);
 			
 			while(rs0.next()){

@@ -50,6 +50,7 @@ public class PipelineController {
 		}
 		
 		staatused = new ArrayList<Staatus>();
+		String staatusteArray = "";
 		
 		Connection con = new Mysql().getConnection();
 		
@@ -134,17 +135,21 @@ public class PipelineController {
 			
 			try{rs.close();stmt.close();}catch(Exception x){}
 			
+			staatused = Staatus.paneJärjekorda(staatused);
+			if(staatused.size() == 0){
+				teade = "Te pole veel ühtegi staatust loonud";
+			}
+			else{
+				for(int i = 0; i < staatused.size(); i++){
+					staatusteArray += staatused.get(i).getNimi() + ";" + staatused.get(i).getKogutulu() + ";" + staatused.get(i).getKogukulu() + ";" + staatused.get(i).getBilanss() + "/";
+				}
+			}
+			
 		}catch(Exception x){
 			x.printStackTrace();
 		}finally {
 			if (con!=null) try {con.close();}catch (Exception ignore) {}
         }
-		
-		staatused = Staatus.paneJärjekorda(staatused);
-		String staatusteArray = "";
-		for(int i = 0; i < staatused.size(); i++){
-			staatusteArray += staatused.get(i).getNimi() + ";" + staatused.get(i).getKogutulu() + ";" + staatused.get(i).getKogukulu() + ";" + staatused.get(i).getBilanss() + "/";
-		}
 		
 		m.addAttribute("staatused",staatusteArray);
 		m.addAttribute("teade", teade);
