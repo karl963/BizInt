@@ -25,7 +25,7 @@ public class Projekt {
 	private static final String DEFAULT_KIRJELDUS = "lahe projekt";
 	private static final int DEFAULT_REITING = 0;
 	private static final int DEFAULT_PROJEKTI_JÄRJEKORRA_NUMBER = 0;
-	public static final int ERROR_JUBA_EKSISTEERIB = 0, VIGA_ANDMEBAASIGA_ÜHENDUMISEL = 1, KÕIK_OKEI = 2;
+	public static final int ERROR_JUBA_EKSISTEERIB = 0, VIGA_ANDMEBAASIGA_ÜHENDUMISEL = 1, KÕIK_OKEI = 2, PROJEKTI_NIMI_TÜHI = 3;
 	
 	private String nimi,kirjeldus;
 	private int id;
@@ -146,57 +146,61 @@ public class Projekt {
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
-		
-		try {
-			
-			int projektiJärjekorraNR = 1;
-			
-			Statement stmt0 = con.createStatement();
-			String query0 = "SELECT MAX(projektiJärjekorraNR) AS max FROM projektid WHERE staatus_ID="+staatusID+" AND juhtID="+juhtID;
-			ResultSet rs0 = stmt0.executeQuery(query0);
-			
-			if(rs0.next()){
-				projektiJärjekorraNR = rs0.getInt("max") + 1;
-			}
-			
-			Statement stmt = con.createStatement();
-			String query = "INSERT INTO projektid (projektNimi, staatus_ID, projektiJärjekorraNR,juhtID) VALUES ('"+projekt.getNimi()+"',"+staatusID+","+projektiJärjekorraNR+","+juhtID+")";
-			stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
-			
-			ResultSet rs = stmt.getGeneratedKeys();
-			
-			if(rs.next()){
-				try {
-					
-					Statement stmt2 = con.createStatement();
-					String query2 = "SELECT staatusNimi FROM staatused WHERE staatusID="+staatusID+" AND juhtID="+juhtID;
-					ResultSet rs2 = stmt2.executeQuery(query2);
-					
-					rs2.next();
-					
-					String staatusnimi = rs2.getString("staatusNimi");
-					
-					Statement stmt9 = con.createStatement();
-					String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
-					ResultSet rs9 = stmt9.executeQuery(query9);
-					rs9.next();
-					String kasutajanimi = rs9.getString("kasutajaNimi");
-					
-					Statement stmt3 = con.createStatement();
-					String query3 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+rs.getInt(1)+",'"+kasutajanimi+" tekitas projekti staatusesse : "+staatusnimi+"',"+juhtID+")";
-					stmt3.executeUpdate(query3);
+		if(projekt.getNimi() != null && !projekt.getNimi().isEmpty() && !projekt.getNimi().trim().isEmpty()){
+			try {
 				
-					try{rs2.close();stmt2.close();}catch(Exception x){}
-					try{stmt3.close();}catch(Exception x){}
-				} catch (SQLException e) {
-					e.printStackTrace();
+				int projektiJärjekorraNR = 1;
+				
+				Statement stmt0 = con.createStatement();
+				String query0 = "SELECT MAX(projektiJärjekorraNR) AS max FROM projektid WHERE staatus_ID="+staatusID+" AND juhtID="+juhtID;
+				ResultSet rs0 = stmt0.executeQuery(query0);
+				
+				if(rs0.next()){
+					projektiJärjekorraNR = rs0.getInt("max") + 1;
 				}
+				
+				Statement stmt = con.createStatement();
+				String query = "INSERT INTO projektid (projektNimi, staatus_ID, projektiJärjekorraNR,juhtID) VALUES ('"+projekt.getNimi()+"',"+staatusID+","+projektiJärjekorraNR+","+juhtID+")";
+				stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+				
+				ResultSet rs = stmt.getGeneratedKeys();
+				
+				if(rs.next()){
+					try {
+						
+						Statement stmt2 = con.createStatement();
+						String query2 = "SELECT staatusNimi FROM staatused WHERE staatusID="+staatusID+" AND juhtID="+juhtID;
+						ResultSet rs2 = stmt2.executeQuery(query2);
+						
+						rs2.next();
+						
+						String staatusnimi = rs2.getString("staatusNimi");
+						
+						Statement stmt9 = con.createStatement();
+						String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
+						ResultSet rs9 = stmt9.executeQuery(query9);
+						rs9.next();
+						String kasutajanimi = rs9.getString("kasutajaNimi");
+						
+						Statement stmt3 = con.createStatement();
+						String query3 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+rs.getInt(1)+",'"+kasutajanimi+" tekitas projekti staatusesse : "+staatusnimi+"',"+juhtID+")";
+						stmt3.executeUpdate(query3);
+					
+						try{rs2.close();stmt2.close();}catch(Exception x){}
+						try{stmt3.close();}catch(Exception x){}
+					} catch (SQLException e) {
+						e.printStackTrace();
+					}
+				}
+				try{stmt.close();}catch(Exception x){}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				if (con!=null) try {con.close();}catch (Exception ignore) {}
+				return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 			}
-			try{stmt.close();}catch(Exception x){}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			if (con!=null) try {con.close();}catch (Exception ignore) {}
-			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+		}
+		if(projekt.getNimi() == null || projekt.getNimi().isEmpty() || projekt.getNimi().trim().isEmpty()){
+			return Projekt.PROJEKTI_NIMI_TÜHI;
 		}
 		
 		if (con!=null) try {con.close();}catch (Exception ignore) {}
@@ -377,34 +381,39 @@ public class Projekt {
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
-		Statement stmt;
-		try {
-			stmt = con.createStatement();
-			String query = "UPDATE projektid SET projektNimi = '"+nimi.getUusNimi()+"' WHERE projektID="+nimi.getProjektID()+" AND juhtID="+juhtID;
-			stmt.executeUpdate(query);
+		if(nimi.getUusNimi() != null && !nimi.getUusNimi().isEmpty() && !nimi.getUusNimi().trim().isEmpty()){
+			Statement stmt;
+			try {
+				stmt = con.createStatement();
+				String query = "UPDATE projektid SET projektNimi = '"+nimi.getUusNimi()+"' WHERE projektID="+nimi.getProjektID()+" AND juhtID="+juhtID;
+				stmt.executeUpdate(query);
+				
+				try{stmt.close();}catch(Exception x){}
+			} catch (SQLException e) {
+				e.printStackTrace();
+				if (con!=null) try {con.close();}catch (Exception ignore) {}
+				return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+			}
 			
-			try{stmt.close();}catch(Exception x){}
-		} catch (SQLException e) {
-			e.printStackTrace();
-			if (con!=null) try {con.close();}catch (Exception ignore) {}
-			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
+			try {
+				
+				Statement stmt9 = con.createStatement();
+				String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
+				ResultSet rs9 = stmt9.executeQuery(query9);
+				rs9.next();
+				String kasutajanimi = rs9.getString("kasutajaNimi");
+				
+				Statement stmt2 = con.createStatement();
+				String query2 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+nimi.getProjektID()+","+"'"+kasutajanimi+" määras projektile uue nime : "+nimi.getUusNimi()+"',"+juhtID+")";
+				stmt2.executeUpdate(query2);
+				
+				try{stmt2.close();}catch(Exception x){}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
-		
-		try {
-			
-			Statement stmt9 = con.createStatement();
-			String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
-			ResultSet rs9 = stmt9.executeQuery(query9);
-			rs9.next();
-			String kasutajanimi = rs9.getString("kasutajaNimi");
-			
-			Statement stmt2 = con.createStatement();
-			String query2 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+nimi.getProjektID()+","+"'"+kasutajanimi+" määras projektile uue nime : "+nimi.getUusNimi()+"',"+juhtID+")";
-			stmt2.executeUpdate(query2);
-			
-			try{stmt2.close();}catch(Exception x){}
-		} catch (SQLException e) {
-			e.printStackTrace();
+		if(nimi.getUusNimi() == null || nimi.getUusNimi().isEmpty() || nimi.getUusNimi().trim().isEmpty()){
+			return Projekt.PROJEKTI_NIMI_TÜHI;
 		}
 		
 		if (con!=null) try {con.close();}catch (Exception ignore) {}

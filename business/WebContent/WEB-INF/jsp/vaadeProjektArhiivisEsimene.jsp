@@ -115,7 +115,7 @@ Reiting: ${projekt.reitinguHTML}
 
 <table>
 	<tr>
-		<td><textarea name="kirjeldus" id="kirjelduseVali" >${projekt.kirjeldus}</textarea></td>
+		<td><textarea class="kirjeldus" name="kirjeldus" id="kirjelduseVali" >${projekt.kirjeldus}</textarea></td>
 	</tr>
 	<form:input path="projektID" value="${projekt.id}" type="hidden" />
 </table>
