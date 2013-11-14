@@ -13,62 +13,135 @@ $(document).ready(function(){
 	$(".teadeHajuvKadumine").ready(function() {
 		  $(".teadeHajuvKadumine").animate({
 		    opacity: 0.0,
-		  }, 3000 );
+		  }, 6000 );
 	});
 	
-	$(".yldKuluNimetusTextDiv").click(function(){
-		$(this).closest(".yldKuluNimetusCell").children(".yldKuluNimetusInputDiv").show();
-		$(this).closest(".yldKuluNimetusCell").find("input.yldKuluNimetusInputDiv").focus().val($(this).closest(".yldKuluNimetusCell").find("input.yldKuluNimetusInputDiv").val());
-		$(this).hide();
+    $(".yldKuluNimetusTextDiv").click(function(){
+		$(".yldInputDiv").hide();
+		$(".yldTextDiv").show();
+        $(this).closest(".yldKuluNimetusCell").children(".yldKuluNimetusInputDiv").show();
+        $(this).closest(".yldKuluNimetusCell").children(".yldKuluNimetusInputDiv").find(".yldKuluNimetusInput").focus().val($(this).closest(".yldKuluNimetusCell").children(".yldKuluNimetusInputDiv").find(".yldKuluNimetusInput").val());
+        $(this).hide();
 	});
 	$(".yldKuluSummaTextDiv").click(function(){
-		$(this).closest(".yldKuluSummaCell").children(".yldKuluSummaInputDiv").show();
-		$(this).closest(".yldKuluSummaCell").find("input.yldKuluSummaInputDiv").focus().val($(this).closest(".yldKuluSummaCell").find("input.yldKuluSummaInputDiv").val());
-		$(this).hide();
+		$(".yldInputDiv").hide();
+		$(".yldTextDiv").show();
+        $(this).closest(".yldKuluSummaCell").children(".yldKuluSummaInputDiv").show();
+        $(this).closest(".yldKuluSummaCell").children(".yldKuluSummaInputDiv").find(".yldKuluSummaInput").focus().val($(this).closest(".yldKuluSummaCell").children(".yldKuluSummaInputDiv").find(".yldKuluSummaInput").val());
+        $(this).hide();
 	});
 	$(".yldKuluKuupäevTextDiv").click(function(){
-		$(this).closest(".yldKuluKuupäevCell").children(".yldKuluKuupäevInputDiv").show();
-		$(this).closest(".yldKuluKuupäevCell").find("input.yldKuluKuupäevInput").focus().val($(this).closest(".yldKuluKuupäevCell").find("input.yldKuluKuupäevInput").val());
-		$(this).hide();
+		$(".yldInputDiv").hide();
+		$(".yldTextDiv").show();
+        $(this).closest(".yldKuluKuupäevCell").children(".yldKuluKuupäevInputDiv").show();
+        $(this).closest(".yldKuluKuupäevCell").children(".yldKuluKuupäevInputDiv").find(".yldKuluKuupäevInput").focus().val($(this).closest(".yldKuluKuupäevCell").children(".yldKuluKuupäevInputDiv").find(".yldKuluKuupäevInput").val());
+        $(this).hide();
 	});
 	
 	$(".yldKuluNimetusInput").blur(function(){
-		$(this).closest(".yldKuluNimetusCell").children(".yldKuluNimetusTextDiv").val($(this).val());
-		$(".yldKuluNimetusInputDiv").hide();
-		$(".yldKuluNimetusTextDiv").show();
+        $(this).closest(".yldKuluNimetusCell").children(".yldKuluNimetusTextDiv").html($(this).val());
+        $(".yldKuluNimetusInputDiv").hide();
+        $(".yldKuluNimetusTextDiv").show();
 	});
 	$(".yldKuluSummaInput").blur(function(){
-		$(this).closest(".yldKuluSummaCell").children(".yldKuluSummaTextDiv").val($(this).val());
-		$(".yldKuluSummaInputDiv").hide();
-		$(".yldKuluSummaTextDiv").show();
+        $(this).closest(".yldKuluSummaCell").children(".yldKuluSummaTextDiv").html($(this).val());
+        $(".yldKuluSummaInputDiv").hide();
+        $(".yldKuluSummaTextDiv").show();
 	});
 	$(".yldKuluKuupäevInput").blur(function(){
-		$(this).closest(".yldKuluKuupäevCell").children(".yldKuluKuupäevTextDiv").val($(this).val());
-		$(".yldKuluKuupäevInputDiv").hide();
-		$(".yldKuluKuupäevTextDiv").show();
+        $(this).closest(".yldKuluKuupäevCell").children(".yldKuluKuupäevTextDiv").html($(this).val());
+        $(".yldKuluKuupäevInputDiv").hide();
+        $(".yldKuluKuupäevTextDiv").show();
 	});
-
+	
 	$("#lisaYldKuluNupp").click(function() {
 		
-		var kuluSumma = $("#uusYldKuluSumma").val();
-		var kuluKuupaev = $("#uusYldKuluKuupäev").val();
-		var kuluNimetus = $("#uusYldKuluNimi").val();
-		
-		$.ajax({
-		    type : "POST",
-		    url : rakenduseNimi+"/vaadeRahavoog.htm",
-		    data : {summa: kuluSumma, nimetus: kuluNimetus, kuupaev: kuluKuupaev},
-		    success : function(response) {
-		    	document.location.href = "vaadeRahavoog.htm";
-		    },
-		    error : function(e) {
-		    	document.location.href = "vaadeRahavoog.htm";
-		    }
-		});
+	        var kuluSumma = $("#uusYldKuluSumma").val();
+	        var kuluKuupaev = $("#uusYldKuluKuupäev").val();
+	        var kuluNimetus = $("#uusYldKuluNimi").val();
+	        var korduv = $("#kasKorduvYldkulu").is(':checked');
+
+	        $.ajax({
+	            type : "POST",
+	            url : rakenduseNimi+"/vaadeRahavoog.htm",
+	            data : {summa: kuluSumma, nimetus: kuluNimetus, kuupaev: kuluKuupaev, korduv : korduv},
+	            success : function(response) {
+	                    document.location.href = "vaadeRahavoog.htm";
+	            },
+	            error : function(e) {
+	                    document.location.href = "vaadeRahavoog.htm";
+	            }
+	        });
 	});
 	
-	////////////////////////////////////////////77
+	$("#yldkuludeSalvestamiseNupp").click(function() {
+		
+		var kulud = "";
+		
+		var table = document.getElementById("yldKuludeTabel");
+		for(var x = 1, row;row = table.rows[x], x < table.rows.length; x++){
+
+			if(x != table.rows.length-1){
+
+				var id = row.getElementsByClassName("yldKuluNimetusCell")[0].getElementsByClassName("yldKuluIdDiv")[0].innerHTML;
+				var nimi = row.getElementsByClassName("yldKuluNimetusCell")[0].getElementsByClassName("yldKuluNimetusInputDiv")[0].getElementsByClassName("yldKuluNimetusInput")[0].value;
+				var summa = row.getElementsByClassName("yldKuluSummaCell")[0].getElementsByClassName("yldKuluSummaInputDiv")[0].getElementsByClassName("yldKuluSummaInput")[0].value;
+				var kuupäev = row.getElementsByClassName("yldKuluKuupäevCell")[0].getElementsByClassName("yldKuluKuupäevInputDiv")[0].getElementsByClassName("yldKuluKuupäevInput")[0].value;
+				var korduv = row.getElementsByClassName("yldKuluKorduvCell")[0].getElementsByClassName("korduvYldKuluInput")[0].checked;
+				
+			    for(var i = 0; i < nimi.length; i++) {
+					if(nimi.charAt(i) == ";"){
+						nimi = nimi.replaceAt(i,"");
+					}
+					else if(nimi.charAt(i) == "#"){
+						nimi = nimi.replaceAt(i,"");
+					}
+			    }
+			    for(var i = 0; i < summa.length; i++) {
+					if(summa.charAt(i) == ";"){
+						summa = summa.replaceAt(i,"");
+					}
+					else if(summa.charAt(i) == "#"){
+						summa = summa.replaceAt(i,"");
+					}
+			    }
+			    for(var i = 0; i < kuupäev.length; i++) {
+					if(kuupäev.charAt(i) == ";"){
+						kuupäev = kuupäev.replaceAt(i,"");
+					}
+					else if(kuupäev.charAt(i) == "#"){
+						kuupäev = kuupäev.replaceAt(i,"");
+					}
+			    }
+
+				kulud += (id+";"+nimi+";"+summa+";"+kuupäev+";"+korduv+"#");
+				
+			}
+		}
+		
+		salvestaYldKulud(kulud);
+	});
 	
+	$(".yldKuluKustutamiseNupp").click(function() {
+		
+		var id = $(this).closest(".yldKuluTabeliRida").children(".yldKuluNimetusCell").children(".yldKuluIdDiv").html();
+		
+	    $.ajax({
+	        type : "POST",
+	        url : rakenduseNimi+"/vaadeRahavoog.htm",
+	        data : {kuluID : id},
+	        success : function(response) {
+	        	document.location.href = "vaadeRahavoog.htm";
+	        },
+	        error : function(e) {
+	        	document.location.href = "vaadeRahavoog.htm";
+	        }
+	    });
+		
+	});
+	
+	////////////////////////////////////////////
+
 	$(".kustutaProjektNupp").click(function(){
 		$(".muudaKustutaEsimene").hide();
 		$(".muudaKustutaTeine").show();
@@ -165,6 +238,21 @@ function avaProjektiDetiliLeht(pid){
 
 function avaArhiivisProjektiDetiliLeht(pid){
 	document.location.href = "vaadeProjektArhiivisEsimene.htm?id="+pid;
+}
+
+function salvestaYldKulud(kulud){
+
+    $.ajax({
+        type : "POST",
+        url : rakenduseNimi+"/vaadeRahavoog.htm",
+        data : {yldKulud : kulud},
+        success : function(response) {
+        	document.location.href = "vaadeRahavoog.htm";
+        },
+        error : function(e) {
+        	document.location.href = "vaadeRahavoog.htm";
+        }
+    });
 }
 
 function muudaVastutajaProjektid(pid,nimi){
@@ -369,7 +457,7 @@ $(document).ready(function() {
     	var list = "";
     	
     	var päevad = new Array();
-    	
+
     	päevad[0] = table.rows[2].getElementsByClassName("tootajaPalk")[0].getElementsByClassName("tootajaPalkText")[0].innerHTML;
     	päevad[1] = table.rows[2].getElementsByClassName("tootajaPalk")[1].getElementsByClassName("tootajaPalkText")[0].innerHTML;
     	päevad[2] = table.rows[2].getElementsByClassName("tootajaPalk")[2].getElementsByClassName("tootajaPalkText")[0].innerHTML;
@@ -420,13 +508,13 @@ $(document).ready(function() {
     $('#kvartaliteValikud').change(function() {
     	document.location.href = "vaadeTootajadTabel.htm?aasta="+$("#aastateValikud").val()+"&kvartal="+$(this).val();
     });
-	$('#rahaVoogAastaValik').change(function() {
-		document.location.href = "vaadeRahavoog.htm?aasta="+$(this).val()+"&kvartal="+$("#rahaVoogKvartaliteValikud").val();
-	});
-	$('#rahaVoogKvartaliteValikud').change(function() {
-		document.location.href = "vaadeRahavoog.htm?aasta="+$("#rahaVoogAastaValik").val()+"&kvartal="+$(this).val();
-	});
-	
+	 $('#rahaVoogAastaValik').change(function() {
+		 document.location.href = "vaadeRahavoog.htm?aasta="+$(this).val()+"&kvartal="+$("#rahaVoogKvartaliteValikud").val();
+	 });
+	 $('#rahaVoogKvartaliteValikud').change(function() {
+	     document.location.href = "vaadeRahavoog.htm?aasta="+$("#rahaVoogAastaValik").val()+"&kvartal="+$(this).val();
+	 });
+
 });
 
 
@@ -483,7 +571,7 @@ function tekitaPipelineGraaf(sisendString,kaart){
 	    var data = google.visualization.arrayToDataTable(tabel);
 	
 	    var options = {
-	      curveType: "function",
+	      //curveType: "function",
 	      legend: {position: 'top'},
 	      colors: ['green','red', 'blue'],
 	      width: 500 + (50 * (tabel.length-1)),
@@ -569,7 +657,7 @@ $(document).ready(function(){
 	        //$(this).css({opacity:0});
 	    },
 	    stop: function(){
-	    	$(this).show()
+	    	$(this).show();
 	        //$(this).css({opacity:1});
 	    },
 	    drag: function(event, ui) {	
@@ -632,7 +720,7 @@ $(document).ready(function(){
 	        //$(this).css({opacity:0});
 	    },
 	    stop: function(){
-	    	$(this).show()
+	    	$(this).show();
 	        //$(this).css({opacity:1});
 	    },
 	    drag: function(event, ui) {
@@ -669,7 +757,7 @@ $(document).ready(function(){
 	        //$(this).css({opacity:0});;
 	    },
 	    stop: function(){
-	    	$(this).show()
+	    	$(this).show();
 	        //$(this).css({opacity:1});
 	    },
 	    drag: function(event, ui) {	

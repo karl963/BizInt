@@ -60,7 +60,7 @@
     </c:forEach>
 </select>
  
-<button type="button" id="salvestaTootajatePalgad" class="projektDetailNupp" >Salvesta valitud aasta palgad</button>
+<button type="button" id="salvestaTootajatePalgad" class="projektDetailNupp" >Salvesta valitud kvartali palgad</button>
  
 <table id="tootajateTabel">
 	<tr>

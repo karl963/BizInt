@@ -13,9 +13,7 @@
 
 <button type="button" style= "display:none;" id = "pipelineAndmed" onclick="javascript:tekitaPipelineGraaf('${andmedString}','tootajadGraaf')"></button>
 
-<br>
-<br>
-<br>
+<div id="rahavooDiv">
 
 <select id="rahaVoogAastaValik">
 	<c:forEach items="${aastad}" var="aasta">
@@ -47,56 +45,73 @@
     <div id="chart_div" class="diagrammiKorgus"></div>
 </div>
 
+<input type="button" value="Salvesta yldkulude muudatused" class="projektDetailNupp" id="yldkuludeSalvestamiseNupp">
+
 <table id="yldKuludeTabel">
 	<tr>
-		<th>Üldkulu nimetus</th>
-		<th>Summa</th>
-		<th colspan=2>Kuupäev</th>
+		<th class="tootajaTabelHeaderVäli">Üldkulu nimetus</th>
+		<th class="tootajaTabelHeaderVäli">Summa</th>
+		<th class="tootajaTabelHeaderVäli">Kuupäev</th>
+		<th class="tootajaTabelHeaderVäli" colspan=2>Korduv (iga kuu)</th>
 	</tr>
-	<tr>
-		<c:forEach items="${yldKulud}" var="kulu">
-		
-		<form:form>
+	
+	<c:forEach items="${yldKulud}" var="kulu">
+	<tr class="yldKuluTabeliRida">
+	
 		<td class="yldKuluNimetusCell">
-		
-			<div class="yldKuluNimetusTextDiv">${kulu.kuluNimi}</div>
 			
-			<div style="display:none;" class="yldKuluNimetusInputDiv">
+			<div style="display:none" class="yldKuluIdDiv">${kulu.kuluID}</div>
+			<div class="yldKuluNimetusTextDiv yldTextDiv">${kulu.kuluNimi}</div>
+			
+			<div style="display:none;" class="yldKuluNimetusInputDiv yldInputDiv">
 				<input class="yldKuluNimetusInput" value="${kulu.kuluNimi}">
 			</div>
 			
 		</td>
 		<td class="yldKuluSummaCell">
 		
-			<div class="yldKuluSummaTextDiv">${kulu.summa}</div>
+			<div class="yldKuluSummaTextDiv yldTextDiv">${kulu.summa}</div>
 			
-			<div style="display:none;" class="yldKuluSummaInputDiv">
+			<div style="display:none;" class="yldKuluSummaInputDiv yldInputDiv">
 				<input class="yldKuluSummaInput" value="${kulu.summa}">
 			</div>
 			
 		</td>
 		<td class="yldKuluKuupäevCell">
 		
-			<div class="yldKuluKuupäevTextDiv">${kulu.formaaditudAeg}</div>
+			<div class="yldKuluKuupäevTextDiv yldTextDiv">${kulu.formaaditudAeg}</div>
 			
-			<div style="display:none;" class="yldKuluKuupäevInputDiv">
+			<div style="display:none;" class="yldKuluKuupäevInputDiv yldInputDiv">
 				<input class="yldKuluKuupäevInput" value="${kulu.formaaditudAeg}">
 			</div>
 			
 		</td>
-		<td>
-			<input type="submit" value="X" class="punaneProjektDetailNupp">
+		<td class="yldKuluKorduvCell">
+			<c:choose>
+				<c:when test="${kulu.korduv==true}">
+					<input class="korduvYldKuluInput" type="checkbox" checked>
+				</c:when>
+				<c:otherwise>
+					<input class="korduvYldKuluInput" type="checkbox">
+				</c:otherwise>
+			</c:choose>
 		</td>
-		</form:form>
+		<td class="yldKuluKorduvCell">
+			<input type="button" value="X" class="punaneProjektDetailNupp yldKuluKustutamiseNupp">
+		</td>
 		
-		</c:forEach>
 	</tr>
+	</c:forEach>
+	
 	<tr>
-		<td colspan=3 >
-			<input id="uusYldKuluNimi" class="looUusInputLahter" value="kulu nimi">
-			<input id="uusYldKuluSumma" value="0.0">
-			<input id="uusYldKuluKuupäev" value="${hetkeKuupäev}">
+		<td colspan=5 >
+			<input id="uusYldKuluNimi" class="looUusInputLahter yldKuluNimetusInput" value="kulu nimi">
+			<input id="uusYldKuluSumma" class="yldKuluSummaInput" value="0.0">
+			<input id="uusYldKuluKuupäev" class="yldKuluKuupäevInput" value="${hetkeKuupaev}">
+			<input id="kasKorduvYldkulu" type="checkbox" >Korduv (iga kuu)
 			<input id="lisaYldKuluNupp" type="button" value="Lisa üldkulu" class="projektDetailNupp">
 		</td>
 	</tr>
 </table>
+
+</div>

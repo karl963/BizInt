@@ -1,9 +1,18 @@
 package bizint.app.alam.rahaline;
 
+import java.sql.Connection;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
+import bizint.andmebaas.Mysql;
 
 public class Kulu {
+	
+	public static int VIGA_ANDMEBAASIGA_ÜHENDUSMISEL = 0, KÕIK_OKEI = 1;
 	
 	private static String DEFAULT_NIMI = "";
 	private static Double DEFAULT_SUMMA = 0.0;
@@ -15,6 +24,8 @@ public class Kulu {
 	private int projektID;
 	private String stringAeg;
 	private String kasutajaNimi = "";
+	private boolean korduv = false;
+	private int kuluID;
 	
 	  ///////////\\\\\\\\\\\\
 	 ///// constructors \\\\\\
@@ -55,6 +66,88 @@ public class Kulu {
 		catch(Exception x){
 			return null;
 		}
+	}
+	
+	public static int lisaYldKuluAndmebaasi(Kulu kulu,boolean korduv, int juhtID){
+		
+		int vastus = KÕIK_OKEI;
+		
+		Connection con = (new Mysql()).getConnection();
+		if(con == null){
+			return Kulu.VIGA_ANDMEBAASIGA_ÜHENDUSMISEL;
+		}
+		
+		try{
+			
+			Timestamp aeg = new Timestamp(kulu.getAeg().getTime());
+			
+			Statement stmt = con.createStatement();
+			String query = "INSERT INTO yldkulud (yldkuluNimi,yldkulu,algusAeg,korduv,juhtID) VALUES ('"+kulu.getKuluNimi()+"',"+kulu.getSumma()+",'"+aeg+"',"+korduv+","+juhtID+")";
+			stmt.executeUpdate(query);
+			
+		}catch(Exception x){
+			vastus = Kulu.VIGA_ANDMEBAASIGA_ÜHENDUSMISEL;
+			x.printStackTrace();
+		}finally{
+			if(con!=null){try{con.close();}catch(Exception x){}}
+		}
+		
+		return vastus;
+	}
+	
+	
+	public static int muudaYldKuludAndmebaasis(List<Kulu> kulud, int juhtID){
+		
+		int vastus = KÕIK_OKEI;
+		
+		Connection con = (new Mysql()).getConnection();
+		if(con == null){
+			return Kulu.VIGA_ANDMEBAASIGA_ÜHENDUSMISEL;
+		}
+		
+		try{
+			
+			for(Kulu kulu : kulud){
+
+				Timestamp aeg = new Timestamp(kulu.getAeg().getTime());
+				
+				Statement stmt = con.createStatement();
+				String query = "UPDATE yldkulud SET yldkuluNimi='"+kulu.getKuluNimi()+"', yldkulu="+kulu.getSumma()+", algusAeg='"+aeg+"', korduv="+kulu.isKorduv()+" WHERE juhtID="+juhtID+" AND yldkuluID="+kulu.getKuluID();
+				stmt.executeUpdate(query);
+			}
+			
+		}catch(Exception x){
+			vastus = Kulu.VIGA_ANDMEBAASIGA_ÜHENDUSMISEL;
+			x.printStackTrace();
+		}finally{
+			if(con!=null){try{con.close();}catch(Exception x){}}
+		}
+		
+		return vastus;
+	}
+	
+	public static int kustutaKuluAndmebaasist(int kuluID, int juhtID){
+		
+		int vastus = KÕIK_OKEI;
+		
+		Connection con = (new Mysql()).getConnection();
+		if(con == null){
+			return Kulu.VIGA_ANDMEBAASIGA_ÜHENDUSMISEL;
+		}
+		
+		try{
+			Statement stmt = con.createStatement();
+			String query = "DELETE FROM yldkulud WHERE juhtID="+juhtID+" AND yldkuluID="+kuluID;
+			stmt.executeUpdate(query);
+		}catch(Exception x){
+			vastus = Kulu.VIGA_ANDMEBAASIGA_ÜHENDUSMISEL;
+			x.printStackTrace();
+		}finally{
+			if(con!=null){try{con.close();}catch(Exception x){}}
+		}
+		
+		return vastus;
+		
 	}
 	
 	  ///////////\\\\\\\\\\\\
@@ -108,6 +201,22 @@ public class Kulu {
 
 	public void setKasutajaNimi(String kasutajaNimi) {
 		this.kasutajaNimi = kasutajaNimi;
+	}
+
+	public boolean isKorduv() {
+		return korduv;
+	}
+
+	public void setKorduv(boolean korduv) {
+		this.korduv = korduv;
+	}
+
+	public int getKuluID() {
+		return kuluID;
+	}
+
+	public void setKuluID(int kuluID) {
+		this.kuluID = kuluID;
 	}
 
 }

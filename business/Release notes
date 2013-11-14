@@ -29,7 +29,6 @@ Current RELEASED (taged) verison: 2.0 alpha
 
 -Tootajate vaade
 * Saab vaadata tootajate vaates kuupalkasid ja projektide pealt tulevaid tulusid ( osakaal x koik tulud ) ) kvartali jaa aasta v2ltel
-
 * Saab muuta tootajate palkasid kvartalite kuude kaupa
 * Saab lisada tootajaid
 * Saab kustutada tootajaid
@@ -38,9 +37,15 @@ Current RELEASED (taged) verison: 2.0 alpha
 -Pipeline vaade
 * Saab vaadata pipeline vaadet
 
+-Rahavoog vaade
+* Saab n2ha rahavoo graafi, saab valida aastat ja kvartalit (kogutulu, kogukulu, bilanss)
+* Saab lisada yldkulusid (kas kordub iga kuu v6i on yhekordne)
+* Saab muuta yldkulusid
+* Saab kustutada yldkulusid
+
 -Arhiivi vaade
-* Saab n2ha arhiivi vaadet
-* Saab projekte arhiivis t6sta yhest kvartalist teise
+* Saab vaadata pipeline vaadet
+* Saab projekte arhiivis tõsta ühest kvartalist teise
 
 -- Lisam2rkused
 * Syntaksiliselt valesti lisatud tulu/kulu asendatakse automaatselt 0 -ga
@@ -50,19 +55,18 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Staatused on kuvatud vastavalt nende j2rekorranumbrile
 * Tootaja kustutamine tootaja vaates ei eemalda teda olemas olevatest ning olnud projektidest (ajalugu s2ilib)
 * Staatust saab kustutada ainult siis, kui temaga pole seotud yhtegi projekti
-* Kasutatakse logimise cookieseid, ehk kui kasutaja ei loginud v2lja, siis brauseri taasavamisel on ta ikka sisse logitud
+* Kasutatakse logimise cookieseid, ehk kui kasutaja ei loginud v�lja, siis brauseri taasavamisel on ta ikka sisse logitud
 
 -- Bug fixes
-* Kommentaaride kuup2ev parandatud
-* Kommentaaride j2rjekord parandatud ( vanemad asuvad all pool )
+* Kommentaaride kuup�ev parandatud
+* Kommentaaride j�rjekord parandatud ( vanemad asuvad all pool )
 * kirjelduse lahter on textarea, enne oli textfield
-* kommentaarimise lahter on nyyd textarea
+* kommentaarimise lahter on n��d textarea
 
 -- Teada olevad probleemid
 * Liiga suurte tulude/kulude korral kuvab *10 astmetega (E)
 * Liiga suurte tulude korral muudetakse projektide vaates projekti lahter suuremaks
 * Projekti tõstmisel staatuse sees ei tööta kerimine
-* Projektisisesed palgad tootajatele ei ilmu tootajate tabelis
 
 ---------- version 2.0 alpha patch notes ----------
 
