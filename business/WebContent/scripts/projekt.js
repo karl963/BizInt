@@ -504,7 +504,7 @@ $(document).ready(function(){
 	        //$(this).css({opacity:0});
 	    },
 	    stop: function(){
-	    	$(this).show()
+	    	$(this).show();
 	        //$(this).css({opacity:1});
 	    },
 	    drag: function(event, ui) {	
@@ -567,7 +567,7 @@ $(document).ready(function(){
 	        //$(this).css({opacity:0});
 	    },
 	    stop: function(){
-	    	$(this).show()
+	    	$(this).show();
 	        //$(this).css({opacity:1});
 	    },
 	    drag: function(event, ui) {
@@ -604,7 +604,7 @@ $(document).ready(function(){
 	        //$(this).css({opacity:0});;
 	    },
 	    stop: function(){
-	    	$(this).show()
+	    	$(this).show();
 	        //$(this).css({opacity:1});
 	    },
 	    drag: function(event, ui) {	

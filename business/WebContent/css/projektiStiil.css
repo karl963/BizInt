@@ -13,11 +13,13 @@
 
 #kirjelduseVali {
 	width:530px;
+	max-width:530px;
 	height:150px;
 }
 
 .kommentaariVali {
 	width:420px;
+	max-width:420px;
 	heigh:50px;
 }
 

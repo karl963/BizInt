@@ -608,6 +608,9 @@ public class ProjektController {
 		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
 		}
+		else if(vastus == Projekt.PROJEKTI_NIMI_TÜHI){
+			teade = "Projekti nimi ei tohi olla tühi!";
+		}
 		else{
 			teade = "Projekti nime muutmine õnnestus";
 		}
@@ -622,6 +625,9 @@ public class ProjektController {
 		
 		if(vastus == Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL){
 			teade = "Viga andmebaasiga ühendumisel";
+		}
+		else if(vastus == Projekt.PROJEKTI_NIMI_TÜHI){
+			teade = "Projekti nimi ei tohi olla tühi!";
 		}
 		else{
 			teade = "Projekti nime muutmine õnnestus";
