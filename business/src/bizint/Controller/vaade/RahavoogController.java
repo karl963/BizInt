@@ -90,6 +90,7 @@ public class RahavoogController {
 			juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
 		}
 		
+		String[] kvartalid = {"I - esimene kvartal","II - teine kvartal","III - kolmas kvartal","IV - neljas kvartal"};
 		String andmed = "";
 		List<Kulu> yldkulud = new ArrayList<Kulu>();
 		
@@ -98,12 +99,17 @@ public class RahavoogController {
 			hetkeAasta = Integer.parseInt(hetkeAastaString);
 		}
 		catch(Exception x){
-			hetkeAasta = Calendar.getInstance().get(Calendar.YEAR);
+			Calendar c = Calendar.getInstance();
+			c.setTime(new Date());
+			hetkeAasta = c.get(Calendar.YEAR);
 		}
 		
 		int alguseKuu = 1;int lõpuKuu = 12;
 		if(hetkeKvartalString.equals("puudub")){
-			int hetkeKuu = Calendar.getInstance().get(Calendar.MONTH)+1;
+			Calendar c = Calendar.getInstance();
+			c.setTime(new Date());
+			
+			int hetkeKuu = c.get(Calendar.MONTH)+1;
 
 			if(hetkeKuu >= 1 && hetkeKuu <= 3){
 				alguseKuu=1;lõpuKuu=3;
@@ -119,16 +125,16 @@ public class RahavoogController {
 			}
 		}
 		else{
-			if(hetkeKvartalString.equals("I - esimene kvartal")){
+			if(hetkeKvartalString.equals(kvartalid[0])){
 				alguseKuu=1;lõpuKuu=3;
 			}
-			else if(hetkeKvartalString.equals("II - teine kvartal")){
+			else if(hetkeKvartalString.equals(kvartalid[1])){
 				alguseKuu=4;lõpuKuu=6;
 			}
-			else if(hetkeKvartalString.equals("III - kolmas kvartal")){
+			else if(hetkeKvartalString.equals(kvartalid[2])){
 				alguseKuu=7;lõpuKuu=9;
 			}
-			else if(hetkeKvartalString.equals("IV - neljas kvartal")){
+			else if(hetkeKvartalString.equals(kvartalid[3])){
 				alguseKuu=10;lõpuKuu=12;
 			}
 		}
@@ -346,7 +352,6 @@ public class RahavoogController {
 		}
 
 		int[] aastad = {hetkeAasta-3,hetkeAasta-2,hetkeAasta-1,hetkeAasta,hetkeAasta+1,hetkeAasta+2,hetkeAasta+3};
-		String[] kvartalid = {"I - esimene kvartal","II - teine kvartal","III - kolmas kvartal","IV - neljas kvartal"};
 		
 		m.addAttribute("hetkeAasta", hetkeAasta);
 		m.addAttribute("aastad", aastad);
