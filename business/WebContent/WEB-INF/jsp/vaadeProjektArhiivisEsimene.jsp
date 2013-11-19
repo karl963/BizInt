@@ -151,7 +151,7 @@ Reiting: ${projekt.reitinguHTML}
 
 </div>
 </div>
-<a href="vaadeArhiiv.htm">
-<div class=closeView >X</div>
+<a class=closeView href="vaadeArhiiv.htm">
+X
 </a>
 </body>
