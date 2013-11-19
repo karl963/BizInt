@@ -68,6 +68,11 @@
 	top:114px;
 }
 
+.menu_position{
+	font-size:20px;
+	font-decoration:bold;
+}
+
 .projekt_selected_pos
 {
 	position:absolute;
@@ -417,7 +422,7 @@ h1
 	font-family:arial;
 	color:white;
 	text-decoration:bold;
-	font-size:50;
+	font-size:50px;
 
 }
 

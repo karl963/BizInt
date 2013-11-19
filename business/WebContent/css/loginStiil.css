@@ -28,7 +28,6 @@
 }
 
 .nimelahter{
-	position:aboslute;
 	margin-top:30px;
 	width:200px;
 	text-align:center;
@@ -49,7 +48,6 @@
 	border-bottom-left-radius:20px;
 }
 .paroolilahter{
-	position:aboslute;
 	margin-top:10px;
 	width:200px;
 	text-align:center;
@@ -70,7 +68,6 @@
 	border-bottom-left-radius:20px;
 }
 .loginupp{
-	position:aboslute;
 	margin-top:10px;
 	width:200px;
 }

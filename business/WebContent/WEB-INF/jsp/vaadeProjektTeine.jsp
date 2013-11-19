@@ -178,8 +178,8 @@ Reiting: ${projekt.reitinguHTML}
 
 </div>
 </div>
-<a href="vaadeProjektid.htm">
-<div class=closeView >X</div>
+<a class=closeView href="vaadeProjektid.htm">
+X
 </a>
 </body>
 
