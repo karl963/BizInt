@@ -11,7 +11,7 @@
 </div>
 </div>
 
-<button type="button" style= "display:none;" id = "pipelineAndmed" onclick="javascript:tekitaPipelineGraaf('${andmedString}','tootajadGraaf')"></button>
+<button type="button" style= "display:none;" id = "pipelineAndmed" onclick="javascript:tekitaPipelineGraaf('${andmedString}','rahavooGraaf')"></button>
 
 <div id="rahavooDiv">
 

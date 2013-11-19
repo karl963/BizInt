@@ -46,6 +46,16 @@
 	max-width:20px;
 }
 
+#tootajadGraafDiv{
+	left:10px;
+	position:absolute;
+	top:170px;
+	width:1170px;
+	height:465px;
+	overflow-x:auto;
+	overflow-y:auto;
+}
+
 .tuluSumma
 {
 	color:#00CC00;
@@ -126,6 +136,7 @@
 	margin-left:10px;
 }
 #tootajadTabelDiv{
+	left:10px;
 	position:absolute;
 	top:170px;
 	width:1170px;

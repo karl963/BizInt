@@ -723,56 +723,6 @@ public class TootajadController {
 		return tabeliAndmed;
 	}
 	
-	@RequestMapping(value = "/vaadeTootajadGraaf.htm", method = RequestMethod.GET)
-	public String vaadeTootajadGraaf(HttpServletRequest request,Model m) {
-		
-		if(LoginController.kontrolliSidOlemasolu(request.getCookies()) == null){
-			request.getSession().setAttribute("viga", VigaController.VIGA_MITTE_LOGITUD);
-			request.getSession().setAttribute("suunatudLink", "vaadeTootajadGraaf.htm");
-			return "redirect:/vaadeViga.htm";
-		}
-		
-		if(request.getSession().getAttribute("juhtID") == null){
-			juhtID = Integer.parseInt(LoginController.kontrolliSidOlemasolu(request.getCookies()).split("\\.")[0]);
-			request.getSession().setAttribute("kasutajaNimi", LoginController.getKasutajaNimiCookiest(request.getCookies()));
-		}
-		else{
-			juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
-		}
-		
-		List<Kasutaja> kasutajad = new ArrayList<Kasutaja>();
-		
-		Connection con = new Mysql().getConnection();
-		
-		try{
-
-			Statement stmt = con.createStatement();
-			String query = "SELECT kasutajaNimi FROM kasutajad WHERE töötab=1"+" AND juhtID="+juhtID;
-			ResultSet rs = stmt.executeQuery(query);
-			
-			while(rs.next()){
-				Kasutaja kasutaja = new Kasutaja();
-				
-				String kasutajaNimi = rs.getString("kasutajaNimi");
-				
-				kasutaja.setKasutajaNimi(kasutajaNimi);
-				
-				kasutajad.add(kasutaja);
-			}
-
-		}catch(Exception x){
-			teade = "Viga andmebaasiga";
-		}
-		
-
-		m.addAttribute("kasutajad",kasutajad);
-		m.addAttribute("teade", teade);
-
-		teade = null;
-		
-		return "vaadeTootajadGraaf"; 
-	}
-	
 	@RequestMapping(value = "/vaadeTootajadTabel.htm", method = RequestMethod.POST, params = {"kasutajaNimi"})
 	public View lisaUusTöötaja(@ModelAttribute("uusTootaja") Kasutaja kasutaja, Model m){
 

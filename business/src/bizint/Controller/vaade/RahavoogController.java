@@ -18,6 +18,7 @@ import java.util.TreeMap;
 import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -112,15 +113,19 @@ public class RahavoogController {
 			int hetkeKuu = c.get(Calendar.MONTH)+1;
 
 			if(hetkeKuu >= 1 && hetkeKuu <= 3){
+				hetkeKvartalString = "I - esimene kvartal";
 				alguseKuu=1;lõpuKuu=3;
 			}
 			else if(hetkeKuu >= 4 && hetkeKuu <= 6){
+				hetkeKvartalString = "II - teine kvartal";
 				alguseKuu=4;lõpuKuu=6;
 			}
 			else if(hetkeKuu >= 7 && hetkeKuu <= 9){
+				hetkeKvartalString = "III - kolmas kvartal";
 				alguseKuu=7;lõpuKuu=9;
 			}
 			else if(hetkeKuu >= 10 && hetkeKuu <= 12){
+				hetkeKvartalString = "IV - neljas kvartal";
 				alguseKuu=10;lõpuKuu=12;
 			}
 		}

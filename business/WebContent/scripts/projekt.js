@@ -508,11 +508,19 @@ $(document).ready(function() {
     $('#kvartaliteValikud').change(function() {
     	document.location.href = "vaadeTootajadTabel.htm?aasta="+$("#aastateValikud").val()+"&kvartal="+$(this).val();
     });
+    
 	 $('#rahaVoogAastaValik').change(function() {
 		 document.location.href = "vaadeRahavoog.htm?aasta="+$(this).val()+"&kvartal="+$("#rahaVoogKvartaliteValikud").val();
 	 });
 	 $('#rahaVoogKvartaliteValikud').change(function() {
 	     document.location.href = "vaadeRahavoog.htm?aasta="+$("#rahaVoogAastaValik").val()+"&kvartal="+$(this).val();
+	 });
+	 
+	 $('#tootajadGraafAastaValik').change(function() {
+		 document.location.href = "vaadeTootajadGraaf.htm?aasta="+$(this).val()+"&kvartal="+$("#tootajadGraafKvartaliteValikud").val();
+	 });
+	 $('#tootajadGraafKvartaliteValikud').change(function() {
+	     document.location.href = "vaadeTootajadGraaf.htm?aasta="+$("#tootajadGraafAastaValik").val()+"&kvartal="+$(this).val();
 	 });
 
 });
@@ -556,7 +564,7 @@ function tekitaPipelineGraaf(sisendString,kaart){
 	    chart.draw(data, options);
     
 	}
-	else if(kaart == "tootajadGraaf"){
+	else if(kaart == "rahavooGraaf"){
 		
 		andmedString = sisendString;
 		
@@ -583,6 +591,32 @@ function tekitaPipelineGraaf(sisendString,kaart){
 	    chart.draw(data, options);
 	    
 	}
+	
+	else if(kaart == "tootajadGraaf"){
+			
+	    var andmed = sisendString.split("/");
+	    var tabel = new Array();
+	    tabel[0]= ["Töötaja", "Tulu", "Kuupalk" , "Projekti palgad"] ;
+	    
+	    for(var i = 1;i < andmed.length ; i++){
+	    	var vaheTabel = andmed[i-1].split(";");
+	    		tabel[i] = [vaheTabel[0], parseFloat(vaheTabel[1]),parseFloat(vaheTabel[2]),parseFloat(vaheTabel[3])];	
+	    }
+	    var data = google.visualization.arrayToDataTable(tabel);
+	
+	    var options = {
+	      legend: {position: 'top'},
+	      colors: ['green','red', 'pink'],
+	      width: 500 + (150 * (tabel.length-1)),
+	      vAxis: {title: '€', titleTextStyle: {color: 'red'}},
+	      hAxis: {title: 'Töötaja', titleTextStyle: {color: 'red'} }
+	    	
+	    };
+	
+	    var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+	    chart.draw(data, options);
+		    
+		}
 }
 
 /*

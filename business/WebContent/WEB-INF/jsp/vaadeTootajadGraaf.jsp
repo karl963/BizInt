@@ -11,12 +11,50 @@
 </div>
 </div>
 
-<button type="button" style= "display:none;" id = "pipelineAndmed" onclick="javascript:tekitaPipelineGraaf('${andmeString}','tootajadGraaf');drawChart()"></button>
+<button type="button" style= "display:none;" id = "pipelineAndmed"  onclick="javascript:tekitaPipelineGraaf('${andmedString}','tootajadGraaf')"></button>
 
-<br>
-<br>
-<br>
+<div id="tootajadGraafDiv">
 
-<div class="pipelineDivSuurus">
-    <div id="chart_div" class="diagrammiKorgus"></div>
+	<br>
+	
+	<div>
+		<table>
+			<tr>
+				<th ><a href="vaadeTootajadTabel.htm">Tabel</a></th>
+				<th class=activeTab ><a href="vaadeTootajadGraaf.htm">Graaf</a></th>
+			</tr>
+		</table>
+	</div>
+	
+
+	<select id="tootajadGraafAastaValik">
+		<c:forEach items="${aastad}" var="aasta">
+			<c:choose>
+				<c:when test="${aasta == hetkeAasta}">
+	    			<option value="${aasta}" selected>${aasta}</option>
+	    		</c:when>
+	    		<c:otherwise>
+	    			<option value="${aasta}">${aasta}</option>
+	    		</c:otherwise>
+	    	</c:choose>
+	    </c:forEach>
+	</select>
+	
+	<select id="tootajadGraafKvartaliteValikud">
+		<c:forEach items="${kvartalid}" var="kvartal">
+			<c:choose>
+				<c:when test="${kvartal == hetkeKvartal}">
+	    			<option value="${kvartal}" selected>${kvartal}</option>
+	    		</c:when>
+	    		<c:otherwise>
+	    			<option value="${kvartal}">${kvartal}</option>
+	    		</c:otherwise>
+	    	</c:choose>
+	    </c:forEach>
+	</select>
+	
+	<div class="pipelineDivSuurus">
+	    <div id="chart_div" class="diagrammiKorgus"></div>
+	</div>
+
 </div>
