@@ -376,7 +376,7 @@ public class RahavoogController {
 				ResultSet rs7 = stmt7.executeQuery(query7);
 				
 				while(rs7.next()){
-					kaibemaksud[i] = kaibemaksud[i]+rs7.getDouble("tulu");
+					kaibemaksud[i] = kaibemaksud[i]+(rs7.getDouble("tulu")*0.2);
 				}
 				try{rs7.close();stmt7.close();}catch(Exception ex){}
 			}
@@ -400,7 +400,7 @@ public class RahavoogController {
 				ResultSet rs7 = stmt7.executeQuery(query7);
 				
 				while(rs7.next()){
-					kaibemaksud[i+3] = kaibemaksud[i+3]+rs7.getDouble("kulu");
+					kaibemaksud[i+3] = kaibemaksud[i+3]+(rs7.getDouble("tulu")*0.2);
 				}
 				try{rs7.close();stmt7.close();}catch(Exception ex){}
 				
@@ -409,7 +409,7 @@ public class RahavoogController {
 				ResultSet rs8 = stmt8.executeQuery(query8);
 				
 				while(rs8.next()){
-					kaibemaksud[i+3] = kaibemaksud[i+3]+rs8.getDouble("yldkulu");
+					kaibemaksud[i+3] = kaibemaksud[i+3]+(rs8.getDouble("yldkulu")*0.2);
 				}
 				try{rs8.close();stmt8.close();}catch(Exception ex){}
 				
@@ -418,7 +418,7 @@ public class RahavoogController {
 				ResultSet rs9 = stmt9.executeQuery(query9);
 				
 				while(rs9.next()){
-					kaibemaksud[i+3] = kaibemaksud[i+3]+rs9.getDouble("yldkulu");
+					kaibemaksud[i+3] = kaibemaksud[i+3]+(rs9.getDouble("yldkulu")*0.2);
 				}
 				try{rs9.close();stmt9.close();}catch(Exception ex){}
 			}
