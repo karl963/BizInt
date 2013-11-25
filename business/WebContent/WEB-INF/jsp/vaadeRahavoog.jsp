@@ -45,6 +45,60 @@
     <div id="chart_div" class="diagrammiKorgus"></div>
 </div>
 
+<table id="kaibemaksuTabel">
+	<tr>
+		<th class="tootajaTabelHeaderVäli" colspan="4">Käibemaks arvestatakse eelmise kuu 21. kuni antud kuu 20.ndani</th>
+	</tr>
+	<tr>
+		<th class="tootajaTabelHeaderVäli"></th>
+		<th class="tootajaTabelHeaderVäli">${esimeneKuu}</th>
+		<th class="tootajaTabelHeaderVäli">${teineKuu}</th>
+		<th class="tootajaTabelHeaderVäli">${kolmasKuu}</th>
+	</tr>
+
+	<tr>
+		<td>Tulude pealt maksmist vajav käibemaks</td>
+		<td class="kaibemaksTuluCell">
+			${esimeneKaibemaksTulu}
+		</td>
+		<td class="kaibemaksTuluCell">
+			${teineKaibemaksTulu}
+		</td>
+		<td class="kaibemaksTuluCell">
+			${kolmasKaibemaksTulu}
+		</td>
+	</tr>
+	
+	<tr>
+		<td >Kulude pealt tagasi saamiseks käibemaks</td>
+		<td class="kaibemaksKuluCell">
+			${esimeneKaibemaksKulu}
+		</td>
+		<td class="kaibemaksKuluCell">
+			${teineKaibemaksKulu}
+		</td>
+		<td class="kaibemaksKuluCell">
+			${kolmasKaibemaksKulu}
+		</td>
+	</tr>
+	
+	<tr>
+		<td >Bilanss ehk kasum</td>
+		<td class="kaibemaksBilanssCell">
+			${esimeneKaibemaksBilanss}
+		</td>
+		<td class="kaibemaksBilanssCell">
+			${teineKaibemaksBilanss}
+		</td>
+		<td class="kaibemaksBilanssCell">
+			${kolmasKaibemaksBilanss}
+		</td>
+	</tr>
+
+</table>
+
+<br>
+
 <input type="button" value="Salvesta yldkulude muudatused" class="projektDetailNupp" id="yldkuludeSalvestamiseNupp">
 
 <table id="yldKuludeTabel">
@@ -52,7 +106,8 @@
 		<th class="tootajaTabelHeaderVäli">Üldkulu nimetus</th>
 		<th class="tootajaTabelHeaderVäli">Summa</th>
 		<th class="tootajaTabelHeaderVäli">Kuupäev</th>
-		<th class="tootajaTabelHeaderVäli" colspan=2>Korduv (iga kuu)</th>
+		<th class="tootajaTabelHeaderVäli">Korduv (iga kuu)</th>
+		<th class="tootajaTabelHeaderVäli" colspan=2>Arvesta käibemaksu</th>
 	</tr>
 	
 	<c:forEach items="${yldKulud}" var="kulu">
@@ -96,6 +151,16 @@
 				</c:otherwise>
 			</c:choose>
 		</td>
+		<td class="yldKuluKaibemaksCell">
+			<c:choose>
+				<c:when test="${kulu.kasArvestaKaibemaksu==true}">
+					<input class="kaibemaksInput" type="checkbox" checked>
+				</c:when>
+				<c:otherwise>
+					<input class="kaibemaksInput" type="checkbox">
+				</c:otherwise>
+			</c:choose>
+		</td>
 		<td class="yldKuluKorduvCell">
 			<input type="button" value="X" class="punaneProjektDetailNupp yldKuluKustutamiseNupp">
 		</td>
@@ -109,9 +174,9 @@
 			<input id="uusYldKuluSumma" class="yldKuluSummaInput" value="0.0">
 			<input id="uusYldKuluKuupäev" class="yldKuluKuupäevInput" value="${hetkeKuupaev}">
 			<input id="kasKorduvYldkulu" type="checkbox" >Korduv (iga kuu)
+			<input id="arvestaYldkuluKaibemaksu" type="checkbox" >Arvesta käibemaksu
 			<input id="lisaYldKuluNupp" type="button" value="Lisa üldkulu" class="projektDetailNupp">
 		</td>
 	</tr>
 </table>
-
 </div>

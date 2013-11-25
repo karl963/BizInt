@@ -16,6 +16,24 @@ $(document).ready(function(){
 		  }, 6000 );
 	});
 	
+	$("#kuluArvestaKaibemaksuBox").click(function() {
+		if($(this).is(':checked')){
+			$("#kuluArvestaKaibemaksuInput").val("jah");
+		}
+		else{
+			$("#kuluArvestaKaibemaksuInput").val("ei");
+		}
+	});
+	
+	$("#tuluArvestaKaibemaksuBox").click(function() {
+		if($(this).is(':checked')){
+			$("#tuluArvestaKaibemaksuInput").val("jah");
+		}
+		else{
+			$("#tuluArvestaKaibemaksuInput").val("ei");
+		}
+	});
+	
     $(".yldKuluNimetusTextDiv").click(function(){
 		$(".yldInputDiv").hide();
 		$(".yldTextDiv").show();
@@ -60,11 +78,16 @@ $(document).ready(function(){
 	        var kuluKuupaev = $("#uusYldKuluKuupäev").val();
 	        var kuluNimetus = $("#uusYldKuluNimi").val();
 	        var korduv = $("#kasKorduvYldkulu").is(':checked');
-
+	        var kaibemaks = "ei";
+	        
+	        if($("#arvestaYldkuluKaibemaksu").is(':checked')){
+	        	kaibemaks = "jah";
+	        }
+	        
 	        $.ajax({
 	            type : "POST",
 	            url : rakenduseNimi+"/vaadeRahavoog.htm",
-	            data : {summa: kuluSumma, nimetus: kuluNimetus, kuupaev: kuluKuupaev, korduv : korduv},
+	            data : {summa: kuluSumma, nimetus: kuluNimetus, kuupaev: kuluKuupaev, korduv : korduv,kaibemaks : kaibemaks},
 	            success : function(response) {
 	                    document.location.href = "vaadeRahavoog.htm";
 	            },
@@ -88,6 +111,12 @@ $(document).ready(function(){
 				var summa = row.getElementsByClassName("yldKuluSummaCell")[0].getElementsByClassName("yldKuluSummaInputDiv")[0].getElementsByClassName("yldKuluSummaInput")[0].value;
 				var kuupäev = row.getElementsByClassName("yldKuluKuupäevCell")[0].getElementsByClassName("yldKuluKuupäevInputDiv")[0].getElementsByClassName("yldKuluKuupäevInput")[0].value;
 				var korduv = row.getElementsByClassName("yldKuluKorduvCell")[0].getElementsByClassName("korduvYldKuluInput")[0].checked;
+				
+				var kaibemaks = "ei";
+
+				if(row.getElementsByClassName("yldKuluKaibemaksCell")[0].getElementsByClassName("kaibemaksInput")[0].checked){
+					kaibemaks = "jah";
+				}
 				
 			    for(var i = 0; i < nimi.length; i++) {
 					if(nimi.charAt(i) == ";"){
@@ -114,7 +143,7 @@ $(document).ready(function(){
 					}
 			    }
 
-				kulud += (id+";"+nimi+";"+summa+";"+kuupäev+";"+korduv+"#");
+				kulud += (id+";"+nimi+";"+summa+";"+kuupäev+";"+korduv+";"+kaibemaks+"#");
 				
 			}
 		}

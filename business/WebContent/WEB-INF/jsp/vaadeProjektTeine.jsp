@@ -79,9 +79,11 @@ Reiting: ${projekt.reitinguHTML}
 <br>
 	Kirjeldus: <form:input maxlength="100" class="bigInput" path="tuluNimi" value="" />
 			   <form:input path="projektID" type="hidden" value="${projekt.id}" />
+			   <form:input id="tuluArvestaKaibemaksuInput" path="käibemaksuArvestatakse" type="hidden"/>
 	           <form:input path="aeg.time" type="hidden"/>
 	           <input class="projektDetailNupp" type="submit" value="lisa">
 </form:form>
+<div id="tuluArvestaKaibemaksuDiv"><input type=checkbox id="tuluArvestaKaibemaksuBox" /> Arvesta Käibemaksu</div>
 
 <br>
 
@@ -99,10 +101,12 @@ Reiting: ${projekt.reitinguHTML}
 	</select>
 	</div>		
 		<form:input id="palkKasutajaNimi" path="kasutajaNimi" type="hidden"/>
+		<form:input id="kuluArvestaKaibemaksuInput" path="käibemaksuArvestatakse" type="hidden"/>
 		<form:input path="projektID" type="hidden" value="${projekt.id}" />
 	    <form:input path="aeg.time" type="hidden" />
 	   	<input class="kuluLisamiseNupp projektDetailNupp" type="submit" value="lisa">
 </form:form>
+<div id="kuluArvestaKaibemaksuDiv"><input type=checkbox id="kuluArvestaKaibemaksuBox" /> Arvesta Käibemaksu</div>
 <div class="kuluPalkCheck" ><input type="checkbox" name="kuluPalk" id="kuluPalk">Töötaja Palk</div>
 
 <br>
@@ -120,7 +124,16 @@ Reiting: ${projekt.reitinguHTML}
 	<form:input path="projektID" type="hidden" value="${projekt.id}" />
 
 	<td><b class="tuluSumma">+ ${tulu.summa}</b></td>
-	<td><small>${tulu.tuluNimi}</small></td>
+	<td><small>
+		<c:choose>
+			<c:when test="${tulu.kasArvestaKaibemaksu==false}">
+				${tulu.tuluNimi}
+			</c:when>
+			<c:otherwise>
+				${tulu.tuluNimi} (+käibemaks ${tulu.kaibemaks})
+			</c:otherwise>
+		</c:choose>
+	</small></td>
 	<td><small><i><b>${tulu.formaaditudAeg}</b></i></small></td>
 	<td><input class="punaneProjektDetailNupp" type="submit" value="X" /></td>
 	</form:form>
@@ -137,7 +150,16 @@ Reiting: ${projekt.reitinguHTML}
 
 
 		<td><b class="kuluSumma">- ${kulu.summa}</b></td>
-		<td><small>${kulu.kuluNimi}</small></td>
+		<td><small>	
+			<c:choose>
+			<c:when test="${kulu.kasArvestaKaibemaksu==true}">
+				${kulu.kuluNimi}
+			</c:when>
+			<c:otherwise>
+				${kulu.kuluNimi} (+käibemaks ${kulu.kaibemaks})
+			</c:otherwise>
+			</c:choose>
+		</small></td>
 		<td><small><i><b>${kulu.formaaditudAeg}</b></i></small></td>
 		<td><input class="punaneProjektDetailNupp" type="submit" value="X" /></td>
 		

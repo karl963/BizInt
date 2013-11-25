@@ -14,6 +14,7 @@ public class Tulu {
 	private Date aeg;
 	private int projektID;
 	private String stringAeg;
+	private String käibemaksuArvestatakse = "ei";
 	
 	  ///////////\\\\\\\\\\\\
 	 ///// constructors \\\\\\
@@ -113,5 +114,25 @@ public class Tulu {
 	public void setStringAeg(String stringAeg) {
 		this.stringAeg = stringAeg;
 	}
+	
+	public String getkäibemaksuArvestatakse(){
+		return käibemaksuArvestatakse;
+	}
+	
+	public void setkäibemaksuArvestatakse(String k){
+		this.käibemaksuArvestatakse = k;
+	}
+	
+	public boolean getkasArvestaKaibemaksu(){
+		if(käibemaksuArvestatakse.equals("jah")){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
 
+	public Object getKaibemaks(){
+		return (Double)summa*0.2;
+	}
 }

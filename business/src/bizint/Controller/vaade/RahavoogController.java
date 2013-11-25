@@ -56,9 +56,11 @@ import org.springframework.web.servlet.view.RedirectView;
 
 
 
+
 import bizint.andmebaas.Mysql;
 import bizint.app.alam.Kasutaja;
 import bizint.app.alam.Staatus;
+import bizint.app.alam.kuuAndmed.Kuud;
 import bizint.app.alam.rahaline.Kulu;
 import bizint.app.alam.rahaline.Tulu;
 
@@ -91,9 +93,12 @@ public class RahavoogController {
 			juhtID = Integer.parseInt(String.valueOf(request.getSession().getAttribute("juhtID")));
 		}
 		
+		Double[] kaibemaksud = new Double[6];
+		
 		String[] kvartalid = {"I - esimene kvartal","II - teine kvartal","III - kolmas kvartal","IV - neljas kvartal"};
 		String andmed = "";
 		List<Kulu> yldkulud = new ArrayList<Kulu>();
+		int hetkeKvartal = 0;
 		
 		int hetkeAasta = 0;
 		try{
@@ -114,33 +119,33 @@ public class RahavoogController {
 
 			if(hetkeKuu >= 1 && hetkeKuu <= 3){
 				hetkeKvartalString = "I - esimene kvartal";
-				alguseKuu=1;lõpuKuu=3;
+				alguseKuu=1;lõpuKuu=3;hetkeKvartal = 0;
 			}
 			else if(hetkeKuu >= 4 && hetkeKuu <= 6){
 				hetkeKvartalString = "II - teine kvartal";
-				alguseKuu=4;lõpuKuu=6;
+				alguseKuu=4;lõpuKuu=6;hetkeKvartal = 1;
 			}
 			else if(hetkeKuu >= 7 && hetkeKuu <= 9){
 				hetkeKvartalString = "III - kolmas kvartal";
-				alguseKuu=7;lõpuKuu=9;
+				alguseKuu=7;lõpuKuu=9;hetkeKvartal = 2;
 			}
 			else if(hetkeKuu >= 10 && hetkeKuu <= 12){
 				hetkeKvartalString = "IV - neljas kvartal";
-				alguseKuu=10;lõpuKuu=12;
+				alguseKuu=10;lõpuKuu=12;hetkeKvartal = 3;
 			}
 		}
 		else{
 			if(hetkeKvartalString.equals(kvartalid[0])){
-				alguseKuu=1;lõpuKuu=3;
+				alguseKuu=1;lõpuKuu=3;hetkeKvartal = 0;
 			}
 			else if(hetkeKvartalString.equals(kvartalid[1])){
-				alguseKuu=4;lõpuKuu=6;
+				alguseKuu=4;lõpuKuu=6;hetkeKvartal = 1;
 			}
 			else if(hetkeKvartalString.equals(kvartalid[2])){
-				alguseKuu=7;lõpuKuu=9;
+				alguseKuu=7;lõpuKuu=9;hetkeKvartal = 2;
 			}
 			else if(hetkeKvartalString.equals(kvartalid[3])){
-				alguseKuu=10;lõpuKuu=12;
+				alguseKuu=10;lõpuKuu=12;hetkeKvartal = 3;
 			}
 		}
 		
@@ -337,6 +342,10 @@ public class RahavoogController {
 				Date aeg = rs6.getTimestamp("algusAeg");
 				boolean kordus = rs6.getBoolean("korduv");
 				int id = rs6.getInt("yldkuluID");
+				
+				if(rs6.getBoolean("kaibemaksuArvestatakse")){
+					kulu.setkäibemaksuArvestatakse("jah");
+				}
 			
 				kulu.setSumma(summa);
 				kulu.setKuluNimi(nimi);
@@ -347,6 +356,73 @@ public class RahavoogController {
 				yldkulud.add(kulu);
 			}
 			try{rs6.close();stmt6.close();}catch(Exception ex){}
+			
+			for(int i = 0; i<3 ; i++){
+				
+				kaibemaksud[i] = 0.0;
+				
+				Calendar cal2 = Calendar.getInstance();
+				cal2.set(Calendar.YEAR, hetkeAasta);
+				cal2.set(Calendar.MONTH, alguseKuu+i-2);
+				cal2.set(Calendar.DAY_OF_MONTH, 21);
+				
+				Calendar cal3 = Calendar.getInstance();
+				cal3.set(Calendar.YEAR, hetkeAasta);
+				cal3.set(Calendar.MONTH, alguseKuu+i-1);
+				cal3.set(Calendar.DAY_OF_MONTH, 20);
+
+				Statement stmt7 = con.createStatement();
+				String query7 = "SELECT tulu FROM tulud WHERE (YEAR(aeg)="+cal2.get(Calendar.YEAR)+" AND MONTH(aeg) = "+(cal2.get(Calendar.MONTH)+1)+" AND DAY(aeg) >= "+cal2.get(Calendar.DAY_OF_MONTH)+") AND (YEAR(aeg)="+cal3.get(Calendar.YEAR)+" AND MONTH(aeg) = "+(cal3.get(Calendar.MONTH)+1)+" AND DAY(aeg) <= "+cal3.get(Calendar.DAY_OF_MONTH)+") AND kaibemaksuArvestatakse = 1 AND juhtID="+juhtID;
+				ResultSet rs7 = stmt7.executeQuery(query7);
+				
+				while(rs7.next()){
+					kaibemaksud[i] = kaibemaksud[i]+rs7.getDouble("tulu");
+				}
+				try{rs7.close();stmt7.close();}catch(Exception ex){}
+			}
+			
+			for(int i = 0; i<3 ; i++){
+				
+				kaibemaksud[i+3] = 0.0;
+				
+				Calendar cal2 = Calendar.getInstance();
+				cal2.set(Calendar.YEAR, hetkeAasta);
+				cal2.set(Calendar.MONTH, alguseKuu+i-2);
+				cal2.set(Calendar.DAY_OF_MONTH, 21);
+				
+				Calendar cal3 = Calendar.getInstance();
+				cal3.set(Calendar.YEAR, hetkeAasta);
+				cal3.set(Calendar.MONTH, alguseKuu+i-1);
+				cal3.set(Calendar.DAY_OF_MONTH, 20);
+
+				Statement stmt7 = con.createStatement();
+				String query7 = "SELECT kulu,kuluNimi FROM kulud WHERE (YEAR(aeg)="+cal2.get(Calendar.YEAR)+" AND MONTH(aeg) = "+(cal2.get(Calendar.MONTH)+1)+" AND DAY(aeg) >= "+cal2.get(Calendar.DAY_OF_MONTH)+") AND (YEAR(aeg)="+cal3.get(Calendar.YEAR)+" AND MONTH(aeg) = "+(cal3.get(Calendar.MONTH)+1)+" AND DAY(aeg) <= "+cal3.get(Calendar.DAY_OF_MONTH)+") AND kaibemaksuArvestatakse = 1 AND juhtID="+juhtID;
+				ResultSet rs7 = stmt7.executeQuery(query7);
+				
+				while(rs7.next()){
+					kaibemaksud[i+3] = kaibemaksud[i+3]+rs7.getDouble("kulu");
+				}
+				try{rs7.close();stmt7.close();}catch(Exception ex){}
+				
+				Statement stmt8 = con.createStatement();
+				String query8 = "SELECT yldkulu,yldkuluNimi FROM yldkulud WHERE (YEAR(algusAeg)="+cal2.get(Calendar.YEAR)+" AND MONTH(algusAeg) = "+(cal2.get(Calendar.MONTH)+1)+" AND DAY(algusAeg) >= "+cal2.get(Calendar.DAY_OF_MONTH)+") AND (YEAR(algusAeg)="+cal3.get(Calendar.YEAR)+" AND MONTH(algusAeg) = "+(cal3.get(Calendar.MONTH)+1)+" AND DAY(algusAeg) <= "+cal3.get(Calendar.DAY_OF_MONTH)+") AND korduv = 0 AND kaibemaksuArvestatakse = 1 AND juhtID="+juhtID;
+				ResultSet rs8 = stmt8.executeQuery(query8);
+				
+				while(rs8.next()){
+					kaibemaksud[i+3] = kaibemaksud[i+3]+rs8.getDouble("yldkulu");
+				}
+				try{rs8.close();stmt8.close();}catch(Exception ex){}
+				
+				Statement stmt9 = con.createStatement();
+				String query9 = "SELECT yldkulu,yldkuluNimi FROM yldkulud WHERE ((YEAR(algusAeg)<"+cal2.get(Calendar.YEAR)+") OR (YEAR(algusAeg)="+cal3.get(Calendar.YEAR)+" AND MONTH(algusAeg) = "+(cal3.get(Calendar.MONTH)+1)+" AND DAY(algusAeg) <= "+cal3.get(Calendar.DAY_OF_MONTH)+") OR (YEAR(algusAeg)="+cal2.get(Calendar.YEAR)+" AND MONTH(algusAeg) <= "+(cal2.get(Calendar.MONTH)+1)+" AND DAY(algusAeg) >= "+cal2.get(Calendar.DAY_OF_MONTH)+") OR (YEAR(algusAeg)="+cal3.get(Calendar.YEAR)+" AND MONTH(algusAeg) <= "+(cal3.get(Calendar.MONTH)+1)+" AND DAY(algusAeg) <= "+cal3.get(Calendar.DAY_OF_MONTH)+")) AND korduv = 1 AND kaibemaksuArvestatakse = 1 AND juhtID="+juhtID;
+				ResultSet rs9 = stmt9.executeQuery(query9);
+				
+				while(rs9.next()){
+					kaibemaksud[i+3] = kaibemaksud[i+3]+rs9.getDouble("yldkulu");
+				}
+				try{rs9.close();stmt9.close();}catch(Exception ex){}
+			}
+			
 		}
 		catch(Exception x){
 			x.printStackTrace();
@@ -368,6 +444,23 @@ public class RahavoogController {
 		m.addAttribute("hetkeKuupaev",Kulu.AJAFORMAAT.format(new Date()));
 		m.addAttribute("teade",teade);
 		m.addAttribute("andmedString",andmed);
+		
+		
+		m.addAttribute("esimeneKuu",Kuud.KUUD.get(hetkeKvartal).get(0));
+		m.addAttribute("teineKuu",Kuud.KUUD.get(hetkeKvartal).get(1));
+		m.addAttribute("kolmasKuu",Kuud.KUUD.get(hetkeKvartal).get(2));
+		
+		m.addAttribute("esimeneKaibemaksTulu",kaibemaksud[0]);
+		m.addAttribute("esimeneKaibemaksKulu",kaibemaksud[3]);
+		m.addAttribute("esimeneKaibemaksBilanss",kaibemaksud[3]-kaibemaksud[0]);
+		
+		m.addAttribute("teineKaibemaksTulu",kaibemaksud[1]);
+		m.addAttribute("teineKaibemaksKulu",kaibemaksud[4]);
+		m.addAttribute("teineKaibemaksBilanss",kaibemaksud[4]-kaibemaksud[1]);
+		
+		m.addAttribute("kolmasKaibemaksTulu",kaibemaksud[2]);
+		m.addAttribute("kolmasKaibemaksKulu",kaibemaksud[5]);
+		m.addAttribute("kolmasKaibemaksBilanss",kaibemaksud[5]-kaibemaksud[2]);
 		
 		teade = null;
 		return "vaadeRahavoog"; 
@@ -456,8 +549,8 @@ public class RahavoogController {
 		return uusMap;
 	}
 	
-	@RequestMapping(value = "/vaadeRahavoog.htm", method = RequestMethod.POST, params = {"summa","nimetus","kuupaev","korduv"})
-	public void lisaUusYldKulu(@RequestParam("summa") String s,@RequestParam("nimetus") String nimetus,@RequestParam("kuupaev") String k,@RequestParam("korduv") boolean korduv){
+	@RequestMapping(value = "/vaadeRahavoog.htm", method = RequestMethod.POST, params = {"summa","nimetus","kuupaev","korduv","kaibemaks"})
+	public void lisaUusYldKulu(@RequestParam("summa") String s,@RequestParam("nimetus") String nimetus,@RequestParam("kuupaev") String k,@RequestParam("korduv") boolean korduv,@RequestParam("kaibemaks") String kaibemaks){
 
 		Double summa = 0.0;
 		try{
@@ -474,7 +567,7 @@ public class RahavoogController {
 			return;
 		}
 		
-		int vastus = Kulu.lisaYldKuluAndmebaasi(new Kulu(nimetus,kuupäev,summa),korduv,juhtID);
+		int vastus = Kulu.lisaYldKuluAndmebaasi(new Kulu(nimetus,kuupäev,summa,kaibemaks),korduv,juhtID);
 				
 		if(vastus == Kulu.VIGA_ANDMEBAASIGA_ÜHENDUSMISEL){
 			teade = "Viga andmebaasiga ühendumisel!";
@@ -504,6 +597,8 @@ public class RahavoogController {
 			}catch(Exception x){
 			}
 			
+			String kaibemaks = rida.split(";")[5];
+
 			Kulu kulu = new Kulu();
 			
 			kulu.setKuluNimi(rida.split(";")[1]);
@@ -511,6 +606,7 @@ public class RahavoogController {
 			kulu.setKuluID(Integer.parseInt(rida.split(";")[0]));
 			kulu.setAeg(kuupäev);
 			kulu.setSumma(summa);
+			kulu.setkäibemaksuArvestatakse(kaibemaks);
 			
 			kulud.add(kulu);
 		}

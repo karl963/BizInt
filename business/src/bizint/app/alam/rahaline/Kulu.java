@@ -26,6 +26,7 @@ public class Kulu {
 	private String kasutajaNimi = "";
 	private boolean korduv = false;
 	private int kuluID;
+	private String käibemaksuArvestatakse = "ei";
 	
 	  ///////////\\\\\\\\\\\\
 	 ///// constructors \\\\\\
@@ -45,6 +46,15 @@ public class Kulu {
 		this.summa = summa;
 		this.projektID = 0;
 		stringAeg = Kulu.AJAFORMAAT.format(new Date());
+	}
+	
+	public Kulu(String kuluNimi, Date aeg, Double summa,String kaibemaks){
+		this.kuluNimi = kuluNimi;
+		this.aeg = aeg;
+		this.summa = summa;
+		this.projektID = 0;
+		stringAeg = Kulu.AJAFORMAAT.format(new Date());
+		this.käibemaksuArvestatakse = kaibemaks;
 	}
 	
 	  ///////////\\\\\\\\\\\\
@@ -82,7 +92,7 @@ public class Kulu {
 			Timestamp aeg = new Timestamp(kulu.getAeg().getTime());
 			
 			Statement stmt = con.createStatement();
-			String query = "INSERT INTO yldkulud (yldkuluNimi,yldkulu,algusAeg,korduv,juhtID) VALUES ('"+kulu.getKuluNimi()+"',"+kulu.getSumma()+",'"+aeg+"',"+korduv+","+juhtID+")";
+			String query = "INSERT INTO yldkulud (yldkuluNimi,yldkulu,algusAeg,korduv,kaibemaksuArvestatakse,juhtID) VALUES ('"+kulu.getKuluNimi()+"',"+kulu.getSumma()+",'"+aeg+"',"+korduv+","+kulu.getkasArvestaKaibemaksu()+","+juhtID+")";
 			stmt.executeUpdate(query);
 			
 		}catch(Exception x){
@@ -110,9 +120,9 @@ public class Kulu {
 			for(Kulu kulu : kulud){
 
 				Timestamp aeg = new Timestamp(kulu.getAeg().getTime());
-				
+
 				Statement stmt = con.createStatement();
-				String query = "UPDATE yldkulud SET yldkuluNimi='"+kulu.getKuluNimi()+"', yldkulu="+kulu.getSumma()+", algusAeg='"+aeg+"', korduv="+kulu.isKorduv()+" WHERE juhtID="+juhtID+" AND yldkuluID="+kulu.getKuluID();
+				String query = "UPDATE yldkulud SET yldkuluNimi='"+kulu.getKuluNimi()+"', yldkulu="+kulu.getSumma()+", algusAeg='"+aeg+"', korduv="+kulu.isKorduv()+", kaibemaksuArvestatakse = "+kulu.getkasArvestaKaibemaksu()+" WHERE juhtID="+juhtID+" AND yldkuluID="+kulu.getKuluID();
 				stmt.executeUpdate(query);
 			}
 			
@@ -217,6 +227,27 @@ public class Kulu {
 
 	public void setKuluID(int kuluID) {
 		this.kuluID = kuluID;
+	}
+	
+	public String getkäibemaksuArvestatakse(){
+		return käibemaksuArvestatakse;
+	}
+	
+	public void setkäibemaksuArvestatakse(String k){
+		this.käibemaksuArvestatakse = k;
+	}
+	
+	public boolean getkasArvestaKaibemaksu(){
+		if(käibemaksuArvestatakse.contains("jah")){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	public Object getKaibemaks(){
+		return (Double)summa*0.2;
 	}
 
 }

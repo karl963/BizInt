@@ -540,13 +540,13 @@ public class Projekt {
 			Timestamp aeg = new Timestamp(kulu.getAeg().getTime());
 		
 			if(!kulu.getKasutajaNimi().equals("")){
-				String query = "INSERT INTO kulud (kulu, aeg, kuluNimi, projekt_ID, kaspalk,juhtID) "
-						+ "VALUES ("+kulu.getSumma()+",'"+aeg+"','palk töötajale: "+kulu.getKasutajaNimi()+"',"+kulu.getProjektID()+",1,"+juhtID+")";
+				String query = "INSERT INTO kulud (kulu, aeg, kuluNimi, projekt_ID, kaspalk,kaibemaksuArvestus,juhtID) "
+						+ "VALUES ("+kulu.getSumma()+",'"+aeg+"','palk töötajale: "+kulu.getKasutajaNimi()+"',"+kulu.getProjektID()+",1,"+kulu.getkasArvestaKaibemaksu()+","+juhtID+")";
 				stmt.executeUpdate(query);
 			}
 			else{
-				String query = "INSERT INTO kulud (kulu, aeg, kuluNimi, projekt_ID,juhtID) "
-					+ "VALUES ("+kulu.getSumma()+",'"+aeg+"','"+kulu.getKuluNimi()+"',"+kulu.getProjektID()+","+juhtID+")";
+				String query = "INSERT INTO kulud (kulu, aeg, kuluNimi, projekt_ID,kaibemaksuArvestus,juhtID) "
+					+ "VALUES ("+kulu.getSumma()+",'"+aeg+"','"+kulu.getKuluNimi()+"',"+kulu.getProjektID()+","+kulu.getkasArvestaKaibemaksu()+","+juhtID+")";
 				stmt.executeUpdate(query);
 			}
 			
@@ -597,8 +597,8 @@ public class Projekt {
 			stmt = con.createStatement();
 			
 			Timestamp aeg = new Timestamp(tulu.getAeg().getTime());
-			String query = "INSERT INTO tulud (tulu, aeg, tuluNimi, projekt_ID,juhtID) "
-				+ "VALUES ("+tulu.getSumma()+",'"+aeg+"','"+tulu.getTuluNimi()+"',"+tulu.getProjektID()+","+juhtID+")";
+			String query = "INSERT INTO tulud (tulu, aeg, tuluNimi, projekt_ID,kaibemaksuArvestatakse,juhtID) "
+				+ "VALUES ("+tulu.getSumma()+",'"+aeg+"','"+tulu.getTuluNimi()+"',"+tulu.getProjektID()+","+tulu.getkasArvestaKaibemaksu()+","+juhtID+")";
 
 			stmt.executeUpdate(query);
 			

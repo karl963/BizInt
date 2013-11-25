@@ -303,7 +303,7 @@ public class ProjektController {
 			try{rs.close();stmt.close();}catch(Exception x){}
 			
 			Statement stmt2 = con.createStatement();
-			String query2 = "SELECT tulu, tuluNimi, aeg FROM tulud WHERE projekt_ID="+projektID+" AND juhtID="+juhtID;
+			String query2 = "SELECT tulu, tuluNimi, aeg, kaibemaksuArvestatakse FROM tulud WHERE projekt_ID="+projektID+" AND juhtID="+juhtID;
 			ResultSet rs2 = stmt2.executeQuery(query2);
 			
 			while(rs2.next()){
@@ -313,6 +313,10 @@ public class ProjektController {
 				Double summa = rs2.getDouble("tulu");
 				String tuluNimi = rs2.getString("tuluNimi");
 				Date aeg = rs2.getTimestamp("aeg");
+				
+				if(rs2.getBoolean("kaibemaksuArvestatakse")){
+					tulu.setkäibemaksuArvestatakse("jah");
+				}
 				
 				tulu.setSumma(summa);
 				tulu.setTuluNimi(tuluNimi);
@@ -324,7 +328,7 @@ public class ProjektController {
 			try{rs2.close();stmt2.close();}catch(Exception x){}
 			
 			Statement stmt3 = con.createStatement();
-			String query3 = "SELECT kulu, kuluNimi, aeg FROM kulud WHERE projekt_ID="+projektID+" AND juhtID="+juhtID;
+			String query3 = "SELECT kulu, kuluNimi, aeg, kaibemaksuArvestatakse FROM kulud WHERE projekt_ID="+projektID+" AND juhtID="+juhtID;
 			ResultSet rs3 = stmt3.executeQuery(query3);
 			
 			while(rs3.next()){
@@ -333,6 +337,10 @@ public class ProjektController {
 				Double summa = rs3.getDouble("kulu");
 				String kuluNimi = rs3.getString("kuluNimi");
 				Date aeg = rs3.getTimestamp("aeg");
+				
+				if(rs3.getBoolean("kaibemaksuArvestatakse")){
+					kulu.setkäibemaksuArvestatakse("jah");
+				}
 				
 				kulu.setSumma(summa);
 				kulu.setKuluNimi(kuluNimi);
