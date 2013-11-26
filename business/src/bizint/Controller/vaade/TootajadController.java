@@ -121,7 +121,7 @@ public class TootajadController {
 			Map<Long,String> kuupäevadMap = new HashMap<Long,String>();
 			
 			Statement stmt0 = con.createStatement();
-			String query0 = "SELECT aeg FROM tulud, projektikasutajad,kasutajad WHERE projektikasutajad.projekt_ID=tulud.projekt_ID AND YEAR(aeg)="+hetkeAasta+" AND projektikasutajad.kasutaja_ID=kasutajad.kasutajaID AND (MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+" OR MONTH(aeg)="+(algusKvartal+2)+")"+" AND tulud.juhtID="+juhtID+" AND projektikasutajad.juhtID="+juhtID+" AND kasutajad.juhtID="+juhtID+" AND töötab=1";
+			String query0 = "SELECT aeg FROM tulud, projektikasutajad,kasutajad WHERE projektikasutajad.projekt_ID=tulud.projekt_ID AND YEAR(aeg)="+hetkeAasta+" AND projektikasutajad.kasutaja_ID=kasutajad.kasutajaID AND (MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+" OR MONTH(aeg)="+(algusKvartal+2)+")"+" AND tulud.juhtID="+juhtID+" AND projektikasutajad.juhtID="+juhtID+" AND kasutajad.juhtID="+juhtID+" AND töötab=1 order by aeg asc";
 			ResultSet rs0 = stmt0.executeQuery(query0);
 			
 			while(rs0.next()){
@@ -150,7 +150,7 @@ public class TootajadController {
 			Map<Long,String> kuupäevadKuludMap = new HashMap<Long,String>();
 			
 			Statement stmt01 = con.createStatement();
-			String query01 = "SELECT aeg FROM kulud WHERE YEAR(aeg)="+hetkeAasta+" AND (MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+" OR MONTH(aeg)="+(algusKvartal+2)+")"+" AND kulud.juhtID="+juhtID+" AND kasPalk=1";
+			String query01 = "SELECT aeg FROM kulud WHERE YEAR(aeg)="+hetkeAasta+" AND (MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+" OR MONTH(aeg)="+(algusKvartal+2)+")"+" AND kulud.juhtID="+juhtID+" AND kasPalk=1 order by aeg asc";
 			ResultSet rs01 = stmt01.executeQuery(query01);
 			
 			while(rs01.next()){
@@ -225,7 +225,7 @@ public class TootajadController {
 				}
 
 				Statement stmt3 = con.createStatement();
-				String query3 = "SELECT tulu, osalus, aeg FROM tulud, projektikasutajad WHERE projektikasutajad.kasutaja_ID="+kasutajaID+" AND tulud.projekt_ID=projektikasutajad.projekt_ID AND YEAR(aeg)="+hetkeAasta+" AND (MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+" OR MONTH(aeg)="+(algusKvartal+2)+")"+" AND tulud.juhtID="+juhtID+" AND projektikasutajad.juhtID="+juhtID;
+				String query3 = "SELECT tulu, osalus, aeg FROM tulud, projektikasutajad WHERE projektikasutajad.kasutaja_ID="+kasutajaID+" AND tulud.projekt_ID=projektikasutajad.projekt_ID AND YEAR(aeg)="+hetkeAasta+" AND (MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+" OR MONTH(aeg)="+(algusKvartal+2)+")"+" AND tulud.juhtID="+juhtID+" AND projektikasutajad.juhtID="+juhtID+" order by aeg asc";
 				ResultSet rs3 = stmt3.executeQuery(query3);
 				
 				while(rs3.next()){
@@ -248,7 +248,7 @@ public class TootajadController {
 				try{rs3.close();stmt3.close();}catch(Exception ex){}
 				
 				Statement stmt4 = con.createStatement();
-				String query4 = "SELECT kulu, aeg FROM kulud WHERE kulud.kuluNimi LIKE '%"+kasutajaNimi+"%' AND YEAR(aeg)="+hetkeAasta+" AND (MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+" OR MONTH(aeg)="+(algusKvartal+2)+")"+" AND kulud.juhtID="+juhtID+" AND kasPalk=1";
+				String query4 = "SELECT kulu, aeg FROM kulud WHERE kulud.kuluNimi LIKE '%"+kasutajaNimi+"%' AND YEAR(aeg)="+hetkeAasta+" AND (MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+" OR MONTH(aeg)="+(algusKvartal+2)+")"+" AND kulud.juhtID="+juhtID+" AND kasPalk=1 order by aeg asc";
 				ResultSet rs4 = stmt4.executeQuery(query4);
 
 				while(rs4.next()){
@@ -422,7 +422,7 @@ public class TootajadController {
 			Map<Long,String> kuupäevadKuludMap = new HashMap<Long,String>();
 			
 			Statement stmt01 = con.createStatement();
-			String query01 = "SELECT aeg FROM kulud WHERE YEAR(aeg)="+hetkeAasta+" AND (MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+" OR MONTH(aeg)="+(algusKvartal+2)+")"+" AND kulud.juhtID="+juhtID+" AND kasPalk=1";
+			String query01 = "SELECT aeg FROM kulud WHERE YEAR(aeg)="+hetkeAasta+" AND (MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+" OR MONTH(aeg)="+(algusKvartal+2)+")"+" AND kulud.juhtID="+juhtID+" AND kasPalk=1 order by aeg asc";
 			ResultSet rs01 = stmt01.executeQuery(query01);
 			
 			while(rs01.next()){
@@ -495,7 +495,7 @@ public class TootajadController {
 				}
 
 				Statement stmt3 = con.createStatement();
-				String query3 = "SELECT tulu, osalus, aeg FROM tulud, projektikasutajad WHERE projektikasutajad.kasutaja_ID="+kasutajaID+" AND tulud.projekt_ID=projektikasutajad.projekt_ID AND YEAR(aeg)="+hetkeAasta+" AND (MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+" OR MONTH(aeg)="+(algusKvartal+2)+")"+" AND projektikasutajad.juhtID="+juhtID+" AND tulud.juhtID="+juhtID;
+				String query3 = "SELECT tulu, osalus, aeg FROM tulud, projektikasutajad WHERE projektikasutajad.kasutaja_ID="+kasutajaID+" AND tulud.projekt_ID=projektikasutajad.projekt_ID AND YEAR(aeg)="+hetkeAasta+" AND (MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+" OR MONTH(aeg)="+(algusKvartal+2)+")"+" AND projektikasutajad.juhtID="+juhtID+" AND tulud.juhtID="+juhtID+" order by aeg asc";
 				ResultSet rs3 = stmt3.executeQuery(query3);
 				
 				while(rs3.next()){
@@ -519,7 +519,7 @@ public class TootajadController {
 				try{rs3.close();stmt3.close();}catch(Exception ex){}
 				
 				Statement stmt4 = con.createStatement();
-				String query4 = "SELECT kulu, aeg FROM kulud WHERE kulud.kuluNimi LIKE '%"+kasutajaNimi+"%' AND YEAR(aeg)="+hetkeAasta+" AND (MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+" OR MONTH(aeg)="+(algusKvartal+2)+")"+" AND kulud.juhtID="+juhtID+" AND kulud.kasPalk=1";
+				String query4 = "SELECT kulu, aeg FROM kulud WHERE kulud.kuluNimi LIKE '%"+kasutajaNimi+"%' AND YEAR(aeg)="+hetkeAasta+" AND (MONTH(aeg)="+(algusKvartal)+" OR MONTH(aeg)="+(algusKvartal+1)+" OR MONTH(aeg)="+(algusKvartal+2)+")"+" AND kulud.juhtID="+juhtID+" AND kulud.kasPalk=1 order by aeg asc";
 				ResultSet rs4 = stmt4.executeQuery(query4);
 
 				while(rs4.next()){
