@@ -43,6 +43,7 @@
 
 <div class="pipelineDivSuurus">
     <div id="chart_div" class="diagrammiKorgus"></div>
+    <div class="googleTekst">Kasutatud Google Visualization-it</div>
 </div>
 
 <table id="kaibemaksuTabel">

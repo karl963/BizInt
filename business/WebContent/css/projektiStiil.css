@@ -16,6 +16,13 @@
 	padding:3px;
 }
 
+.googleTekst{
+	text-align:right;
+	color:gray;
+	font-size:16px;
+	
+}
+
 #rahavooDiv{
 	left:10px;
 	position:absolute;

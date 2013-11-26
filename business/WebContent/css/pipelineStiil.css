@@ -8,3 +8,13 @@
 {
 	height: 470px;
 }
+
+#pipelineDiv{
+	left:10px;
+	position:absolute;
+	top:170px;
+	width:1100px;
+	height:465px;
+	overflow-x:auto;
+	overflow-y:auto;
+}
