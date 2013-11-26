@@ -12,10 +12,11 @@
 
 <button type="button" style= "display:none;" id = "pipelineAndmed" onclick="javascript:tekitaPipelineGraaf('${staatused}','pipeline')"></button>
 
-<br>
-<br>
-<br>
+<div id="pipelineDiv">
 
-<div class="pipelineDivSuurus">
-    <div id="chart_div" class="diagrammiKorgus"></div>
+	<div class="pipelineDivSuurus">
+	    <div id="chart_div" class="diagrammiKorgus"></div>
+	    <div class="googleTekst">Kasutatud Google Visualization-it</div>
+	</div>
+
 </div>
