@@ -317,6 +317,9 @@ public class ProjektController {
 				if(rs2.getBoolean("kaibemaksuArvestatakse")){
 					tulu.setkäibemaksuArvestatakse("jah");
 				}
+				else{
+					tulu.setkäibemaksuArvestatakse("ei");
+				}
 				
 				tulu.setSumma(summa);
 				tulu.setTuluNimi(tuluNimi);
@@ -340,6 +343,9 @@ public class ProjektController {
 				
 				if(rs3.getBoolean("kaibemaksuArvestatakse")){
 					kulu.setkäibemaksuArvestatakse("jah");
+				}
+				else{
+					kulu.setkäibemaksuArvestatakse("ei");
 				}
 				
 				kulu.setSumma(summa);

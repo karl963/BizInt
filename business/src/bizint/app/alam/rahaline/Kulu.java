@@ -26,7 +26,7 @@ public class Kulu {
 	private String kasutajaNimi = "";
 	private boolean korduv = false;
 	private int kuluID;
-	private String käibemaksuArvestatakse = "ei";
+	private String käibemaksuArvestatakse = "jah";
 	
 	  ///////////\\\\\\\\\\\\
 	 ///// constructors \\\\\\

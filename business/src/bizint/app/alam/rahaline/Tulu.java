@@ -14,7 +14,7 @@ public class Tulu {
 	private Date aeg;
 	private int projektID;
 	private String stringAeg;
-	private String käibemaksuArvestatakse = "ei";
+	private String käibemaksuArvestatakse = "jah";
 	
 	  ///////////\\\\\\\\\\\\
 	 ///// constructors \\\\\\

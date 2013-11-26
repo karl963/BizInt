@@ -346,6 +346,9 @@ public class RahavoogController {
 				if(rs6.getBoolean("kaibemaksuArvestatakse")){
 					kulu.setkäibemaksuArvestatakse("jah");
 				}
+				else{
+					kulu.setkäibemaksuArvestatakse("ei");
+				}
 			
 				kulu.setSumma(summa);
 				kulu.setKuluNimi(nimi);

@@ -83,7 +83,7 @@ Reiting: ${projekt.reitinguHTML}
 	           <form:input path="aeg.time" type="hidden"/>
 	           <input class="projektDetailNupp" type="submit" value="lisa">
 </form:form>
-<div id="tuluArvestaKaibemaksuDiv"><input type=checkbox id="tuluArvestaKaibemaksuBox" /> Arvesta Käibemaksu</div>
+<div id="tuluArvestaKaibemaksuDiv"><input type=checkbox id="tuluArvestaKaibemaksuBox" checked/> Arvesta Käibemaksu</div>
 
 <br>
 
@@ -106,7 +106,7 @@ Reiting: ${projekt.reitinguHTML}
 	    <form:input path="aeg.time" type="hidden" />
 	   	<input class="kuluLisamiseNupp projektDetailNupp" type="submit" value="lisa">
 </form:form>
-<div id="kuluArvestaKaibemaksuDiv"><input type=checkbox id="kuluArvestaKaibemaksuBox" /> Arvesta Käibemaksu</div>
+<div id="kuluArvestaKaibemaksuDiv"><input type=checkbox id="kuluArvestaKaibemaksuBox" checked/> Arvesta Käibemaksu</div>
 <div class="kuluPalkCheck" ><input type="checkbox" name="kuluPalk" id="kuluPalk">Töötaja Palk</div>
 
 <br>
@@ -152,7 +152,7 @@ Reiting: ${projekt.reitinguHTML}
 		<td><b class="kuluSumma">- ${kulu.summa}</b></td>
 		<td><small>	
 			<c:choose>
-			<c:when test="${kulu.kasArvestaKaibemaksu==true}">
+			<c:when test="${kulu.kasArvestaKaibemaksu==false}">
 				${kulu.kuluNimi}
 			</c:when>
 			<c:otherwise>
