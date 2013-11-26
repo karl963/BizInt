@@ -45,8 +45,9 @@ Current RELEASED (taged) verison: 2.0 alpha
 * Saab n2ha k2ibemaksu tulude/kulude pealt valitud kvartalis asuvate kuude kaupa
 
 -Arhiivi vaade
-* Saab vaadata pipeline vaadet
+* Saab vaadata arhiivi vaadet
 * Saab projekte arhiivis tõsta ühest kvartalist teise
+* Saab vaadata arhiveeritud projekte aastate kaupa
 
 -- Lisam2rkused
 * Syntaksiliselt valesti lisatud tulu/kulu asendatakse automaatselt 0 -ga
