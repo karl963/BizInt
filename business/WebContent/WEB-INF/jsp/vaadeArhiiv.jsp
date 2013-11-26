@@ -8,6 +8,19 @@
 	<c:if test="${not empty teade}"><div class="message green">${teade}</div></c:if>
 </div>
 
+<select id="arhiivAastaValik">
+	<c:forEach items="${aastad}" var="aasta">
+		<c:choose>
+			<c:when test="${aasta == hetkeAasta}">
+    			<option value="${aasta}" selected>${aasta}</option>
+    		</c:when>
+    		<c:otherwise>
+    			<option value="${aasta}">${aasta}</option>
+    		</c:otherwise>
+    	</c:choose>
+    </c:forEach>
+</select>
+
 <div class=staatusteKonteiner>
 
 <c:forEach items="${staatused}" var="staatus">

@@ -551,6 +551,9 @@ $(document).ready(function() {
 	 $('#tootajadGraafKvartaliteValikud').change(function() {
 	     document.location.href = "vaadeTootajadGraaf.htm?aasta="+$("#tootajadGraafAastaValik").val()+"&kvartal="+$(this).val();
 	 });
+	 $('#arhiivAastaValik').change(function() {
+		 document.location.href = "vaadeArhiiv.htm?aasta="+$(this).val();
+	 });
 
 });
 

@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -422,6 +423,10 @@ public class Projekt {
 	
 	public static int paneProjektArhiiviAndmebaasis(int projektID, int juhtID){
 		
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		int hetkeAasta = cal.get(Calendar.YEAR);
+		
 		Connection con = new Mysql().getConnection();
 		if(con==null){
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
@@ -429,33 +434,27 @@ public class Projekt {
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
-			String query = "UPDATE projektid SET arhiivis = '1', staatus_ID = '1' WHERE projektID="+projektID+" AND juhtID="+juhtID;
+			String query = "UPDATE projektid SET aeg = '"+hetkeAasta+"' arhiivis = '1', staatus_ID = '1' WHERE projektID="+projektID+" AND juhtID="+juhtID;
 			stmt.executeUpdate(query);
 			
+			Statement stmtlogi1 = con.createStatement();
+			String querylogi1 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
+			ResultSet rslogi1 = stmtlogi1.executeQuery(querylogi1);
+			rslogi1.next();
+			String kasutajanimi = rslogi1.getString("kasutajaNimi");
+			
+			Statement stmtlogi2 = con.createStatement();
+			String querylogi2 = "INSERT INTO logid (projekt_ID, sonum, juhtID) VALUES ("+projektID+",'"+kasutajanimi+" arhiveeris projekti',"+juhtID+")";
+			stmtlogi2.executeUpdate(querylogi2);	
+			
 			try{stmt.close();}catch(Exception x){}
+			try{stmtlogi1.close();}catch(Exception x){}
+			try{stmtlogi2.close();}catch(Exception x){}
 		} catch (SQLException e) {
 			e.printStackTrace();
 			if (con!=null) try {con.close();}catch (Exception ignore) {}
 			return Projekt.VIGA_ANDMEBAASIGA_ÜHENDUMISEL;
 		}
-		
-		try {
-			
-			Statement stmt9 = con.createStatement();
-			String query9 = "SELECT kasutajaNimi FROM juhid WHERE juhtID="+juhtID;
-			ResultSet rs9 = stmt9.executeQuery(query9);
-			rs9.next();
-			String kasutajanimi = rs9.getString("kasutajaNimi");
-			
-			Statement stmt2 = con.createStatement();
-			String query2 = "INSERT INTO logid (projekt_ID, sonum,juhtID) VALUES ("+projektID+","+"'"+kasutajanimi+" arhiveeris projekti " +"',"+juhtID+")";
-			stmt2.executeUpdate(query2);
-			
-			try{stmt2.close();}catch(Exception x){}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
 		
 		if (con!=null) try {con.close();}catch (Exception ignore) {}
 		return Projekt.KÕIK_OKEI;
