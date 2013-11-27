@@ -194,15 +194,9 @@ public class RahavoogController {
 					
 					kuupäevad.put(stringAeg, 0.0);
 					
-					if(kulud.get(stringAeg) != null){
-						kulud.put(stringAeg, kulud.get(stringAeg)+kulu);
-					}
-					else{
-						kulud.put(stringAeg, kulu);
-					}
-					
 					if(rs.getInt("kaibemaksuArvestatakse")==1){
-						Double km = kulu/20;
+						Double km = kulu*0.2;
+						kulu = kulu+km;
 						if(kuludKm.get(stringAeg) != null){
 							kuludKm.put(stringAeg, kuludKm.get(stringAeg)+km);
 						}
@@ -210,6 +204,14 @@ public class RahavoogController {
 							kuludKm.put(stringAeg, km);
 						}
 					}
+					
+					if(kulud.get(stringAeg) != null){
+						kulud.put(stringAeg, kulud.get(stringAeg)+kulu);
+					}
+					else{
+						kulud.put(stringAeg, kulu);
+					}
+					
 				}
 			}
 			try{rs.close();stmt.close();}catch(Exception ex){}
@@ -228,15 +230,9 @@ public class RahavoogController {
 					
 					kuupäevad.put(stringAeg, 0.0);
 					
-					if(tulud.get(stringAeg) != null){
-						tulud.put(stringAeg, tulud.get(stringAeg)+tulu);
-					}
-					else{
-						tulud.put(stringAeg, tulu);
-					}
-					
 					if(rs2.getInt("kaibemaksuArvestatakse")==1){
-						Double km = tulu/20;
+						Double km = tulu*0.2;
+						tulu = tulu + km;
 						if(tuludKm.get(stringAeg) != null){
 							tuludKm.put(stringAeg, tuludKm.get(stringAeg)+km);
 						}
@@ -244,6 +240,14 @@ public class RahavoogController {
 							tuludKm.put(stringAeg, km);
 						}
 					}
+					
+					if(tulud.get(stringAeg) != null){
+						tulud.put(stringAeg, tulud.get(stringAeg)+tulu);
+					}
+					else{
+						tulud.put(stringAeg, tulu);
+					}
+					
 				}
 			}
 			try{rs2.close();stmt2.close();}catch(Exception ex){}
@@ -295,15 +299,9 @@ public class RahavoogController {
 	
 					kuupäevad.put(stringAeg, 0.0);
 					
-					if(kulud.get(stringAeg) != null){
-						kulud.put(stringAeg, kulud.get(stringAeg)+kulu);
-					}
-					else{
-						kulud.put(stringAeg, kulu);
-					}
-					
 					if(rs4.getInt("kaibemaksuArvestatakse")==1){
-						Double km = kulu/20;
+						Double km = kulu*0.2;
+						kulu = kulu + km;
 						if(kuludKm.get(stringAeg) != null){
 							kuludKm.put(stringAeg, kuludKm.get(stringAeg)+km);
 						}
@@ -311,6 +309,14 @@ public class RahavoogController {
 							kuludKm.put(stringAeg, km);
 						}
 					}
+					
+					if(kulud.get(stringAeg) != null){
+						kulud.put(stringAeg, kulud.get(stringAeg)+kulu);
+					}
+					else{
+						kulud.put(stringAeg, kulu);
+					}
+					
 				}
 			}
 			try{rs4.close();stmt4.close();}catch(Exception ex){}
@@ -345,15 +351,9 @@ public class RahavoogController {
 
 						kuupäevad.put(stringAeg, 0.0);
 						
-						if(kulud.get(stringAeg) != null){
-							kulud.put(stringAeg, kulud.get(stringAeg)+kulu);
-						}
-						else{
-							kulud.put(stringAeg, kulu);
-						}
-						
 						if(rs5.getInt("kaibemaksuArvestatakse")==1){
-							Double km = kulu/20;
+							Double km = kulu*0.2;
+							kulu = kulu +km;
 							if(kuludKm.get(stringAeg) != null){
 								kuludKm.put(stringAeg, kuludKm.get(stringAeg)+km);
 							}
@@ -361,6 +361,14 @@ public class RahavoogController {
 								kuludKm.put(stringAeg, km);
 							}
 						}
+						
+						if(kulud.get(stringAeg) != null){
+							kulud.put(stringAeg, kulud.get(stringAeg)+kulu);
+						}
+						else{
+							kulud.put(stringAeg, kulu);
+						}
+						
 					}
 				}
 			}
@@ -551,14 +559,14 @@ public class RahavoogController {
 	        	tuluTooltip = päev+"."+kuu+"##Kogu Tulu: "+tulu.intValue();
 	        }
 	        else{
-	        	tuluTooltip = päev+"."+kuu+"##Kogu Tulu: "+tulu.intValue()+"(+km: "+tuluKm.intValue()+")";
+	        	tuluTooltip = päev+"."+kuu+"##Kogu Tulu: "+tulu.intValue()+"(km sellest: "+tuluKm.intValue()+")";
 	        }
 	        
 	        if(kuluKm == 0.0){
 	        	kuluTooltip = päev+"."+kuu+"##Kogu Kulu: "+kulu.intValue();
 	        }
 	        else{
-	        	kuluTooltip = päev+"."+kuu+"##Kogu Kulu: "+kulu.intValue()+"(+km: "+kuluKm.intValue()+")";
+	        	kuluTooltip = päev+"."+kuu+"##Kogu Kulu: "+kulu.intValue()+"(km sellest: "+kuluKm.intValue()+")";
 	        }
 	        
 	        Double kasum = tulu-kulu;
