@@ -107,6 +107,12 @@
 	left:423px;
 }
 
+.arhiiv_selected_pos
+{
+	position:absolute;
+	left:587px;
+}
+
 .menu_button_text
 {
 	position:absolute;
