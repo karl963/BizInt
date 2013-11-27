@@ -570,7 +570,7 @@ function tekitaPipelineGraaf(sisendString,kaart){
 	if(sisendString == ""){
 		return;
 	}
-	
+
 	if(kaart == "pipeline"){
 		
 	    var andmed = sisendString.split("/");
@@ -596,31 +596,41 @@ function tekitaPipelineGraaf(sisendString,kaart){
 	    chart.draw(data, options);
     
 	}
+
 	else if(kaart == "rahavooGraaf"){
 		
-		andmedString = sisendString;
-		
-	    var andmed = sisendString.split("/");
-	    var tabel = new Array();
-	    tabel[0]= ["Aeg", "Kogu Tulu", "Kogu Kulu" , "Bilanss"] ;
-	    
-	    for(var i = 1;i < andmed.length ; i++){
-	    	var vaheTabel = andmed[i-1].split(";");
-	    		tabel[i] = [vaheTabel[0], parseFloat(vaheTabel[1]),parseFloat(vaheTabel[2]),parseFloat(vaheTabel[3])];	
-	    }
-	    var data = google.visualization.arrayToDataTable(tabel);
-	
-	    var options = {
-	      //curveType: "function",
-	      legend: {position: 'top'},
-	      colors: ['green','red', 'blue'],
-	      width: 500 + (50 * (tabel.length-1)),
-	      vAxis: {title: '€', titleTextStyle: {color: 'red'}},
-	      hAxis: {title: 'Kuupäev', titleTextStyle: {color: 'red'} }
-	    };
+		  var dataTable = new google.visualization.DataTable();
+		  dataTable.addColumn('string', 'Aeg');
+		  dataTable.addColumn('number', 'Kogu Tulu');
+		  dataTable.addColumn({type: 'string', role: 'tooltip'});
+		  dataTable.addColumn('number', 'Kogu Kulu');
+		  dataTable.addColumn({type: 'string', role: 'tooltip'});
+		  dataTable.addColumn('number', 'Bilanss');
+		  
+		    var andmed = sisendString.split("/");
+		    mituRida = 0;
+		    for(var i = 1;i < andmed.length ; i++){
+		    	var vaheTabel = andmed[i-1].split(";");
+		    	var tuluTooltip = vaheTabel[4].split("##");
+		    	var kuluTooltip = vaheTabel[5].split("##");
+		    	mituRida ++;
+				  dataTable.addRows([
+				                     [vaheTabel[0], parseFloat(vaheTabel[1]),tuluTooltip[0]+"\n"+tuluTooltip[1],parseFloat(vaheTabel[2]),kuluTooltip[0]+"\n"+kuluTooltip[1],parseFloat(vaheTabel[3])]
+				  ]);
+		    			
+		    }
 
-	    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
-	    chart.draw(data, options);
+		    var options = {
+		  	      legend: {position: 'top'},
+		  	      tooltip: { isHtml: true },
+		  	      colors: ['green','red', 'blue'],
+		  	      width: 500 + (50 * (mituRida-1)),
+		  	      vAxis: {title: '€', titleTextStyle: {color: 'red'}},
+		  	      hAxis: {title: 'Kuupäev', titleTextStyle: {color: 'red'} }
+		  	    };
+
+		  	    var chart = new google.visualization.LineChart(document.getElementById('chart_div'));
+		  	    chart.draw(dataTable, options);
 	    
 	}
 	
@@ -650,6 +660,18 @@ function tekitaPipelineGraaf(sisendString,kaart){
 		    
 		}
 }
+
+function createCustomHTMLContent(flagURL, totalGold, totalSilver, totalBronze) {
+	  return '<div style="padding:5px 5px 5px 5px;">' +
+	      '<img src="' + flagURL + '" style="width:75px;height:50px"><br/>' +
+	      '<table id="medals_layout">' + '<tr>' +
+	      '<td><img src="http://upload.wikimedia.org/wikipedia/commons/1/15/Gold_medal.svg" style="width:25px;height:25px"/></td>' +
+	      '<td><b>' + totalGold + '</b></td>' + '</tr>' + '<tr>' +
+	      '<td><img src="http://upload.wikimedia.org/wikipedia/commons/0/03/Silver_medal.svg" style="width:25px;height:25px"/></td>' +
+	      '<td><b>' + totalSilver + '</b></td>' + '</tr>' + '<tr>' +
+	      '<td><img src="http://upload.wikimedia.org/wikipedia/commons/5/52/Bronze_medal.svg" style="width:25px;height:25px"/></td>' +
+	      '<td><b>' + totalBronze + '</b></td>' + '</tr>' + '</table>' + '</div>';
+	}
 
 /*
 google.load("visualization", "1", {packages:["corechart"]});
@@ -761,9 +783,9 @@ $(document).ready(function(){
 	  });
 	  
 	  //staatuse tõstmise drag and drop
-	  $(".staatusteKonteiner").sortable({
+	  $(".staatuseDrag").sortable({
 		//placeholder: 'ajutineStaatusDiv',
-	    connectWith: ".staatusteKonteiner",
+	    connectWith: ".staatuseDrag",
 	    stop: function(event, ui) {
 	    	draggableStaatusJNR = ui.item.index() + 1;
 	    	muudaStaatuseJNR();
@@ -774,7 +796,7 @@ $(document).ready(function(){
 	  });
 
 	  $('.dropZoneStaatused').draggable({
-		connectToSortable: ".staatusteKonteiner",
+		connectToSortable: ".staatuseDrag",
 		cursor: 'move',
 	    helper: 'clone',
 	    appendTo: 'body',
@@ -798,7 +820,7 @@ $(document).ready(function(){
 	    }
 	  });
 		  
-	$('.staatusteKonteiner').droppable({
+	$('.staatuseDrag').droppable({
 		  accept: '.dropZoneStaatused',
 		  drop: function(event, ui) {
 		   	if(!dropToimus){

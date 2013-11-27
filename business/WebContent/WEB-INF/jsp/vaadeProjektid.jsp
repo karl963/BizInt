@@ -11,7 +11,7 @@
 
 <div class=textontop>
 
-<div class=staatusteKonteiner>
+<div class="staatusteKonteiner staatuseDrag">
 
 <c:forEach items="${staatused}" var="staatus">
 

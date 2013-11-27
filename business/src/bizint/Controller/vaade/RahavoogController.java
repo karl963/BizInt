@@ -167,6 +167,8 @@ public class RahavoogController {
 		Map<String,Double> tulud = new HashMap<String,Double>();
 		Map<String,Double> kulud = new HashMap<String,Double>();
 		Map<String,Double> kuupäevad = new HashMap<String,Double>();
+		Map<String,Double> tuludKm = new HashMap<String,Double>();
+		Map<String,Double> kuludKm = new HashMap<String,Double>();
 		
 		Timestamp algusAeg = null,lõppAeg = null;
 		
@@ -179,7 +181,7 @@ public class RahavoogController {
 		try{
 			
 			Statement stmt = con.createStatement();
-			String query = "SELECT kulu,aeg FROM kulud WHERE aeg >= '"+algusAeg.toString()+"' AND aeg <= '"+lõppAeg.toString()+"' AND juhtID="+juhtID;
+			String query = "SELECT kulu,aeg,kaibemaksuArvestatakse FROM kulud WHERE aeg >= '"+algusAeg.toString()+"' AND aeg <= '"+lõppAeg.toString()+"' AND juhtID="+juhtID;
 			ResultSet rs = stmt.executeQuery(query);
 			
 			while(rs.next()){
@@ -198,12 +200,22 @@ public class RahavoogController {
 					else{
 						kulud.put(stringAeg, kulu);
 					}
+					
+					if(rs.getInt("kaibemaksuArvestatakse")==1){
+						Double km = kulu/20;
+						if(kuludKm.get(stringAeg) != null){
+							kuludKm.put(stringAeg, kuludKm.get(stringAeg)+km);
+						}
+						else{
+							kuludKm.put(stringAeg, km);
+						}
+					}
 				}
 			}
 			try{rs.close();stmt.close();}catch(Exception ex){}
 			
 			Statement stmt2 = con.createStatement();
-			String query2 = "SELECT tulu,aeg FROM tulud WHERE aeg >= '"+algusAeg.toString()+"' AND aeg <= '"+lõppAeg.toString()+"' AND juhtID="+juhtID;
+			String query2 = "SELECT tulu,aeg,kaibemaksuArvestatakse FROM tulud WHERE aeg >= '"+algusAeg.toString()+"' AND aeg <= '"+lõppAeg.toString()+"' AND juhtID="+juhtID;
 			ResultSet rs2 = stmt2.executeQuery(query2);
 			
 			while(rs2.next()){
@@ -221,6 +233,16 @@ public class RahavoogController {
 					}
 					else{
 						tulud.put(stringAeg, tulu);
+					}
+					
+					if(rs2.getInt("kaibemaksuArvestatakse")==1){
+						Double km = tulu/20;
+						if(tuludKm.get(stringAeg) != null){
+							tuludKm.put(stringAeg, tuludKm.get(stringAeg)+km);
+						}
+						else{
+							tuludKm.put(stringAeg, km);
+						}
 					}
 				}
 			}
@@ -256,12 +278,13 @@ public class RahavoogController {
 					else{
 						kulud.put(stringAeg, kulu);
 					}
+					
 				}
 			}
 			try{rs3.close();stmt3.close();}catch(Exception ex){}
 			
 			Statement stmt4 = con.createStatement();
-			String query4 = "SELECT algusAeg, yldkulu FROM yldkulud WHERE korduv=0 AND MONTH(algusAeg)>="+alguseKuu+" AND MONTH(algusAeg)<="+lõpuKuu+" AND YEAR(algusAeg)="+algusAasta+" AND juhtID="+juhtID;
+			String query4 = "SELECT algusAeg, yldkulu, kaibemaksuArvestatakse FROM yldkulud WHERE korduv=0 AND MONTH(algusAeg)>="+alguseKuu+" AND MONTH(algusAeg)<="+lõpuKuu+" AND YEAR(algusAeg)="+algusAasta+" AND juhtID="+juhtID;
 			ResultSet rs4 = stmt4.executeQuery(query4);
 			
 			while(rs4.next()){
@@ -278,12 +301,22 @@ public class RahavoogController {
 					else{
 						kulud.put(stringAeg, kulu);
 					}
+					
+					if(rs4.getInt("kaibemaksuArvestatakse")==1){
+						Double km = kulu/20;
+						if(kuludKm.get(stringAeg) != null){
+							kuludKm.put(stringAeg, kuludKm.get(stringAeg)+km);
+						}
+						else{
+							kuludKm.put(stringAeg, km);
+						}
+					}
 				}
 			}
 			try{rs4.close();stmt4.close();}catch(Exception ex){}
 			
 			Statement stmt5 = con.createStatement();
-			String query5 = "SELECT algusAeg, yldkulu FROM yldkulud WHERE korduv=1 AND ((MONTH(algusAeg)<="+lõpuKuu+" AND YEAR(algusAeg)="+algusAasta+") OR (YEAR(algusAeg)<"+algusAasta+")) AND juhtID="+juhtID;
+			String query5 = "SELECT algusAeg, yldkulu, kaibemaksuArvestatakse FROM yldkulud WHERE korduv=1 AND ((MONTH(algusAeg)<="+lõpuKuu+" AND YEAR(algusAeg)="+algusAasta+") OR (YEAR(algusAeg)<"+algusAasta+")) AND juhtID="+juhtID;
 			ResultSet rs5 = stmt5.executeQuery(query5);
 			
 			while(rs5.next()){
@@ -318,12 +351,22 @@ public class RahavoogController {
 						else{
 							kulud.put(stringAeg, kulu);
 						}
+						
+						if(rs5.getInt("kaibemaksuArvestatakse")==1){
+							Double km = kulu/20;
+							if(kuludKm.get(stringAeg) != null){
+								kuludKm.put(stringAeg, kuludKm.get(stringAeg)+km);
+							}
+							else{
+								kuludKm.put(stringAeg, km);
+							}
+						}
 					}
 				}
 			}
 			try{rs5.close();stmt5.close();}catch(Exception ex){}
 			
-			andmed = paneAndmedStringi(tulud,kulud,kuupäevad);
+			andmed = paneAndmedStringi(tulud,kulud,kuupäevad,tuludKm,kuludKm);
 			
 			if(andmed.equals("")){
 				teade = "Nende valikutega andmed puuduvad";
@@ -469,7 +512,7 @@ public class RahavoogController {
 		return "vaadeRahavoog"; 
 	}
 	
-	private String paneAndmedStringi(Map<String, Double> tulud, Map<String, Double> kulud, Map<String, Double> kuupäevad){
+	private String paneAndmedStringi(Map<String, Double> tulud, Map<String, Double> kulud, Map<String, Double> kuupäevad, Map<String, Double> tuludKm, Map<String, Double> kuludKm){
 		String andmed = "";
 		
 		kuupäevad = sordiMap(kuupäevad);
@@ -480,6 +523,8 @@ public class RahavoogController {
 
 	        Double kulu = 0.0;
 	        Double tulu = 0.0;
+	        Double tuluKm = 0.0;
+	        Double kuluKm = 0.0;
 
 	        String päev = pairs.getKey().split("\\.")[0];
 	        String kuu = pairs.getKey().split("\\.")[1];
@@ -492,9 +537,33 @@ public class RahavoogController {
 	        	tulu = tulud.get(pairs.getKey());
 	        }
 	        
+	        if(kuludKm.get(pairs.getKey()) != null){
+	        	kuluKm = kuludKm.get(pairs.getKey());
+	        }
+
+	        if(tuludKm.get(pairs.getKey()) != null){
+	        	tuluKm = tuludKm.get(pairs.getKey());
+	        }
+	        
+	        String tuluTooltip = "";
+	        String kuluTooltip = "";
+	        if(tuluKm == 0.0){
+	        	tuluTooltip = päev+"."+kuu+"##Kogu Tulu: "+tulu.intValue();
+	        }
+	        else{
+	        	tuluTooltip = päev+"."+kuu+"##Kogu Tulu: "+tulu.intValue()+"(+km: "+tuluKm.intValue()+")";
+	        }
+	        
+	        if(kuluKm == 0.0){
+	        	kuluTooltip = päev+"."+kuu+"##Kogu Kulu: "+kulu.intValue();
+	        }
+	        else{
+	        	kuluTooltip = päev+"."+kuu+"##Kogu Kulu: "+kulu.intValue()+"(+km: "+kuluKm.intValue()+")";
+	        }
+	        
 	        Double kasum = tulu-kulu;
 	        
-	        andmed += ( päev+"."+kuu + ";"+tulu+";"+kulu+";"+kasum+"/");
+	        andmed += ( päev+"."+kuu + ";"+tulu+";"+kulu+";"+kasum+";"+tuluTooltip+";"+kuluTooltip+"/");
 	        
 	    }
 		

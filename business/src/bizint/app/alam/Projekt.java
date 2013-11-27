@@ -434,7 +434,7 @@ public class Projekt {
 		Statement stmt;
 		try {
 			stmt = con.createStatement();
-			String query = "UPDATE projektid SET aeg = '"+hetkeAasta+"' arhiivis = '1', staatus_ID = '1' WHERE projektID="+projektID+" AND juhtID="+juhtID;
+			String query = "UPDATE projektid SET aeg = '"+hetkeAasta+"', arhiivis = 1, staatus_ID = 1 WHERE projektID="+projektID+" AND juhtID="+juhtID;
 			stmt.executeUpdate(query);
 			
 			Statement stmtlogi1 = con.createStatement();
