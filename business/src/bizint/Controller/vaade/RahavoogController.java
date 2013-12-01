@@ -255,7 +255,7 @@ public class RahavoogController {
 			Calendar algusCal = Calendar.getInstance();
 			algusCal.setTime(algusAeg);
 			int algusPäev = algusCal.get(Calendar.DAY_OF_MONTH);
-			int algusKuu = algusCal.get(Calendar.MONTH)+1;
+			int algusKuu = algusCal.get(Calendar.MONTH);
 			int algusAasta = algusCal.get(Calendar.YEAR);
 			
 			Calendar lõppCal = Calendar.getInstance();
@@ -272,6 +272,7 @@ public class RahavoogController {
 				Double kulu = rs3.getDouble("palk");
 				
 				if(kulu != 0.0){
+					
 					String stringAeg = rs3.getInt("päev")+"."+rs3.getInt("kuu")+"."+rs3.getInt("aasta");
 	
 					kuupäevad.put(stringAeg, 0.0);
@@ -293,9 +294,11 @@ public class RahavoogController {
 			
 			while(rs4.next()){
 				Double kulu = rs4.getDouble("yldKulu");
+				Date aeg = rs4.getTimestamp("algusAeg");
 				
 				if(kulu != 0.0){
-					String stringAeg = AJAFORMAAT.format(rs4.getTimestamp("algusAeg"));
+					cal.setTime(aeg);
+					String stringAeg = cal.get(Calendar.DAY_OF_MONTH)+"."+(cal.get(Calendar.MONTH)+1)+"."+cal.get(Calendar.YEAR);
 	
 					kuupäevad.put(stringAeg, 0.0);
 					
@@ -327,6 +330,7 @@ public class RahavoogController {
 			
 			while(rs5.next()){
 				Double kulu = rs5.getDouble("yldKulu");
+				Double km = 0.0;
 				
 				if(kulu != 0.0){
 					Calendar c = Calendar.getInstance();
@@ -344,16 +348,18 @@ public class RahavoogController {
 					
 					int aasta = c.get(Calendar.YEAR);
 					int päev = c.get(Calendar.DAY_OF_MONTH);
+					
+					if(rs5.getInt("kaibemaksuArvestatakse")==1){
+						km = kulu*0.2;
+						kulu = kulu +km;
+					}
 
 					for(int i = kuu1; i<=kuu2; i++){
 						
 						String stringAeg = päev+"."+i+"."+aasta;
-
-						kuupäevad.put(stringAeg, 0.0);
 						
-						if(rs5.getInt("kaibemaksuArvestatakse")==1){
-							Double km = kulu*0.2;
-							kulu = kulu +km;
+						if(km != 0.0){
+						
 							if(kuludKm.get(stringAeg) != null){
 								kuludKm.put(stringAeg, kuludKm.get(stringAeg)+km);
 							}
@@ -361,6 +367,8 @@ public class RahavoogController {
 								kuludKm.put(stringAeg, km);
 							}
 						}
+
+						kuupäevad.put(stringAeg, 0.0);
 						
 						if(kulud.get(stringAeg) != null){
 							kulud.put(stringAeg, kulud.get(stringAeg)+kulu);
